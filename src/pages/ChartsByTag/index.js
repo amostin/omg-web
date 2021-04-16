@@ -1,47 +1,71 @@
 import React, {Component} from 'react';
 import {getAllTagsFromUserId} from "../../services/omgServer";
-import CardDefault from "../../components/Cards/Default";
-
+import PageHeading from "../../components/PageHeading";
+import ChartBasic from "../../components/Charts/Line/chartBasic";
+import CardBasic from "../../components/Cards/Basic";
 
 class ChartsByTag extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            userId: "a301cca5-165c-4197-952b-d302343b876a",
-            tags: ['repas', 'ptitdej'],
-            tagSelected: "",
+            tags: [],
+            tagSelected: 'none',
             loadingTags: true
         };
     }
 
     componentDidMount() {
-        getAllTagsFromUserId(this.state.userId).then((data) => {
-            console.log(data);
-            this.state.tags = data;
-            this.state.loadingTags = false
+        getAllTagsFromUserId().then((data) => {
+            try {
+                data.unshift('none');
+                this.setState({'tags': data});
+                this.setState({'loadingTags': false});
+            } catch (e) {
+                console.log(data);
+                console.log("error while try to retrieve tags : " + e);
+            }
         });
     }
 
+    tagChange = (event) => {
+        this.setState({'tagSelected': event.target.value});
+    }
+
     tagSelector() {
-        return (
-            <form className="ml-4 mr-4">
-                <div className="row">
-                    <label htmlFor="tagsList">Choose a tag :</label>
-                    <select className="form-control" id="tagsList">
-                        {this.state.tags.map(tag => (<option key={tag} value={tag}>{tag}</option>))}
-                    </select>
-                </div>
-            </form>
-        )
+        if (!this.state.loadingTags) {
+            return (
+                <form>
+                    <div className="row">
+                        <label htmlFor="tagsList">Choose a tag :</label>
+                        <select className="form-control" id="tagsList" onChange={this.tagChange}>
+                            {this.state.tags.map(tag => (<option key={tag} value={tag}>{tag}</option>))}
+                        </select>
+                    </div>
+                </form>
+            )
+        } else {
+            return (<p>Loading...</p>)
+        }
+    }
+
+    renderTag() {
+        if (this.state.tagSelected === 'none') {
+            return (<p>Select a tag</p>)
+        } else {
+            return (<CardBasic><ChartBasic tagSelected={this.state.tagSelected}/></CardBasic>)
+        }
     }
 
     render() {
         return (
             <div className="container-fluid">
-                <div className="row align-items-center">
-                    {/*<button onClick={() => {this.tagSelector()}}>Click me</button>*/}
+                <PageHeading title="Tag"/>
+                <div className="row align-items-center mb-4 ml-4 mr-4">
                     {this.tagSelector()}
+                </div>
+                <PageHeading title="Chart"/>
+                <div className="row align-items-center mb-4 ml-2 mr-4">
+                    {this.renderTag()}
                 </div>
             </div>
         )

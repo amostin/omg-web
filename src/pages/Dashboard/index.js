@@ -6,7 +6,7 @@ import Topbar from '../../components/Navigation/Topbar';
 
 import CardInfo from '../../components/Cards/Info';
 import ChartDonut from '../../components/Charts/Donut';
-import ChartLine from '../../components/Charts/Line';
+import ChartLineExample from '../../components/Charts/Line';
 import PageHeading from '../../components/PageHeading';
 
 class Dashboard extends Component {
@@ -46,7 +46,7 @@ class Dashboard extends Component {
                 </div>
                 <div className="row">
                     <div className="col-xl-8 col-lg-6">
-                        <ChartLine/>
+                        <ChartLineExample/>
                     </div>
                     <div className="col-xl-4 col-lg-6">
                         <ChartDonut/>

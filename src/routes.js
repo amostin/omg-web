@@ -1,72 +1,103 @@
-import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import React, {Component} from "react";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
-
-//Pages
-import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound";
 import Sidebar from "./components/Navigation/Sidebar";
 import Topbar from "./components/Navigation/Topbar";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+
+//Pages
+import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 import UploadFile from "./pages/Upload";
 import ChartsByTag from "./pages/ChartsByTag";
 
-const Routes = () => (
-    <BrowserRouter>
-        <div>
-            {/* <!-- Page Wrapper --> */}
-            <div id="wrapper">
+class Routes extends Component {
+    rndr() {
+        if (this.props.apiKey === ''){
+            if (this.props.method === 'in'){
+                return <SignIn/>
+            }
+            if (this.props.method === 'up'){
+                return  <SignUp/>
+            }
+        }
+        else {
+            return (
+                <div>
+                    {/* <!-- Page Wrapper --> */}
+                    <div id="wrapper">
 
-                {/* <!-- Sidebar --> */}
-                <Sidebar/>
-                {/* <!-- End of Sidebar --> */}
+                        {/* <!-- Sidebar --> */}
+                        <Sidebar/>
+                        {/* <!-- End of Sidebar --> */}
 
-                {/* <!-- Content Wrapper --> */}
-                <div id="content-wrapper" className="d-flex flex-column">
+                        {/* <!-- Content Wrapper --> */}
+                        <div id="content-wrapper" className="d-flex flex-column">
 
-                    {/* <!-- Main Content --> */}
-                    <div id="content">
+                            {/* <!-- Main Content --> */}
+                            <div id="content">
 
-                        {/* <!-- Topbar --> */}
-                        <Topbar/>
-                        {/* <!-- End of Topbar --> */}
+                                {/* <!-- Topbar --> */}
+                                <Topbar/>
+                                {/* <!-- End of Topbar --> */}
 
-                        <Switch>
-                            <Route exact path="/" component={Dashboard}/>
-                            <Route exact path="/dashboard" component={Dashboard}/>
-                            <Route path="/signup" component={SignUp}/>
-                            <Route path="/index" component={Index}/>
-                            <Route path="/fileupload" component={UploadFile}/>
-                            <Route path="/chartsbytag" component={ChartsByTag}/>
-                            <Route path="*" component={NotFound}/>
-                        </Switch>
+                                <div className="row">
+
+                                    <Switch>
+                                        <Redirect from='/dashboard?' to='/'/>
+                                        <Route exact path="/" component={Index}/>
+                                        <Route path="/index" component={Index}/>
+                                        <Route path="/fileupload" component={UploadFile}/>
+                                        <Route path="/chartsbytag" component={ChartsByTag}/>
+                                        <Route path="*" component={NotFound}/>
+                                    </Switch>
+
+                                </div>
+
+                            </div>
+                            {/* <!-- End of Main Content --> */}
+
+                            {/* <!-- Footer --> */}
+                            <footer className="row sticky-footer bg-white">
+                                <div className="container my-auto">
+                                    <div className="copyright text-center my-auto">
+                                        <span>Copyright &copy; OMGWeb 2021</span>
+                                    </div>
+                                </div>
+                            </footer>
+                            {/* <!-- End of Footer --> */}
+
+                        </div>
+                        {/* <!-- End of Content Wrapper --> */}
 
                     </div>
-                    {/* <!-- End of Main Content --> */}
+                    {/* <!-- End of Page Wrapper --> */}
 
-                    {/* <!-- Footer --> */}
-                    <footer className="sticky-footer bg-white">
-                        <div className="container my-auto">
-                            <div className="copyright text-center my-auto">
-                                <span>Copyright &copy; OMGWeb 2021</span>
-                            </div>
-                        </div>
-                    </footer>
-                    {/* <!-- End of Footer --> */}
-
+                    {/* <!-- Scroll to Top Button--> */}
+                    <a className="scroll-to-top rounded" href="#page-top">
+                        <i className="fas fa-angle-up"/>
+                    </a>
                 </div>
-                {/* <!-- End of Content Wrapper --> */}
+            );
+        }
+    }
 
-            </div>
-            {/* <!-- End of Page Wrapper --> */}
+    render() {
+        return (
+            <BrowserRouter>
+                {this.rndr()}
+            </BrowserRouter>
+        );
+    }
+}
 
-            {/* <!-- Scroll to Top Button--> */}
-            <a className="scroll-to-top rounded" href="#page-top">
-                <i className="fas fa-angle-up"/>
-            </a>
-        </div>
-    </BrowserRouter>
-);
+const mapStateToProps = (state) => {
+    return {
+        apiKey: state.storeApiKey.apiKey,
+        method: state.storeSignMethod.method
+    }
+}
 
-export default Routes;
+export default connect(mapStateToProps)(Routes);

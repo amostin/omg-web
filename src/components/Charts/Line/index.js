@@ -7,7 +7,7 @@ Chart.defaults.global.defaultFontFamily = 'Nunito';
 Chart.defaults.global.defaultFontColor = '#858796';
 
 
-class ChartLine extends Component {
+class ChartLineExample extends Component {
     chartRef = React.createRef();
 
     componentDidMount() {
@@ -105,7 +105,7 @@ class ChartLine extends Component {
         return (
             <CardBasic title="Area Chart">
                 <div className="chart-area">
-                    <canvas id="myAreaChart" ref={this.chartRef}></canvas>
+                    <canvas id="myAreaChart" ref={this.chartRef}/>
                 </div>
                 <hr />
                 Styling for the area chart can be found in the <code>/Components/Charts/Line/Index.js</code> file.
@@ -114,4 +114,4 @@ class ChartLine extends Component {
     }
 }
 
-export default ChartLine;
+export default ChartLineExample;
