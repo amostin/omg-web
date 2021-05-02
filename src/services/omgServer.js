@@ -1,5 +1,4 @@
 import store from "../redux/store";
-import {object} from "prop-types";
 
 const hostUrl = "http://192.168.0.20:3001"
 const headers = new Headers({

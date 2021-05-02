@@ -23,7 +23,7 @@ class ImportCard extends Component {
                 this.setState({upload: -1})
             }
             this.setState({'resultRequest': res[1]})
-        }).catch(res => console.log(res))
+        }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}))
     }
 
     fileChange = (event) => {
@@ -85,7 +85,7 @@ class ImportCard extends Component {
                                 <label htmlFor="pumpModelSelector">Pump model :</label>
                                 <select className="form-control" id="pumpModelSelector" name="pumpModel"
                                         onChange={this.modelPumpChange}>
-                                    <option value="minimed" selected>MiniMed</option>
+                                    <option value="minimed">MiniMed</option>
                                 </select>
                             </div>
                             <div className="row form-group ">

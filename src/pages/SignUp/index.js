@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {Link, Redirect, useHistory} from 'react-router-dom';
 import {connect} from "react-redux";
-import Topbar from "../../components/Navigation/Topbar";
-import {getAllTagsFromUserId, signin, signup} from "../../services/omgServer";
-import * as timers from "timers";
+import {signup} from "../../services/omgServer";
 
 
 class SignUp extends Component {
@@ -16,6 +13,9 @@ class SignUp extends Component {
             password: '',
             confirmPassword: '',
             error: '',
+            messageApi: '',
+            showSmallButtons: true,
+            secret: '',
         }
     }
 
@@ -26,6 +26,10 @@ class SignUp extends Component {
     handleSignUp = async () => {
         this.setState({'error': ''})
         this.removeDangerInput(['inputFirstName', 'inputLastName', 'inputEmail', 'inputPassword', 'inputConfirmPassword']);
+        if (this.state.secret !== 'createAccount2121'){
+            this.dangerInput(['inputSecret'])
+            await this.setState({'error': 'Wrong secret'});
+        }
         if (this.state.password !== this.state.confirmPassword) {
             this.dangerInput(['inputPassword', 'inputConfirmPassword']);
             await this.setState({'error': 'Passwords must match'});
@@ -48,9 +52,8 @@ class SignUp extends Component {
             await this.setState({'error': "You can't use special characters for names"})
         }
         if (!this.state.error) {
-            document.getElementById('smallButtons').classList.add('d-none');
             document.getElementById('btnSignUp').classList.remove('btn-primary');
-            document.getElementById('btnSignUp').classList.add('disabled');
+            document.getElementById('btnSignUp').setAttribute('disabled', 'true');
             document.getElementById('btnSignUp').classList.add('btn-secondary');
             let response = await signup({
                'firstName': this.state.firstName,
@@ -59,7 +62,14 @@ class SignUp extends Component {
                'password': this.state.password
             });
             console.log(response);
-            this.showApiResponse(response.status);
+            if (response.status === 'ok'){
+                this.setState({'messageApi': response.message, 'showSmallButtons': false});
+            }
+            if (response.status === 'error'){
+                this.setState({'error': response.message});
+                document.getElementById('btnSignUp').classList.remove('btn-secondary');
+                document.getElementById('btnSignUp').removeAttribute('disabled');
+            }
         }
     };
 
@@ -89,13 +99,18 @@ class SignUp extends Component {
         return message;
     }
 
-    showApiResponse(response) {
-        document.getElementById('btnSignUp').classList.remove('btn-primary');
-        document.getElementById('btnSignUp').classList.add('disabled');
-        document.getElementById('btnSignUp').classList.add('btn-secondary');
-        return (<div className="text-primary d-flex justify-content-center mt-3 mb-0">
-                    <p>response</p>
-                </div>);
+    showSuccess() {
+        let message = '';
+        if (this.state.messageApi !== '') {
+            document.getElementById('horizLine').classList.remove('mt-4');
+            document.getElementById('horizLine').classList.add('mt-0');
+            message = (
+                <div className="text-success d-flex justify-content-center mt-3 mb-0">
+                    <p>{this.state.messageApi}</p>
+                </div>
+            );
+        }
+        return message;
     }
 
     isValidName(name) {
@@ -104,14 +119,39 @@ class SignUp extends Component {
     }
 
     isValidEmail(email) {
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let re = /^(([^<>()q[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
+    }
+
+    showSmallButtons(){
+        if (this.state.showSmallButtons){
+            return(
+                <div id="smallButtons" className="row justify-content-center flex-column">
+                    <div className="text-center">
+                        <button className="btn btn-link disabled">Forgot Password?</button>
+                    </div>
+                    <div className="text-center">
+                        <button className="btn btn-link" onClick={this.toSignIn}>Already an account ? Sign in!</button>
+                    </div>
+                </div>
+            );
+        }
+        else{
+            return(
+                <div id="smallButtons" className="row justify-content-center flex-column">
+                    <div className="text-center">
+                        <button className="btn btn-primary" onClick={this.toSignIn}>Sign in !</button>
+                    </div>
+                </div>
+            );
+        }
     }
 
     setFirstName = (event) => this.setState({firstName: event.target.value});
     setLastName = (event) => this.setState({lastName: event.target.value});
     setEmail = (event) => this.setState({email: event.target.value});
     setPassword = (event) => this.setState({password: event.target.value});
+    setSecret = (event) => this.setState({secret: event.target.value});
     setConfirmPassword = (event) => this.setState({confirmPassword: event.target.value});
     toSignIn = async () => await this.setSignMethod('in');
 
@@ -143,21 +183,18 @@ class SignUp extends Component {
                                                 <input type="password" className="form-control form-control-user" id="inputPassword" placeholder="Password" onChange={this.setPassword}/>
                                                 <input type="password" className="form-control form-control-user ml-2" id="inputConfirmPassword" placeholder="Confirm password" onChange={this.setConfirmPassword}/>
                                             </div>
+                                            <div id="formGroupPassword" className="form-group d-flex flex-row">
+                                                <input type="password" className="form-control form-control-user" id="inputSecret" placeholder="Secret" onChange={this.setSecret}/>
+                                            </div>
                                             <button id="btnSignUp" className="btn btn-primary btn-user btn-block" onClick={this.handleSignUp}>
                                                 Sign up
                                             </button>
                                             {this.showError()}
+                                            {this.showSuccess()}
                                         </div>
                                     </div>
                                     <hr id="horizLine" className="mt-4"/>
-                                    <div id="smallButtons" className="row justify-content-center flex-column">
-                                        <div className="text-center">
-                                            <button className="btn btn-link">Forgot Password?</button>
-                                        </div>
-                                        <div className="text-center">
-                                            <button className="btn btn-link" onClick={this.toSignIn}>Already an account ? Sign in!</button>
-                                        </div>
-                                    </div>
+                                    {this.showSmallButtons()}
                                 </div>
                             </div>
                         </div>

@@ -9,11 +9,12 @@ class SignIn extends Component {
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            error: ''
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         document.getElementById('body').className = 'bg-gradient-primary'
     }
 
@@ -22,15 +23,33 @@ class SignIn extends Component {
     }
 
     handleSignIn = async () => {
-        if (this.state.email !== "" || this.state.password !== ""){
+        if (this.state.email !== "" && this.state.password !== "") {
             let res = await signin(this.state.email, this.state.password);
-            await this.setApiKey(res.token);
-            return <Redirect to="/"/>;
-        }
-        else{
-
+            if (res.status !== 'ok'){
+                this.setState({'error': res.message});
+            }
+            else {
+                await this.setApiKey(res.token);
+                return <Redirect to="/"/>;
+            }
+        } else {
+            this.setState({'error': 'Missing email and/or password'})
         }
     };
+
+    showError() {
+        let message = '';
+        if (this.state.error !== '') {
+            document.getElementById('horizLine').classList.remove('mt-4');
+            document.getElementById('horizLine').classList.add('mt-0');
+            message = (
+                <div className="text-danger d-flex justify-content-center mt-3 mb-0">
+                    <p>{this.state.error}</p>
+                </div>
+            );
+        }
+        return message;
+    }
 
     setEmail = (event) => this.setState({email: event.target.value});
     setPassword = (event) => this.setState({password: event.target.value});
@@ -69,13 +88,14 @@ class SignIn extends Component {
                                             </button>
                                         </div>
                                     </div>
-                                    <hr className="mt-4"/>
+                                    {this.showError()}
+                                    <hr id="horizLine" className="mt-4"/>
                                     <div className="row justify-content-center flex-column">
                                         <div className="text-center">
-                                            <a className="small">Forgot Password?</a>
+                                            <button className="btn btn-link disabled">Forgot Password?</button>
                                         </div>
                                         <div className="text-center">
-                                            <a className="small" onClick={this.toSignUp}>Create an Account!</a>
+                                            <button className="btn btn-link" onClick={this.toSignUp}>Create an Account!</button>
                                         </div>
                                     </div>
                                 </div>
