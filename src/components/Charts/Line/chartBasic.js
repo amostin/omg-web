@@ -27,8 +27,8 @@ class ChartBasic extends Component {
                             },
                             ticks: {
                                 maxTicksLimit: 20,
-                                padding: 10
-                            }
+                                padding: 10,
+                            },
                         }],
                         yAxes: [{
                             ticks: {
@@ -91,6 +91,7 @@ class ChartBasic extends Component {
         // const paletteLight = ["#eb9096", "#72afd7", "#4ae49c", "#bf8bba", "#f8a894", "#88cceb", "#86e0b4", "#d79db9", "#fac998", "#bbb39d"];
         let showData = {};
         await getChartDataFromTagName(this.state.tagSelected).then((data) => {
+            console.log(data.chartData);
             showData['labels'] = data['chartData'].map((arr) => arr[0]);
             showData['datasets'] = []
             for (let i = 0; i < Object.keys(data['datasetsLabel']).length; i++) {

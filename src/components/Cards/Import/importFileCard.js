@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {postUpload} from "../../../services/omgServer";
 
 
-class ImportCard extends Component {
+class ImportFileCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -75,14 +75,14 @@ class ImportCard extends Component {
                         <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
                                 <div className="text font-weight-bold text-primary text-uppercase mb-1">
-                                    Automatic import
+                                    File import
                                 </div>
                             </div>
                         </div>
                         <hr className="sidebar-divider"/>
                         <form className="ml-4 mr-4" id="uploadForm">
                             <div className="row">
-                                <label htmlFor="pumpModelSelector">Pump model :</label>
+                                <label htmlFor="pumpModelSelector">Sensor model :</label>
                                 <select className="form-control" id="pumpModelSelector" name="pumpModel"
                                         onChange={this.modelPumpChange}>
                                     <option value="minimed">MiniMed</option>
@@ -110,4 +110,4 @@ class ImportCard extends Component {
     }
 }
 
-export default ImportCard;
+export default ImportFileCard;

@@ -78,7 +78,7 @@ export async function signin(email, password) {
 }
 
 export async function signup(user) {
-    let url = hostUrl + "/users/register";
+    let url = hostUrl + "/users/signup";
     let res = await fetch(url, {
         credentials: 'same-origin',
         method: 'POST',

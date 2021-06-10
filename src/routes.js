@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 
-import Sidebar from "./components/Navigation/Sidebar";
+import Sidebar from "./components/Navigation/Sidebar/sidebar";
 import Topbar from "./components/Navigation/Topbar";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -10,7 +10,7 @@ import SignUp from "./pages/SignUp";
 //Pages
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
-import UploadFile from "./pages/Upload";
+import Upload from "./pages/Upload/upload";
 import ChartsByTag from "./pages/ChartsByTag";
 
 class Routes extends Component {
@@ -49,7 +49,7 @@ class Routes extends Component {
                                         <Redirect from='/dashboard?' to='/'/>
                                         <Route exact path="/" component={Index}/>
                                         <Route path="/index" component={Index}/>
-                                        <Route path="/fileupload" component={UploadFile}/>
+                                        <Route path="/fileupload" component={Upload}/>
                                         <Route path="/chartsbytag" component={ChartsByTag}/>
                                         <Route path="*" component={NotFound}/>
                                     </Switch>
