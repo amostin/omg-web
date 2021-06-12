@@ -1,6 +1,6 @@
 import store from "../redux/store";
 
-const hostUrl = "http://192.168.0.20:3001"
+const hostUrl = "https://92.22.24.129:3000"
 const headers = new Headers({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
