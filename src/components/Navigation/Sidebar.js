@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
+/**
+ *  This is the sidebar of the web application. Allows user to navigate between the different pages of the application
+ */
 class Sidebar extends Component {
     render() {
         return (
@@ -17,7 +20,7 @@ class Sidebar extends Component {
                 {/* <!-- Divider --> */}
                 <hr className="sidebar-divider my-0"/>
 
-                {/* <!-- Nav Item - Index --> */}
+                {/* <!-- Nav Item - Home --> */}
                 <li className="nav-item">
                     <Link className="nav-link" to="/index">
                         <i className="fas fa-fw fa-home"/>
@@ -32,7 +35,7 @@ class Sidebar extends Component {
                     Charts
                 </div>
 
-                {/* <!-- Nav Item - Index --> */}
+                {/* <!-- Nav Item - Home --> */}
                 <li className="nav-item">
                     <Link className="nav-link" to="/chartsbytag">
                         <i className="fas fa-fw fa-tag"/>
@@ -51,16 +54,8 @@ class Sidebar extends Component {
                 <li className="nav-item">
                     <Link className="nav-link" to="/fileupload">
                         <i className="fas fa-fw fa-file-upload"/>
-                        <span>Upload data</span></Link>
+                        <span>Import data</span></Link>
                 </li>
-
-                {/* <!-- Nav Item - tags manager --> */}
-                <li className="nav-item">
-                    <Link className="nav-link" to="/index">
-                        <i className="fas fa-fw fa-tags"/>
-                        <span>Tags manager</span></Link>
-                </li>
-
             </ul>)
     }
 }

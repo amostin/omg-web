@@ -1,18 +1,23 @@
 import React, {Component} from 'react';
-import {postUpload} from "../../../services/omgServer";
+import {postUpload} from "../../services/omgServer";
 
-
+/**
+ * component that implements the method of importing the data of a user via a CSV file
+ */
 class ImportFileCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upload: 0,
-            file: '',
-            modelPump: '',
-            resultRequest: ''
+            upload: 0,  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, -1 -> error)
+            file: '',   // CSV data file
+            modelPump: '',  // Chosen model pump
+            resultRequest: '' // API results of the request
         }
     }
 
+    /**
+     * manages the sending and the result of the data import request.
+     */
     uploadFile = () => {
         this.setState({upload: 1});
         postUpload(document.getElementById('dataFileAutoInput')).then((res) => {
@@ -43,6 +48,11 @@ class ImportFileCard extends Component {
         });
     }
 
+    /**
+     * manages the display of the status of the data import request
+     *
+     * @return {JSX.Element}
+     */
     uploadResults() {
         let results = ""
         if (this.state.upload === -1){

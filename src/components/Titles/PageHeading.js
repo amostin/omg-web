@@ -1,5 +1,12 @@
 import React from 'react';
 
+/**
+ * Main title
+ *
+ * @param title
+ * @return {JSX.Element}
+ * @constructor
+ */
 const PageHeading = ({ title = '' }) => (
     < div className="d-sm-flex align-items-center justify-content-between mb-4" >
         <h1 className="h3 mb-0 text-gray-800">{title}</h1>

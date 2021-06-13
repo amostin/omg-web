@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from "react-redux";
-import {signin} from "../../services/omgServer";
+import {signin} from "../services/omgServer";
 
 
 class SignIn extends Component {

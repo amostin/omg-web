@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-
-class Index extends Component {
-
+/**
+ * Home page of the web application
+ */
+class Home extends Component {
     render() {
         return (
             <div className="container-fluid">
@@ -14,4 +15,4 @@ class Index extends Component {
     }
 }
 
-export default Index;
+export default Home;

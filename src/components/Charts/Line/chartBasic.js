@@ -6,15 +6,18 @@ import {getChartDataFromTagName} from "../../../services/omgServer";
 Chart.defaults.global.defaultFontFamily = 'Nunito';
 Chart.defaults.global.defaultFontColor = '#858796';
 
+/**
+ *  displays a chart based on the selected tag and user data
+ *  @props tagSelected
+ */
 class ChartBasic extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             tagSelected: this.props.tagSelected,
             loadingData: true,
             myChart: '',
-            config: {
+            config: {   // chart configuration
                 type: 'line',
                 data: {},
                 options: {
@@ -63,7 +66,7 @@ class ChartBasic extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.tagSelected !== prevProps.tagSelected) {
-            this.changeTagSelected(this.props.tagSelected).then(() => {
+            this.changeTagSelected(this.props.tagSelected).then(() => { // update chart when the selected Tag change
                 this.getChartData().then(() => {
                     this.state.myChart.update();
                 });
@@ -84,6 +87,11 @@ class ChartBasic extends Component {
         this.setState({myChart: data})
     }
 
+    /**
+     * retrieves the user's data according to the selected tag and loads the data into the chart
+     *
+     * @return {Promise<void>}
+     */
     async getChartData() {
         this.setState({'loadingData': true});
         const paletteDark = ["#dc414b", "#307aac", "#18a060", "#8e4e88", "#f26542", "#36a8dd", "#36cb83", "#bb5888", "#f69e46", "#8d8162"]

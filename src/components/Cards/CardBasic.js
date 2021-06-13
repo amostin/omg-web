@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+/**
+ * basic card component inspired of the SB Admin 2 theme
+ */
 class CardBasic extends Component {
   constructor(props) {
     super(props)
@@ -13,7 +16,6 @@ class CardBasic extends Component {
   }
 
   render() {
-
     return (
       <div className="card border-bottom-primary shadow mb-4">
         <div className="card-body">

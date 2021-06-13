@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
+/**
+ * "web page" displayed when trying to display a page that does not exist
+ */
 class NotFound extends Component {
     render() {
         return (

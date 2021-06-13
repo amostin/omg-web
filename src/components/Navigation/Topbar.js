@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 
+/**
+ * This is the topbar of the web application. Allows user to access the application and account settings
+ */
 class Topbar extends Component {
     render() {
         return (

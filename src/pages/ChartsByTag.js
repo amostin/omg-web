@@ -1,19 +1,25 @@
 import React, {Component} from 'react';
-import {getAllTagsFromUserId} from "../../services/omgServer";
-import PageHeading from "../../components/PageHeading";
-import ChartBasic from "../../components/Charts/Line/chartBasic";
-import CardBasic from "../../components/Cards/Basic";
+import {getAllTagsFromUserId} from "../services/omgServer";
+import PageHeading from "../components/Titles/PageHeading";
+import ChartBasic from "../components/Charts/Line/chartBasic";
+import CardBasic from "../components/Cards/CardBasic";
 
+/**
+ * "web page" ChartsByTag. Displays a graph according to the chosen tag
+ */
 class ChartsByTag extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tags: [],
-            tagSelected: 'none',
+            tags: [],   // stores user tags for displaying
+            tagSelected: 'none',    // stores the chosen tag
             loadingTags: true
         };
     }
 
+    /**
+     * get the user's tags when loading the component
+     */
     componentDidMount() {
         getAllTagsFromUserId().then((data) => {
             try {
@@ -21,7 +27,6 @@ class ChartsByTag extends Component {
                 this.setState({'tags': data});
                 this.setState({'loadingTags': false});
             } catch (e) {
-                console.log(data);
                 console.log("error while try to retrieve tags : " + e);
             }
         });
@@ -31,6 +36,10 @@ class ChartsByTag extends Component {
         this.setState({'tagSelected': event.target.value});
     }
 
+    /**
+     * This function loads user's tags in the selector and returns it
+     * @return {JSX.Element}
+     */
     tagSelector() {
         if (!this.state.loadingTags) {
             return (
@@ -48,7 +57,12 @@ class ChartsByTag extends Component {
         }
     }
 
-    renderTag() {
+    /**
+     * Displays the chart as soon as a tag has been selected
+     *
+     * @return {JSX.Element}
+     */
+    renderChart() {
         if (this.state.tagSelected === 'none') {
             return (<p>Select a tag</p>)
         } else {
@@ -65,7 +79,7 @@ class ChartsByTag extends Component {
                 </div>
                 <PageHeading title="Chart"/>
                 <div className="row align-items-center mb-4 ml-2 mr-4">
-                    {this.renderTag()}
+                    {this.renderChart()}
                 </div>
             </div>
         )
