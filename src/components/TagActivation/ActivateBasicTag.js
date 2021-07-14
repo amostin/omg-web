@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import CardBasicTitle from "../components/Cards/CardBasicTitle";
-import {getRecentTags} from "../services/omgServer";
+import CardBasicTitle from "../Cards/CardBasicTitle";
+import {getRecentTags} from "../../services/omgServer";
 
 class ActivateBasicTag extends Component {
 
@@ -35,8 +35,8 @@ class ActivateBasicTag extends Component {
                     <div className={"d-inline-flex flex-wrap btn-group-toggle"} data-toggle={"buttons"}>
                         {
                             this.state.recentTags.map((tag) => (
-                                <label id={tag} className={"btn btn-outline-primary mt-2 ml-1 mr-1"}>
-                                    <input type="radio" name="recentTagsButtons" id={"recentTagsBtn" + tag} value={tag}/> {tag}
+                                <label id={tag} className={"btn btn-outline-primary mt-2 ml-1 mr-1 pl-2 pr-2 pt-1 pb-1"}>
+                                    <input type="radio" name="recentTagsButtons" key={"recentTagsBtn" + tag} id={"recentTagsBtn" + tag} value={tag}/> {tag}
                                 </label>
                             ))
                         }

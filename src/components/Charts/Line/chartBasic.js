@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Chart from "chart.js";
-// import annotationPlugin from 'chartjs-plugin-annotation';
+import annotationPlugin from 'chartjs-plugin-annotation';
 
 import {getChartDataFromTagName} from "../../../services/omgServer";
 
