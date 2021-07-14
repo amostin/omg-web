@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Chart from "chart.js";
+// import annotationPlugin from 'chartjs-plugin-annotation';
 
 import {getChartDataFromTagName} from "../../../services/omgServer";
 
@@ -15,12 +16,51 @@ class ChartBasic extends Component {
         super(props);
         this.state = {
             tagSelected: this.props.tagSelected,
+            datetimeRange: this.props.datetimeRange,
+            timeSelected: this.props.timeSelected,
+            weekDaysSelected: this.props.weekDaysSelected,
             loadingData: true,
             myChart: '',
             config: {   // chart configuration
                 type: 'line',
                 data: {},
                 options: {
+                    annotation: {
+                        annotations: [
+                            {
+                                drawTime: "beforeDatasetsDraw",
+                                id: "verticalLine",
+                                type: "line",
+                                mode: "vertical",
+                                scaleID: "x-axis-0",
+                                value: "+00:00:00",
+                                borderColor: "darkgray",
+                                borderWidth: 2
+                            },
+                            {
+                                drawTime: "beforeDatasetsDraw",
+                                id: "horizontalLine80",
+                                type: "line",
+                                mode: "horizontal",
+                                scaleID: "y-axis-0",
+                                value: "80",
+                                borderColor: "darkgray",
+                                borderDash: [4, 4],
+                                borderWidth: 2
+                            },
+                            {
+                                drawTime: "beforeDatasetsDraw",
+                                id: "horizontalLine130",
+                                type: "line",
+                                mode: "horizontal",
+                                scaleID: "y-axis-0",
+                                value: "130",
+                                borderColor: "darkgray",
+                                borderDash: [4, 4],
+                                borderWidth: 2
+                            }
+                        ]
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -29,14 +69,16 @@ class ChartBasic extends Component {
                                 unit: 'date'
                             },
                             ticks: {
-                                maxTicksLimit: 20,
                                 padding: 10,
+                                autoSkip: true,
+                                maxTicksLimit: 20,
                             },
                         }],
                         yAxes: [{
                             ticks: {
                                 maxTicksLimit: 10,
-                                paddings: 10
+                                paddings: 10,
+                                type: 'linear'
                             },
                         }],
                     },
@@ -71,12 +113,44 @@ class ChartBasic extends Component {
                     this.state.myChart.update();
                 });
             });
-
+        }
+        if (this.props.datetimeRange !== prevProps.datetimeRange) {
+            this.changeDatetimeRange(this.props.datetimeRange).then(() => { // update chart when the selected Tag change
+                this.getChartData().then(() => {
+                    this.state.myChart.update();
+                });
+            });
+        }
+        if (this.props.timeSelected !== prevProps.timeSelected) {
+            this.changeTimeSelected(this.props.timeSelected).then(() => { // update chart when the selected Tag change
+                this.getChartData().then(() => {
+                    this.state.myChart.update();
+                });
+            });
+        }
+        if (this.props.weekDaysSelected !== prevProps.weekDaysSelected) {
+            this.changeWeekDaysSelected(this.props.weekDaysSelected).then(() => { // update chart when the selected Tag change
+                this.getChartData().then(() => {
+                    this.state.myChart.update();
+                });
+            });
         }
     }
 
     changeTagSelected = async (data) => {
         this.setState({tagSelected: data})
+    }
+
+    changeDatetimeRange = async (data) => {
+        this.setState({datetimeRange: data})
+    }
+
+    changeTimeSelected = async (data) => {
+        this.setState({timeSelected: data})
+    }
+
+    changeWeekDaysSelected = async (data) => {
+        this.setState({weekDaysSelected: data})
     }
 
     changeConfig = (data) => {
@@ -98,37 +172,59 @@ class ChartBasic extends Component {
         const palette = ["#E15B64", "#3688BF", "#1BB16B", "#9E5797", "#F47E60", "#51B4E1", "#4DD191", "#C46E98", "#F8B26A", "#9B8F6F"];
         // const paletteLight = ["#eb9096", "#72afd7", "#4ae49c", "#bf8bba", "#f8a894", "#88cceb", "#86e0b4", "#d79db9", "#fac998", "#bbb39d"];
         let showData = {};
-        await getChartDataFromTagName(this.state.tagSelected).then((data) => {
-            console.log(data.chartData);
+        await getChartDataFromTagName(this.state.tagSelected, this.state.datetimeRange, this.state.timeSelected, this.state.weekDaysSelected).then((data) => {
             showData['labels'] = data['chartData'].map((arr) => arr[0]);
-            showData['datasets'] = []
+            showData['datasets'] = [];
+            showData['datasets'].push(this.setAverageDataset(data['chartData']));
             for (let i = 0; i < Object.keys(data['datasetsLabel']).length; i++) {
-                showData['datasets'].push(
-                    {
-                        label: new Date(data['datasetsLabel'][i]).toLocaleString('fr-BE', {hour:'2-digit', minute:'2-digit', second:'2-digit', day:'numeric', month:'short', year:'numeric'}),
-                        lineTension: 0.3,
-                        borderColor: palette[i],
-                        borderWidth: 1,
-                        pointRadius: 3,
-                        fill: false,
-                        pointBackgroundColor: palette[i],
-                        pointBorderColor: palette[i],
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: paletteDark[i],
-                        pointHoverBorderColor: paletteDark[i],
-                        pointHoverBorderWidth: 5,
-                        pointHitRadius: 5,
-                        pointBorderWidth: 2,
-                        spanGaps: true,
-                        data: data['chartData'].map((arr) => arr[1][i])
-                    }
-                )
+                let oneDataset = {
+                    label: new Date(data['datasetsLabel'][i]).toLocaleString('fr-BE', {hour: '2-digit', minute: '2-digit', second: '2-digit', day: 'numeric', month: 'short', year: 'numeric'}),
+                    lineTension: 0.3,
+                    borderColor: palette[i],
+                    borderWidth: 1,
+                    pointRadius: 3,
+                    fill: false,
+                    pointBackgroundColor: palette[i],
+                    pointBorderColor: palette[i],
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: paletteDark[i],
+                    pointHoverBorderColor: paletteDark[i],
+                    pointHoverBorderWidth: 5,
+                    pointHitRadius: 5,
+                    pointBorderWidth: 2,
+                    spanGaps: false,
+                    data: data['chartData'].map((arr) => arr[1][i])
+                };
+                showData['datasets'].push(oneDataset);
             }
             let newConfig = this.state.config;
             newConfig.data = showData;
             this.changeConfig(newConfig);
             this.setState({'loadingData': false});
         })
+    }
+
+    setAverageDataset (chartData) {
+        let averageLength =  chartData.map(array => array[1].filter(value => value > 0).length);
+        return {
+            label: "Average line",
+            lineTension: 0.3,
+            borderColor: "#555555",
+            borderDash: [5, 5],
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            pointBackgroundColor: "#555555",
+            pointBorderColor: "#555555",
+            pointHoverRadius: 3,
+            pointHoverBackgroundColor: "#555555",
+            pointHoverBorderColor: "#555555",
+            pointHoverBorderWidth: 5,
+            pointHitRadius: 5,
+            pointBorderWidth: 2,
+            spanGaps: false,
+            data: (chartData.map(array => array[1].reduce((a, b) => a + b) / averageLength[chartData.indexOf(array)])).map(value => Math.round(value))
+        };
     }
 
     async componentDidMount() {

@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import {connect} from "react-redux";
 import {signup} from "../services/omgServer";
+import {Cookies, withCookies} from "react-cookie";
+import {instanceOf} from "prop-types";
 
 
 class SignUp extends Component {
+
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +25,7 @@ class SignUp extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         document.getElementById('body').className = 'bg-gradient-primary'
     }
 
@@ -56,10 +62,10 @@ class SignUp extends Component {
             document.getElementById('btnSignUp').setAttribute('disabled', 'true');
             document.getElementById('btnSignUp').classList.add('btn-secondary');
             let response = await signup({
-               'firstName': this.state.firstName,
-               'lastName': this.state.lastName,
-               'email': this.state.email,
-               'password': this.state.password
+                'firstName': this.state.firstName,
+                'lastName': this.state.lastName,
+                'email': this.state.email,
+                'password': this.state.password
             });
             console.log(response);
             if (response.status === 'ok'){
@@ -153,7 +159,7 @@ class SignUp extends Component {
     setPassword = (event) => this.setState({password: event.target.value});
     setSecret = (event) => this.setState({secret: event.target.value});
     setConfirmPassword = (event) => this.setState({confirmPassword: event.target.value});
-    toSignIn = async () => await this.setSignMethod('in');
+    toSignIn = async () => await this.setCookie("method", "in");
 
     render() {
         return (
@@ -204,20 +210,14 @@ class SignUp extends Component {
         )
     };
 
-    async setApiKey(apiKey) {
-        await this.props.dispatch({type: 'SETKEY', value: apiKey});
+    getCookie = (name) => {
+        return this.props.cookies.get(name);
     }
 
-    async setSignMethod(method) {
-        await this.props.dispatch({type: 'SETMETHOD', value: method});
+    setCookie = (name, key) => {
+        this.props.cookies.set(name, key);
     }
+
 }
 
-const mapStateToProps = (state) => {
-    return {
-        apiKey: state.storeApiKey.apiKey,
-        method: state.storeSignMethod.method
-    }
-}
-
-export default connect(mapStateToProps)(SignUp);
+export default withCookies(SignUp);

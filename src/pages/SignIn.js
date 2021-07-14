@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import {connect} from "react-redux";
 import {signin} from "../services/omgServer";
-
+import {withCookies, Cookies} from "react-cookie";
+import {instanceOf} from "prop-types";
+import store from "../redux/store";
 
 class SignIn extends Component {
+
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +25,7 @@ class SignIn extends Component {
     }
 
     toSignUp = async () => {
-        await this.setSignMethod('up');
+        await this.setCookie("method","up");
     }
 
     handleSignIn = async () => {
@@ -29,6 +35,7 @@ class SignIn extends Component {
                 this.setState({'error': res.message});
             }
             else {
+                await this.setCookie("apiKey", res.token);
                 await this.setApiKey(res.token);
                 return <Redirect to="/"/>;
             }
@@ -107,21 +114,14 @@ class SignIn extends Component {
         )
     };
 
+    setCookie = (name, key) => {
+        this.props.cookies.set(name, key);
+    }
+
     async setApiKey(apiKey) {
-        await this.props.dispatch({type: 'SETKEY', value: apiKey});
-    }
-
-    async setSignMethod(method) {
-        await this.props.dispatch({type: 'SETMETHOD', value: method});
+        store.dispatch({type: 'SETKEY', value: apiKey});
     }
 
 }
 
-const mapStateToProps = (state) => {
-    return {
-        apiKey: state.storeApiKey.apiKey,
-        method: state.storeSignMethod.method
-    }
-}
-
-export default connect(mapStateToProps)(SignIn);
+export default withCookies(SignIn);

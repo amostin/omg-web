@@ -50,12 +50,40 @@ class Sidebar extends Component {
                     Tools
                 </div>
 
+                <li className="nav-item">
+                    <Link className="nav-link pb-2" to="/tagactivation">
+                        <i className="fas fa-fw fa-plus-circle"/>
+                        <span>Tag activation</span></Link>
+                </li>
+
                 {/* <!-- Nav Item - upload data --> */}
                 <li className="nav-item">
-                    <Link className="nav-link" to="/fileupload">
+                    <Link className="nav-link pt-2" to="/fileupload">
                         <i className="fas fa-fw fa-file-upload"/>
                         <span>Import data</span></Link>
                 </li>
+
+                {/* <!-- Divider --> */}
+                <hr className="sidebar-divider"/>
+
+                {/* <!-- Heading --> */}
+                <div className="sidebar-heading">
+                    Manage
+                </div>
+                {/* <!-- Nav Item - manage data --> */}
+                <li className="nav-item">
+                    <Link className="nav-link pb-2" to="/dataManager">
+                        <i className="fas fa-fw fa-database"/>
+                        <span>Data</span></Link>
+                </li>
+
+                {/* <!-- Nav Item - manage tags --> */}
+                <li className="nav-item">
+                    <Link className="nav-link pt-2" to="/tagsManager">
+                        <i className="fas fa-fw fa-tags"/>
+                        <span>Tags</span></Link>
+                </li>
+
             </ul>)
     }
 }
