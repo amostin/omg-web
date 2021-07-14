@@ -28,7 +28,8 @@ class Topbar extends Component {
             "/index": "Home",
             "/datamanager": "Data Manager",
             "/tagsmanager": "Tags Manager",
-            "/basictag": "Basic tag",
+            "/tagactivation": "Tag Activation",
+            "/tagshistory": "History",
             "/fileUpload": "Import data",
             "/chartsbyTag": "Charts by tag"
         };

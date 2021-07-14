@@ -8,7 +8,7 @@ class Bottombar extends Component {
         super(props);
         this.state = {
             tabs: [{
-                route: "/index",
+                route: "/tagshistory",
                 icon: "fa-history",
                 label: "History"
             },{

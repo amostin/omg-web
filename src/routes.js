@@ -19,6 +19,7 @@ import {verifyToken} from "./services/omgServer";
 import TagsManager from "./pages/TagsManager";
 import Bottombar from "./components/Navigation/Bottombar";
 import TagActivation from "./pages/TagActivation";
+import TagsHistory from "./pages/TagHistory";
 
 /**
  * Routing component. Manage authentification too.
@@ -136,6 +137,7 @@ class Routes extends Component {
                                     <Route path="/datamanager" component={DataManager}/>
                                     <Route path="/tagsmanager" component={TagsManager}/>
                                     <Route path="/tagactivation" component={TagActivation}/>
+                                    <Route path="/tagshistory" component={TagsHistory}/>
                                     <Route path="/fileupload" component={Import}/>
                                     <Route path="/chartsbytag" component={ChartsByTag}/>
                                     <Route path="*" component={NotFound}/>
