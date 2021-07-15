@@ -105,17 +105,16 @@ class ChartsByTag extends Component {
     }
 
     setDaysCheckboxes () {
-        let weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        let weekDays = [["Mon", 1], ["Tue", 2], ["Wed", 3], ["Thu",4], ["Fri", 5], ["Sat", 6], ["Sun", 0]];
         let checkboxes = [];
-        for (let i = 0; i <= 6; i++) {
-            let day = weekDays[i];
+        weekDays.forEach(day => {
             checkboxes.push((
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" key={"checkbox" + day } id={"checkbox" + day } value={i} onChange={() => this.weekDaysChange(i)}/>
-                    <label className="form-check-label" htmlFor={"checkbox" + day}>{day}</label>
+                    <input className="form-check-input" type="checkbox" key={"checkbox" + day[0] } id={"checkbox" + day[0] } value={day[1]} onChange={() => this.weekDaysChange(day[1])}/>
+                    <label className="form-check-label" htmlFor={"checkbox" + day[0]}>{day[0]}</label>
                 </div>
             ));
-        }
+        })
         return checkboxes;
     }
 

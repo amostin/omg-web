@@ -50,10 +50,18 @@ class Sidebar extends Component {
                     Tools
                 </div>
 
+                {/* <!-- Nav Item - tag activation --> */}
                 <li className="nav-item">
                     <Link className="nav-link pb-2" to="/tagactivation">
                         <i className="fas fa-fw fa-plus-circle"/>
                         <span>Tag activation</span></Link>
+                </li>
+
+                {/* <!-- Nav Item - tag activation --> */}
+                <li className="nav-item">
+                    <Link className="nav-link pt-2 pb-2" to="/tagshistory">
+                        <i className="fas fa-fw fa-history"/>
+                        <span>Tags history</span></Link>
                 </li>
 
                 {/* <!-- Nav Item - upload data --> */}

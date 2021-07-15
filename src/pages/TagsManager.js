@@ -3,7 +3,11 @@ import React, {Component} from 'react';
 class TagsManager extends Component {
 
     render() {
-        return <p>Hola</p>
+        return (
+            <div className={"container-fluid"}>
+                <p>Tags Manager</p>
+            </div>
+        );
     }
 
 }
