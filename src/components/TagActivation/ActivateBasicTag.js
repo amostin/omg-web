@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CardBasicTitle from "../Cards/CardBasicTitle";
-import {getRecentTags} from "../../services/omgServer";
+import {getRecentTags, postBasicTag} from "../../services/omgServer";
 import TextField from '@material-ui/core/TextField';
 
 class ActivateBasicTag extends Component {
@@ -25,11 +25,11 @@ class ActivateBasicTag extends Component {
         });
     }
 
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     if (this.state.chosenTag !== prevState.chosenTag) {
-    //         console.log(this.state.chosenTag);
-    //     }
-    // }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.chosenTag !== prevState.chosenTag) {
+            console.log(this.state.chosenTag);
+        }
+    }
 
     chosenDatetimeChange = (event) => {
         this.setState({chosenDatetime: this.getDatePickerFormat(new Date(event.target.value))});
@@ -53,7 +53,7 @@ class ActivateBasicTag extends Component {
         let radio = document.querySelector('input[type="radio"][name="recentTagsButtons"]:checked');
         if (radio) {
             radio.checked = false;
-            document.getElementById("recentTagsLbl" + radio.value).classList.remove("active");
+            document.getElementById("recentTagsLbl" + radio.id.substr(13)).classList.remove("active");
         }
         this.setState({chosenTag: event.target.value});
 
@@ -66,7 +66,13 @@ class ActivateBasicTag extends Component {
         if (this.state.chosenTag) {
             this.setState({status: 1});
             let chosenDatatimeISO = new Date(this.state.chosenDatetime).toISOString();
-            console.log(this.state.chosenTag)
+            postBasicTag(this.state.chosenTag, chosenDatatimeISO).then(res => {
+                if (res){
+                    this.setState({status: 2});
+                } else {
+                    this.setState({status: -1});
+                }
+            });
         } else {
             document.getElementById("basicConfirmButtonInvalidText").innerText = "You have to select/enter a tag";
         }
@@ -128,12 +134,12 @@ class ActivateBasicTag extends Component {
                     <div className={"d-inline-flex flex-wrap btn-group-toggle"} data-toggle={"buttons"}>
                         {
                             this.state.recentTags.map((tag) => (
-                                <label id={"recentTagsLbl" + tag} className={"btn btn-outline-primary mt-2 ml-1 mr-1 pl-2 pr-2 pt-1 pb-1"}>
+                                <label id={"recentTagsLbl" + this.state.recentTags.indexOf(tag)} key={"recentTagsLbl" + this.state.recentTags.indexOf(tag)} className={"btn btn-outline-primary mt-2 ml-1 mr-1 pl-2 pr-2 pt-1 pb-1"}>
                                     <input
                                         type="radio"
                                         name="recentTagsButtons"
-                                        key={"recentTagsBtn" + tag}
-                                        id={"recentTagsBtn" + tag}
+                                        key={"recentTagsBtn" + this.state.recentTags.indexOf(tag)}
+                                        id={"recentTagsBtn" + this.state.recentTags.indexOf(tag)}
                                         value={tag}
                                         onClick={this.recentTagClick}
                                     />

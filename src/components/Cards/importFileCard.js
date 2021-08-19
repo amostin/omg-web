@@ -145,8 +145,8 @@ class ImportFileCard extends Component {
                         </div>
                         <hr className="sidebar-divider"/>
                         <form className="ml-2 mr-2" id="uploadForm">
-                            <div className="row">
-                                <label htmlFor="sensorModelSelector">Sensor model :</label>
+                            <div className="row form-group">
+                                <label className={"form-check-label"} htmlFor="sensorModelSelector">Sensor model</label>
                                 <select className="form-control" id="sensorModelSelector" name="pumpModel"
                                         onChange={this.sensorModelChange} defaultValue={{value: "none"}}>
                                     <option value="none">Choose a model...</option>
@@ -155,13 +155,13 @@ class ImportFileCard extends Component {
                                 <div className={"invalid-feedback"}>You have to choose a model</div>
                             </div>
 
-                            <div className="row form-group mt-2 mb-0">
-                                <label htmlFor="importName">Import name (default : filename)</label>
+                            <div className="row form-group mt-2">
+                                <label className={"form-check-label"} htmlFor="importName">Import name (default : filename)</label>
                                 <input type="text" className={"form-control"} id="importName" onChange={this.importNameChange}/>
                                 <div className={"invalid-feedback"}>You have to enter a import name</div>
                             </div>
-                            <div className="row form-group ">
-                                <label className="invisible" htmlFor="dataFileAutoInput">Sensor data csv :</label>
+                            <div className="row form-group mt-2">
+                                <label className={"form-check-label"} htmlFor="dataFileAutoInput">Sensor data CSV</label>
                                 <input type="file" className="form-control-file" id="dataFileAutoInput" name="file" accept=".csv" onChange={this.fileChange}/>
                                 <div className={"invalid-feedback"}>You have to choose a CSV file</div>
                             </div>

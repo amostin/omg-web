@@ -4,16 +4,6 @@ import React, { Component } from 'react';
  * basic card component inspired of the SB Admin 2 theme
  */
 class CardBasic extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            title: '',
-        }
-    }
-
-    componentDidMount() {
-        this.setState({ title: this.props.title ? this.props.title : 'Basic Card Example' });
-    }
 
     setClassName = () => {
         let borderBottom = this.props.color ? "border-bottom-" + this.props.color : "border-bottom-primary"

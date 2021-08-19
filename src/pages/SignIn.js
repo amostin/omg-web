@@ -63,7 +63,7 @@ class SignIn extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"col-12"}>
                 <div id="wrapper d-flex flex-column">
                     <div className="row ml-4 mt-4 d-flex flex-row align-items-center">
                         <i className="fas fa-chart-area fa-4x text-white mb-1"/>
@@ -87,7 +87,8 @@ class SignIn extends Component {
                                             <div className="form-group">
                                                 <input type="password" className="form-control form-control-user"
                                                        id="exampleInputPassword" placeholder="Password"
-                                                       onChange={this.setPassword}/>
+                                                       onChange={this.setPassword}
+                                                       onKeyPress={event => event.key === 'Enter' ? this.handleSignIn : ''}/>
                                             </div>
                                             <button className="btn btn-primary btn-user btn-block"
                                                     onClick={this.handleSignIn}>

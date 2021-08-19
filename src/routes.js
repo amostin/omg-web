@@ -20,6 +20,7 @@ import TagsManager from "./pages/TagsManager";
 import Bottombar from "./components/Navigation/Bottombar";
 import TagActivation from "./pages/TagActivation";
 import TagsHistory from "./pages/TagHistory";
+import BottombarTest from "./components/Navigation/BottombarTest";
 
 /**
  * Routing component. Manage authentification too.

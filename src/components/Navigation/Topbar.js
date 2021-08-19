@@ -12,11 +12,6 @@ class Topbar extends Component {
         cookies: instanceOf(Cookies).isRequired
     };
 
-    constructor(props) {
-        console.log(window.location.pathname)
-        super(props);
-    }
-
     logout() {
         store.dispatch({type: 'SETKEY', value: ""});
         this.setCookie("apiKey", "");

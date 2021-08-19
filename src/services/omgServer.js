@@ -251,3 +251,110 @@ export async function getRecentTags() {
         return null;
     }
 }
+
+/**
+ * request for insert activation tag in the database
+ *
+ * @param tag
+ * @param date
+ * @return {Promise<any>} : return result request
+ */
+export async function postBasicTag(tag, date) {
+    try {
+        const url = hostUrl + '/tags/one';
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tag: tag,
+                startDatetime: date,
+                endDatetime: date,
+            }),
+        });
+        if (res.ok) {
+            return await res.json();
+        } else {
+            return null;
+        }
+    } catch (e) {
+        return e;
+    }
+}
+
+/**
+ * Retrieves the 10 most recent tags based on the creation date passed in parameters
+ *
+ * @param datetimeBegin
+ * @return {Promise<null|any>} : 10 most recent tags or error
+ */
+export async function getTagsHistory(datetimeBegin) {
+    let url = hostUrl + '/tags/recentHistory?datetimeBegin=' + datetimeBegin ;
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+        },
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Retrieves the count of all activated tag
+ *
+ * @return {Promise<null|any>} count or error
+ */
+export async function getCountAllActivations() {
+    let url = hostUrl + '/tags/countAllActivations';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+        },
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}
+
+export async function putOneTag(tagName, tagId, tagDatetime) {
+    let url = hostUrl + '/tags/one';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'PUT',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tagId: tagId,
+            tagDatetime: tagDatetime,
+            tagName: tagName,
+        })
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}

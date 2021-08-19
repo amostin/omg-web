@@ -1,15 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from "react";
 
-/**
- * basic card component inspired of the SB Admin 2 theme
- */
-class CardBasicTitle extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            title: ''
-        }
-    }
+class CardHistory extends Component {
 
     checkMobile() {
         let check = false;
@@ -19,39 +10,19 @@ class CardBasicTitle extends Component {
         return check;
     }
 
-    componentDidMount() {
-        this.setState({ title: this.props.title ? this.props.title : 'Basic Card Example' });
-    }
-
     setContainerClassName = () => {
-        let borderBottom = this.props.color ? "border-bottom-" + this.props.color : "border-bottom-primary";
-        let ret = "card shadow mb-4 " + borderBottom;
+        let ret = "card mb-2";
         ret += !this.checkMobile() ? " mr-3" : " w-100";
         return ret;
     }
 
-    setTitleClassName = () => {
-        let textColor = this.props.color ? "text-" + this.props.color : "text-primary";
-        return "text font-weight-bold text-uppercase mb-1 " + textColor;
-    }
-
     render() {
         return (
-            <div className={this.setContainerClassName()}>
-                <div className="card-body">
-                    <div className="no-gutters align-items-center">
-                        <div className="col mr-2">
-                            <div className={this.setTitleClassName()}>
-                                {this.state.title}
-                            </div>
-                        </div>
-                    </div>
-                    <hr className="sidebar-divider mb-1"/>
-                    {this.props.children}
-                </div>
+            <div className={this.setContainerClassName()} style={{backgroundColor: 'white'}}>
+                {this.props.children}
             </div>
         )
     }
 }
 
-export default CardBasicTitle;
+export default CardHistory;

@@ -109,7 +109,7 @@ class ChartsByTag extends Component {
         let checkboxes = [];
         weekDays.forEach(day => {
             checkboxes.push((
-                <div className="form-check form-check-inline">
+                <div key={"checkboxItem" + day[0] } className="form-check form-check-inline">
                     <input className="form-check-input" type="checkbox" key={"checkbox" + day[0] } id={"checkbox" + day[0] } value={day[1]} onChange={() => this.weekDaysChange(day[1])}/>
                     <label className="form-check-label" htmlFor={"checkbox" + day[0]}>{day[0]}</label>
                 </div>
@@ -175,7 +175,9 @@ class ChartsByTag extends Component {
                     </CardBasicTitle>
                 </div>
                 <div className="row">
-                    {this.renderChart()}
+                    <div className={"col-12"}>
+                        {this.renderChart()}
+                    </div>
                 </div>
             </div>
         )

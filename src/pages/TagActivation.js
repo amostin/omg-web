@@ -5,7 +5,7 @@ class TagActivation extends Component {
     render() {
         return (
             <div className="container-fluid">
-                <div className={"d-flex"}>
+                <div className={"d-flex w-100"}>
                     <ActivateBasicTag/>
                 </div>
             </div>
