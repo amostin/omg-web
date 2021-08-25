@@ -14,7 +14,7 @@ class Sidebar extends Component {
                     <div className="sidebar-brand-icon">
                         <i className="fas fa-chart-area"/>
                     </div>
-                    <div className="sidebar-brand-text mx-3">OMG</div>
+                    <div className="sidebar-brand-text mx-3">OMG Web</div>
                 </Link>
 
                 {/* <!-- Divider --> */}
