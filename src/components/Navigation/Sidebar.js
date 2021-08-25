@@ -66,7 +66,7 @@ class Sidebar extends Component {
 
                 {/* <!-- Nav Item - upload data --> */}
                 <li className="nav-item">
-                    <Link className="nav-link pt-2" to="/fileupload">
+                    <Link className="nav-link pt-2" to="/import">
                         <i className="fas fa-fw fa-file-upload"/>
                         <span>Import data</span></Link>
                 </li>

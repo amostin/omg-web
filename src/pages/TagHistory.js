@@ -107,15 +107,14 @@ class TagsHistory extends Component {
     }
 
     render() {
-    return (
+        return (
             <div className="container-fluid">
-
-            <div>
-                {this.setInfiniteScrollComponent()}
+                <div>
+                    {this.setInfiniteScrollComponent()}
+                </div>
             </div>
-    </div>
-    )
-}
+        )
+    }
 }
 
 export default TagsHistory;

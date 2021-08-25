@@ -163,15 +163,15 @@ class SignUp extends Component {
 
     render() {
         return (
-            <div>
-                <div id="wrapper d-flex flex-column">
+            <div className={"col-12"}>
+                <div id="wrapper d-sm-flex flex-column">
                     <div className="row ml-4 mt-4 d-flex flex-row align-items-center">
                         <i className="fas fa-chart-area fa-4x text-white mb-1"/>
                         <div className="ml-3 h1 mb-0 text-white font-weight-bold">OMG</div>
                     </div>
                     {/* <!-- Outer Row --> */}
                     <div className="row justify-content-center">
-                        <div className="card o-hidden border-0 shadow-lg my-5">
+                        <div className="card o-hidden border-0 shadow-lg mt-5 ml-2 mr-2 mb-2">
                             <div className="card-body">
                                 {/* <!-- Nested Row within Card Body --> */}
                                 <div className="p-3">

@@ -71,7 +71,7 @@ class SignIn extends Component {
                     </div>
                     {/* <!-- Outer Row --> */}
                     <div className="row justify-content-center">
-                        <div className="card o-hidden border-0 shadow-lg my-5" style={{width: "20rem"}}>
+                        <div className="card o-hidden border-0 shadow-lg mt-5 ml-2 mr-2 mb-2" style={{width: "20rem"}}>
                             <div className="card-body">
                                 {/* <!-- Nested Row within Card Body --> */}
                                 <div className="p-3">
