@@ -117,7 +117,7 @@ class Routes extends Component {
         return (
             <div>
                 {/* <!-- Page Wrapper --> */}
-                <div id="wrapper" className={"bg-danger"}>
+                <div id="wrapper">
                     {/* <!-- Sidebar --> */}
                     {this.checkMobile() ? <div/> : <Sidebar/>}
                     {/* <!-- End of Sidebar --> */}
@@ -133,8 +133,8 @@ class Routes extends Component {
                                 <Switch>
                                     <Redirect from='/dashboard?' to='/'/>
                                     <Route exact path="/" component={Home}/>
-                                    <Route path="/index" component={Home}/>
-                                    <Route path="/datamanager" component={DataManager}/>
+                                    <Route exact path="/index" component={Home}/>
+                                    <Route exact path="/datamanager" component={DataManager}/>
                                     <Route path="/tagsmanager" component={TagsManager}/>
                                     <Route path="/tagactivation" component={TagActivation}/>
                                     <Route path="/tagshistory" component={TagsHistory}/>

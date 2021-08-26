@@ -120,6 +120,7 @@ class DataManager extends Component {
 
     setCalendar() {
         let calendar = (<p className={"text-center"}>No data available</p>);
+        console.log(this.state.dataDays.length)
         if (this.state.dataDays.length > 0) {
             calendar = (<div>
                     <Calendar
