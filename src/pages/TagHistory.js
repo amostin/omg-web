@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {getCountAllActivations, getTagsHistory} from "../services/omgServer";
 import CardHistory from "../components/Cards/CardHistory";
 import EditTagDialog from "../components/Dialogs/EditTagDialog";
+import DeleteTagDialog from "../components/Dialogs/DeleteTagDialog";
 
 class TagsHistory extends Component {
 
@@ -19,14 +20,14 @@ class TagsHistory extends Component {
         getCountAllActivations().then((res) => this.setState({tagsHistoryCount: res}));
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.tagsHistory !== prevState.tagsHistory) {
-            console.log(this.state.tagsHistory);
-        }
-        if (this.state.tagsHistoryCount !== prevState.tagsHistoryCount) {
-            console.log(this.state.tagsHistoryCount);
-        }
-    }
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     if (this.state.tagsHistory !== prevState.tagsHistory) {
+    //         console.log(this.state.tagsHistory);
+    //     }
+    //     if (this.state.tagsHistoryCount !== prevState.tagsHistoryCount) {
+    //         console.log(this.state.tagsHistoryCount);
+    //     }
+    // }
 
     loadTags = (datetime) => {
         let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
@@ -37,6 +38,10 @@ class TagsHistory extends Component {
                 this.setState({tagsHistory: data})
             }
         });
+    }
+
+    buttonDeleteClick = () => {
+
     }
 
     setInfiniteScrollContent() {
@@ -65,7 +70,7 @@ class TagsHistory extends Component {
                         <div className="collapse" id={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
                             <div className="card-body d-flex justify-content-around">
                                 <EditTagDialog tagName={tag["name"]} tagDatetime={tag["startDatetime"]} tagId={tag["id"]}/>
-                                <button className={"btn btn-danger"}>Delete</button>
+                                <DeleteTagDialog tagId={tag["id"]}/>
                             </div>
                         </div>
                     </CardHistory>
@@ -82,7 +87,6 @@ class TagsHistory extends Component {
                 ret = false;
             }
         }
-        console.log(ret);
         return ret;
     }
 

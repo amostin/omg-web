@@ -5,7 +5,7 @@ class TagsManager extends Component {
     render() {
         return (
             <div className={"container-fluid"}>
-                <p>Tags Manager</p>
+                <p>Tags Manager coming soon...</p>
             </div>
         );
     }

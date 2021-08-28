@@ -3,8 +3,8 @@ import store from "../redux/store";
 //
 // Service file that contains all the requests for the OMG server API.
 //
-
-const hostUrl = "https://omg.ephec-ti.be/api"  // Url of the OMG server
+const hostUrl = "http://localhost:3001/api" // Dev URL
+// const hostUrl = "https://omg.ephec-ti.be/api"  // Prod URL
 const headers = new Headers({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -334,6 +334,14 @@ export async function getCountAllActivations() {
     }
 }
 
+/**
+ *  Edit one activation tag of a user
+ *
+ * @param tagName
+ * @param tagId
+ * @param tagDatetime
+ * @return {Promise<null|any>}
+ */
 export async function putOneTag(tagName, tagId, tagDatetime) {
     let url = hostUrl + '/tags/one';
     let res = await fetch(url, {
@@ -357,4 +365,23 @@ export async function putOneTag(tagName, tagId, tagDatetime) {
     } else {
         return null;
     }
+}
+
+export async function deleteOneTag(tagId) {
+    let url = hostUrl + '/tags/one';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'DELETE',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tagId: tagId
+        })
+    });
+    return [res, await res.json()];
 }

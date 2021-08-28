@@ -56,9 +56,17 @@ export default function EditTagDialog(props) {
 
     return (
         <div>
-            <button className={"btn btn-warning"} onClick={handleClickOpen}>
-                Edit
+            <button type={"button"} className={"btn btn-warning"} onClick={handleClickOpen}>
+                <span className={"icon text-white mr-2"}>
+                    <i className={"fas fa-edit"}/>
+                </span>
+                <span className={"text"}>
+                    Edit
+                </span>
             </button>
+            {/*<button className={"btn btn-warning"} onClick={handleClickOpen}>*/}
+            {/*    Edit*/}
+            {/*</button>*/}
             <Dialog open={open} onClose={handleClose} aria-labelledby="editTag-dialog-title">
                 <DialogTitle id="editTagDialogTitle" className={"text-warning pb-0"}>Edit Tag</DialogTitle>
                 <DialogContent className={"ml-2 mr-2"}>
@@ -85,7 +93,7 @@ export default function EditTagDialog(props) {
                     <button id={"editTagApplyButton"} onClick={applyChanges} className={"btn text-warning ml-0"}>
                         Apply
                     </button>
-                    <button onClick={handleClose} className={"btn"}>
+                    <button onClick={handleClose} className={"btn text-primary"}>
                         Close
                     </button>
                 </DialogActions>
