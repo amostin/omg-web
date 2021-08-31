@@ -73,33 +73,33 @@ class Routes extends Component {
     isConnected = () => {
         switch (this.state.requestLoading) {
             case 0:
-                // console.log(0);
+                console.log(0);
                 if (this.getCookie('apiKey')) {
-                    // console.log(10);
+                    console.log(10);
                     if (this.getCookie("apiKey").includes("ey")) {
-                        // console.log(110);
+                        console.log(110);
                         if (store.getState().storeApiKey.apiKey === this.getCookie("apiKey")) {
-                            // console.log(1110);
+                            console.log(1110);
                             return this.showRouter();
                         } else {
-                            // console.log(-1110);
+                            console.log(-1110);
                             this.testKey();
                             this.setState({requestLoading: 1});
                         }
                     } else {
-                        // console.log(-110);
+                        console.log(-110);
                         return this.showAuth();
                     }
                 } else {
-                    // console.log(-10);
+                    console.log(-10);
                     return this.showAuth();
                 }
                 break;
             case 1:
-                // console.log(1);
+                console.log(1);
                 return (<p>Loading...</p>);
             case 2:
-                // console.log(2);
+                console.log(2);
                 if (this.state.requestOk) {
                     this.setState({requestLoading: 0});
                     return this.showRouter();
