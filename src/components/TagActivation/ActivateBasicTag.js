@@ -25,11 +25,11 @@ class ActivateBasicTag extends Component {
         });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.chosenTag !== prevState.chosenTag) {
-            console.log(this.state.chosenTag);
-        }
-    }
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     if (this.state.chosenTag !== prevState.chosenTag) {
+    //         console.log(this.state.chosenTag);
+    //     }
+    // }
 
     chosenDatetimeChange = (event) => {
         this.setState({chosenDatetime: this.getDatePickerFormat(new Date(event.target.value))});
@@ -40,9 +40,10 @@ class ActivateBasicTag extends Component {
 
     recentTagClick = (event) => {
         let manualTagInput = document.getElementById("manualBasicTagInput");
-        if (manualTagInput.value !== "") {
-            manualTagInput.value = "";
-        }
+        manualTagInput.value = event.target.value;
+        // if (manualTagInput.value !== "") {
+        //     manualTagInput.value = "";
+        // }
         this.setState({chosenTag: event.target.value});
         if (this.state.status !== 0) {
             this.setState({status: 0});

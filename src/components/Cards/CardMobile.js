@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class CardHistory extends Component {
+class CardMobile extends Component {
 
     checkMobile() {
         let check = false;
@@ -12,7 +12,7 @@ class CardHistory extends Component {
 
     setContainerClassName = () => {
         let ret = "card mb-2";
-        ret += !this.checkMobile() ? " mr-3" : " w-100";
+        ret += !this.checkMobile() ? "" : " w-100";
         return ret;
     }
 
@@ -25,4 +25,4 @@ class CardHistory extends Component {
     }
 }
 
-export default CardHistory;
+export default CardMobile;

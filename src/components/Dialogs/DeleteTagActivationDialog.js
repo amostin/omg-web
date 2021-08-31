@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import {deleteAllTags} from "../../services/omgServer";
+import {deleteOneTag} from "../../services/omgServer";
 
-export default function DeleteTagDialog(props) {
+export default function DeleteTagActivationDialog(props) {
 
     const [open, setOpen] = React.useState(false);
-    const [tagName] = useState(props.tagName);
+    const [tagId] = useState(props.tagId);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -18,18 +18,17 @@ export default function DeleteTagDialog(props) {
         window.location.reload(false);
     };
 
-    const deleteTag = () => {
-        const deleteBtn = document.getElementById("buttonYesDeleteTagDialog");
+    const deleteTagActivation = () => {
+        const deleteBtn = document.getElementById("buttonDeleteTagActivationDialog");
         deleteBtn.setAttribute("disabled", "true");
         deleteBtn.innerText = "deleting...";
-        deleteAllTags(props.tagName).then(res => {
+        deleteOneTag(tagId).then(res => {
             if (res[0].ok) {
-                deleteBtn.innerText = "Tag deleted";
-                console.log(res[1]);
+                deleteBtn.innerText = "Tag activation deleted";
                 handleClose();
             } else {
                 deleteBtn.innerText = "Error";
-                document.getElementById("responseTextDeleteTagDialog").innerText = "Something wrong happened. Try Later.";
+                document.getElementById("responseTextDeleteTagActivationDialog").innerText = "Something wrong happened. Try Later.";
             }
         });
 
@@ -37,24 +36,24 @@ export default function DeleteTagDialog(props) {
 
     return (
         <div>
-            <button className={"btn btn-outline-danger"} onClick={handleClickOpen}>
-                <span className={"icon mr-2"}>
+            <button className={"btn btn-danger"} onClick={handleClickOpen}>
+                <span className={"icon text-white mr-2"}>
                     <i className={"fas fa-trash"}/>
                 </span>
                 <span className={"text"}>
-                    {"Delete " + props.tagName}
+                    Delete
                 </span>
             </button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="deleteTag-dialog-title">
                 <DialogContent className={"ml-2 mr-2"}>
-                    <div className={"text-center"}> Are you sure you want to delete {tagName === "All" ? "all tags" : "this tag"} ? All associated activations will also be deleted. This action is irreversible.</div>
-                    <div id={"responseTextDeleteTagDialog"} className={"text-center text-danger small mt-2"}/>
+                    <div className={"text-center"}> Are you sure you want to delete this tag activation ?</div>
+                    <div id={"responseTextDeleteTagActivationDialog"} className={"text-center text-danger small mt-2"}/>
                 </DialogContent>
                 <DialogActions>
-                    <button id={"buttonYesDeleteTagDialog"} onClick={deleteTag} className={"btn text-danger ml-0"}>
+                    <button id={"buttonDeleteTagActivationDialog"} onClick={deleteTagActivation} className={"btn text-danger ml-0"}>
                         Yes
                     </button>
-                    <button id={"buttonNoDeleteTagDialog"} onClick={handleClose} className={"btn text-primary"}>
+                    <button onClick={handleClose} className={"btn text-primary"}>
                         No
                     </button>
                 </DialogActions>

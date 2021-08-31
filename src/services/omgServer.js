@@ -3,7 +3,7 @@ import store from "../redux/store";
 //
 // Service file that contains all the requests for the OMG server API.
 //
-// const hostUrl = "http://localhost:3001/api" // Dev URL
+// const hostUrl = "http://192.168.0.20:3001/api" // Dev URL
 const hostUrl = "https://omg.ephec-ti.be/api"  // Prod URL
 const headers = new Headers({
     'Content-Type': 'application/json',
@@ -114,7 +114,6 @@ export async function signin(email, password) {
             password: password,
         })
     });
-    console.log(res);
     return res.json();
 }
 
@@ -141,7 +140,45 @@ export async function signup(user) {
  * @return Array of date {Promise<any>}
  */
 export async function getDataDays() {
-    let url = hostUrl + "/data/datadays";
+    let url = hostUrl + "/data/days";
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Authorization': "Bearer " + store.getState().storeApiKey.apiKey
+        }
+    });
+    return res.json();
+}
+
+export async function getTagsDays(tagName = "") {
+    let url = hostUrl + "/tags/days";
+    if (tagName) {
+        url += "?tagName=" + tagName;
+    }
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Authorization': "Bearer " + store.getState().storeApiKey.apiKey
+        }
+    });
+    return res.json();
+}
+
+export async function getTagsDay(day, tagName = "") {
+    let url = hostUrl + "/tags/day?day=" + day;
+    if (tagName) {
+        url += "&tagName=" + tagName;
+    }
     let res = await fetch(url, {
         credentials: 'same-origin',
         method: 'GET',
@@ -384,4 +421,47 @@ export async function deleteOneTag(tagId) {
         })
     });
     return [res, await res.json()];
+}
+
+export async function deleteAllTags(tagName) {
+    let url = hostUrl + '/tags/all';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'DELETE',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tagName: tagName
+        })
+    });
+    return [res, await res.json()];
+}
+
+export async function putAllTags(tagName, newTagName) {
+    let url = hostUrl + '/tags/all';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'PUT',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tagName: tagName,
+            newTagName: newTagName
+        })
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
 }

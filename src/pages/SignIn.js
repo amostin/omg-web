@@ -67,7 +67,7 @@ class SignIn extends Component {
                 <div id="wrapper d-flex flex-column">
                     <div className="row ml-4 mt-4 d-flex flex-row align-items-center">
                         <i className="fas fa-chart-area fa-4x text-white mb-1"/>
-                        <div className="ml-3 h1 mb-0 text-white font-weight-bold">OMG</div>
+                        <div className="ml-3 h1 mb-0 text-white font-weight-bold">OMG Web</div>
                     </div>
                     {/* <!-- Outer Row --> */}
                     <div className="row justify-content-center">
@@ -77,24 +77,27 @@ class SignIn extends Component {
                                 <div className="p-3">
                                     <div className="row justify-content-center flex-column">
                                         <h1 className="h3 text-gray-900 mb-4">Sign in</h1>
-                                        <div className="user">
-                                            <div className="form-group">
-                                                <input type="email" className="form-control form-control-user"
-                                                       id="exampleInputEmail" aria-describedby="emailHelp"
-                                                       placeholder="Email"
-                                                       onChange={this.setEmail}/>
+                                        <form onSubmit={this.handleSignIn} action={"#"}>
+                                            <div className="user">
+                                                <div className="form-group">
+                                                    <input type="email" className="form-control form-control-user"
+                                                           id="exampleInputEmail" aria-describedby="emailHelp"
+                                                           placeholder="Email"
+                                                           onChange={this.setEmail}/>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input type="password" className="form-control form-control-user"
+                                                           id="exampleInputPassword" placeholder="Password"
+                                                           onChange={this.setPassword}
+                                                    />
+                                                </div>
+                                                <button className="btn btn-primary btn-user btn-block"
+                                                        onClick={this.handleSignIn}
+                                                        type={"submit"}>
+                                                    Login
+                                                </button>
                                             </div>
-                                            <div className="form-group">
-                                                <input type="password" className="form-control form-control-user"
-                                                       id="exampleInputPassword" placeholder="Password"
-                                                       onChange={this.setPassword}
-                                                       onKeyPress={event => event.key === 'Enter' ? this.handleSignIn : ''}/>
-                                            </div>
-                                            <button className="btn btn-primary btn-user btn-block"
-                                                    onClick={this.handleSignIn}>
-                                                Login
-                                            </button>
-                                        </div>
+                                        </form>
                                     </div>
                                     {this.showError()}
                                     <hr id="horizLine" className="mt-4"/>

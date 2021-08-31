@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {getCountAllActivations, getTagsHistory} from "../services/omgServer";
-import CardHistory from "../components/Cards/CardHistory";
-import EditTagDialog from "../components/Dialogs/EditTagDialog";
-import DeleteTagDialog from "../components/Dialogs/DeleteTagDialog";
+import CardMobile from "../components/Cards/CardMobile";
+import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
+import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 
 class TagsHistory extends Component {
 
@@ -48,8 +48,8 @@ class TagsHistory extends Component {
         let message = (<div>Loading...</div>)
         if (this.state.tagsHistory) {
             message = this.state.tagsHistory.map((tag) => (
-                <div key={"containerCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
-                    <CardHistory>
+                <div key={"containerTagsHistoryCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
+                    <CardMobile>
                         {/* <!-- Card Header - Accordion --> */}
                         <a href={"#tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
                            aria-controls={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
@@ -69,11 +69,11 @@ class TagsHistory extends Component {
                         {/*<!-- Card Content - Collapse -->*/}
                         <div className="collapse" id={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
                             <div className="card-body d-flex justify-content-around">
-                                <EditTagDialog tagName={tag["name"]} tagDatetime={tag["startDatetime"]} tagId={tag["id"]}/>
-                                <DeleteTagDialog tagId={tag["id"]}/>
+                                <EditTagActivationDialog tagName={tag["name"]} tagDatetime={tag["startDatetime"]} tagId={tag["id"]}/>
+                                <DeleteTagActivationDialog tagId={tag["id"]}/>
                             </div>
                         </div>
-                    </CardHistory>
+                    </CardMobile>
                 </div>
             ));
         }

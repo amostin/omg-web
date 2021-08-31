@@ -167,7 +167,7 @@ class SignUp extends Component {
                 <div id="wrapper d-sm-flex flex-column">
                     <div className="row ml-4 mt-4 d-flex flex-row align-items-center">
                         <i className="fas fa-chart-area fa-4x text-white mb-1"/>
-                        <div className="ml-3 h1 mb-0 text-white font-weight-bold">OMG</div>
+                        <div className="ml-3 h1 mb-0 text-white font-weight-bold">OMG Web</div>
                     </div>
                     {/* <!-- Outer Row --> */}
                     <div className="row justify-content-center">
@@ -189,7 +189,7 @@ class SignUp extends Component {
                                                 <input type="password" className="form-control form-control-user" id="inputPassword" placeholder="Password" onChange={this.setPassword}/>
                                                 <input type="password" className="form-control form-control-user ml-2" id="inputConfirmPassword" placeholder="Confirm password" onChange={this.setConfirmPassword}/>
                                             </div>
-                                            <div id="formGroupPassword" className="form-group d-flex flex-row">
+                                            <div id="formGroupSecret" className="form-group d-flex flex-row">
                                                 <input type="password" className="form-control form-control-user" id="inputSecret" placeholder="Secret" onChange={this.setSecret}/>
                                             </div>
                                             <button id="btnSignUp" className="btn btn-primary btn-user btn-block" onClick={this.handleSignUp}>
