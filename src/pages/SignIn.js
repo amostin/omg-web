@@ -35,7 +35,9 @@ class SignIn extends Component {
                 this.setState({'error': res.message});
             }
             else {
-                await this.setCookie("apiKey", res.token);
+                let expiresDate = new Date(Date.now());
+                expiresDate.setHours(expiresDate.getHours() + 2);
+                await this.setCookie("apiKey", res.token, {expires: expiresDate});
                 await this.setApiKey(res.token);
                 return <Redirect to="/"/>;
             }
@@ -118,8 +120,8 @@ class SignIn extends Component {
         )
     };
 
-    setCookie = (name, key) => {
-        this.props.cookies.set(name, key);
+    setCookie = (name, key, options) => {
+        this.props.cookies.set(name, key, options);
     }
 
     async setApiKey(apiKey) {

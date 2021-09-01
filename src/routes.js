@@ -34,7 +34,7 @@ class Routes extends Component {
     constructor(props) {
         super(props);
         this.setCookie("method", "in");
-        document.getElementById('body').style.backgroundColor = "#f8f9fc"
+        // document.getElementById('body').style.backgroundColor = "#f8f9fc"
         this.state = {
             requestLoading: 0,
             requestOk: false
