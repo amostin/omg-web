@@ -168,8 +168,8 @@ class ChartBasic extends Component {
      */
     async getChartData() {
         this.setState({'loadingData': true});
-        const paletteDark = ["#dc414b", "#307aac", "#18a060", "#8e4e88", "#f26542", "#36a8dd", "#36cb83", "#bb5888", "#f69e46", "#8d8162"]
-        const palette = ["#E15B64", "#3688BF", "#1BB16B", "#9E5797", "#F47E60", "#51B4E1", "#4DD191", "#C46E98", "#F8B26A", "#9B8F6F"];
+        const paletteDark = ["#dc414b", "#307aac", "#18a060", "#8e4e88", "#f26542", "#36a8dd", "#36cb83", "#bb5888", "#f69e46", "#8d8162", "#E15B64", "#3688BF", "#1BB16B", "#9E5797", "#F47E60", "#51B4E1", "#4DD191", "#C46E98", "#F8B26A", "#9B8F6F"];
+        const palette = ["#E15B64", "#3688BF", "#1BB16B", "#9E5797", "#F47E60", "#51B4E1", "#4DD191", "#C46E98", "#F8B26A", "#9B8F6F", "#eb9096", "#72afd7", "#4ae49c", "#bf8bba", "#f8a894", "#88cceb", "#86e0b4", "#d79db9", "#fac998", "#bbb39d"];
         // const paletteLight = ["#eb9096", "#72afd7", "#4ae49c", "#bf8bba", "#f8a894", "#88cceb", "#86e0b4", "#d79db9", "#fac998", "#bbb39d"];
         let showData = {};
         await getChartDataFromTagName(this.state.tagSelected, this.state.datetimeRange, this.state.timeSelected, this.state.weekDaysSelected).then((data) => {

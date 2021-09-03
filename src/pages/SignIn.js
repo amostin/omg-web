@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {signin} from "../services/omgServer";
-import {withCookies, Cookies} from "react-cookie";
+import {Cookies, withCookies} from "react-cookie";
 import {instanceOf} from "prop-types";
 import store from "../redux/store";
 
@@ -25,16 +25,15 @@ class SignIn extends Component {
     }
 
     toSignUp = async () => {
-        await this.setCookie("method","up");
+        await this.setCookie("method", "up");
     }
 
     handleSignIn = async () => {
         if (this.state.email !== "" && this.state.password !== "") {
             let res = await signin(this.state.email, this.state.password);
-            if (res.status !== 'ok'){
+            if (res.status !== 'ok') {
                 this.setState({'error': res.message});
-            }
-            else {
+            } else {
                 let expiresDate = new Date(Date.now());
                 expiresDate.setHours(expiresDate.getHours() + 2);
                 await this.setCookie("apiKey", res.token, {expires: expiresDate});
@@ -79,27 +78,25 @@ class SignIn extends Component {
                                 <div className="p-3">
                                     <div className="row justify-content-center flex-column">
                                         <h1 className="h3 text-gray-900 mb-4">Sign in</h1>
-                                        <form onSubmit={this.handleSignIn} action={"#"}>
-                                            <div className="user">
-                                                <div className="form-group">
-                                                    <input type="email" className="form-control form-control-user"
-                                                           id="exampleInputEmail" aria-describedby="emailHelp"
-                                                           placeholder="Email"
-                                                           onChange={this.setEmail}/>
-                                                </div>
-                                                <div className="form-group">
-                                                    <input type="password" className="form-control form-control-user"
-                                                           id="exampleInputPassword" placeholder="Password"
-                                                           onChange={this.setPassword}
-                                                    />
-                                                </div>
-                                                <button className="btn btn-primary btn-user btn-block"
-                                                        onClick={this.handleSignIn}
-                                                        type={"submit"}>
-                                                    Login
-                                                </button>
+                                        <div className="user">
+                                            <div className="form-group">
+                                                <input type="email" className="form-control form-control-user"
+                                                       id="exampleInputEmail" aria-describedby="emailHelp"
+                                                       placeholder="Email"
+                                                       onChange={this.setEmail}/>
                                             </div>
-                                        </form>
+                                            <div className="form-group">
+                                                <input type="password" className="form-control form-control-user"
+                                                       id="exampleInputPassword" placeholder="Password"
+                                                       onChange={this.setPassword}
+                                                />
+                                            </div>
+                                            <button className="btn btn-primary btn-user btn-block"
+                                                    onClick={this.handleSignIn}
+                                                    type={"submit"}>
+                                                Login
+                                            </button>
+                                        </div>
                                     </div>
                                     {this.showError()}
                                     <hr id="horizLine" className="mt-4"/>

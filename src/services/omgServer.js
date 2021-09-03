@@ -3,8 +3,8 @@ import store from "../redux/store";
 //
 // Service file that contains all the requests for the OMG server API.
 //
-// const hostUrl = "http://192.168.0.20:3001/api" // Dev URL
-const hostUrl = "https://omg.ephec-ti.be/api"  // Prod URL
+const hostUrl = process.env.REACT_APP_API_HOST;
+
 const headers = new Headers({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
