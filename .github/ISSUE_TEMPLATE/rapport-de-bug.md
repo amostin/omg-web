@@ -1,6 +1,6 @@
 ---
 name: 'Rapport de bug '
-about: ' '
+about: 'Aider à améliorer le programme en envoyant des rapports de bug'
 title: '[BUG] '
 labels: ''
 assignees: ''
