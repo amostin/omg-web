@@ -7,22 +7,22 @@ assignees: ''
 
 ---
 
-**Description du bug**
+### Description du bug
 
 
-**Comment le reproduire ?**
-Étapes pour reproduire le comportement:
+### Comment le reproduire ?
+*Étapes pour reproduire le comportement :*
 
 
-**Résultat initialement attendu**
+### Résultat initialement attendu 
 
 
-**Capture d'écran**
-Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.
+### Capture d'écran 
+*Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.*
 
 
-**Contexte supplémentaire**
-Ajoutez tout autre contexte à propos du problème ici.
+### Contexte supplémentaire
+*Ajoutez tout autre contexte à propos du problème ici.*
 
 
 **Desktop :**
