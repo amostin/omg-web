@@ -1,7 +1,7 @@
 ---
-name: ''
-about: ''
-title: ''
+name: 'Rapport de bug '
+about: ' '
+title: '[BUG] '
 labels: ''
 assignees: ''
 
