@@ -12,6 +12,7 @@ class TagsHistory extends Component {
         this.state = {
             items: Array.from({length: 20}),
             tagsHistory: this.loadTags(new Date(Date.now()).toISOString()),
+            datetimetest: this.conso(new Date(Date.now()).toISOString()),
             tagHistoryCount: null  // Number of tags activation for one user
         }
     }
@@ -20,6 +21,9 @@ class TagsHistory extends Component {
         getCountAllActivations().then((res) => this.setState({tagsHistoryCount: res}));
     }
 
+    conso(datetime) {
+        console.log(datetime);
+    }
     // componentDidUpdate(prevProps, prevState, snapshot) {
     //     if (this.state.tagsHistory !== prevState.tagsHistory) {
     //         console.log(this.state.tagsHistory);
@@ -33,9 +37,40 @@ class TagsHistory extends Component {
         let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
         getTagsHistory(datetimeBegin).then((data) => {
             if (this.state.tagsHistory) {
-                this.setState({tagsHistory: this.state.tagsHistory.concat(data)})
+                // ne passe pas par ici par défaut
+                // console.log(data);
+                this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
+
             } else {
-                this.setState({tagsHistory: data})
+                // console.log(data);
+                let startDatetimeTmp = data.map(x => x.startDatetime);
+                // console.log(startDatetimeTmp);
+                // for (const elem of data) {
+                //     console.log(elem);
+                // }
+                startDatetimeTmp.sort().reverse();
+                console.log(startDatetimeTmp);
+
+                let orderedData = [];
+                let i = 0;
+                for (const orderedDate of startDatetimeTmp) {
+                    for (const element of data) {
+
+                        // console.log(orderedDate + '=?=?=?=?=' + element.startDatetime);
+                        if(orderedDate.localeCompare(element.startDatetime) === 0) {
+                            // console.log(element);
+                            // data[i] = element; ça ça remplace le premier qui est 28 puis il n'existe plus...
+                            orderedData[i] = element;
+                            // console.log(orderedData[i]);
+                        }
+                    }
+                    i++;
+                }
+                // console.log('orderedData --> ' + JSON.stringify(orderedData));
+                // data.map(x => x.s)
+                this.setState({tagsHistory: orderedData});
+                // this.setState({tagsHistory: data});
+                // console.log(this.state.tagsHistory);
             }
         });
     }
@@ -46,6 +81,7 @@ class TagsHistory extends Component {
 
     setInfiniteScrollContent() {
         let message = (<div>Loading...</div>)
+        // this.state.tagsHistory.map((tag) => (console.log(tag)));
         if (this.state.tagsHistory) {
             message = this.state.tagsHistory.map((tag) => (
                 <div key={"containerTagsHistoryCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
@@ -119,6 +155,8 @@ class TagsHistory extends Component {
             </div>
         )
     }
+
+
 }
 
 export default TagsHistory;

@@ -32,6 +32,7 @@ class ActivateBasicTag extends Component {
     // }
 
     chosenDatetimeChange = (event) => {
+        console.log(event.target.value);
         this.setState({chosenDatetime: this.getDatePickerFormat(new Date(event.target.value))});
         if (this.state.status !== 0) {
             this.setState({status: 0});
@@ -182,6 +183,7 @@ class ActivateBasicTag extends Component {
                     id="datetimePickerBasicTag"
                     type="datetime-local"
                     className={"w-100 rounded"}
+                    // disabled
                 />
             </div>
         );
