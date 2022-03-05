@@ -39,7 +39,7 @@ class TagsHistory extends Component {
             if (this.state.tagsHistory) {
                 // ne passe pas par ici par défaut
                 // console.log(data);
-                this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
+                // this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
 
             } else {
                 // console.log(data);
