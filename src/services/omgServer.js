@@ -324,6 +324,31 @@ export async function postBasicTag(tag, date) {
 }
 
 /**
+ * Retrieves the 10 most recent tags based on the activation date passed in parameters
+ *
+ * @param datetimeBegin
+ * @return {Promise<null|any>} : 10 most recent tags or error
+ */
+export async function getTagsHistoryByActivationTime(datetimeBegin) {
+    let url = hostUrl + '/tags/recentHistorySorted?datetimeBegin=' + datetimeBegin ;
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+        },
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}
+
+/**
  * Retrieves the 10 most recent tags based on the creation date passed in parameters
  *
  * @param datetimeBegin
