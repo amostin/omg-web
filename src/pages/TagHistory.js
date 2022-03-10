@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {getCountAllActivations, getTagsHistory} from "../services/omgServer";
+import {getCountAllActivations, getTagsHistory, getTagsHistoryByActivationTime} from "../services/omgServer";
 import CardMobile from "../components/Cards/CardMobile";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
@@ -12,18 +12,16 @@ class TagsHistory extends Component {
         this.state = {
             items: Array.from({length: 20}),
             tagsHistory: this.loadTags(new Date(Date.now()).toISOString()),
-            datetimetest: this.conso(new Date(Date.now()).toISOString()),
             tagHistoryCount: null  // Number of tags activation for one user
         }
     }
 
     componentDidMount() {
-        getCountAllActivations().then((res) => this.setState({tagsHistoryCount: res}));
+        getCountAllActivations().then((res) => this.setState({tagHistoryCount: res}));
+        // getCountAllActivations().then((res) => console.log(res));
+
     }
 
-    conso(datetime) {
-        console.log(datetime);
-    }
     // componentDidUpdate(prevProps, prevState, snapshot) {
     //     if (this.state.tagsHistory !== prevState.tagsHistory) {
     //         console.log(this.state.tagsHistory);
@@ -34,46 +32,78 @@ class TagsHistory extends Component {
     // }
 
     loadTags = (datetime) => {
-        let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
-        getTagsHistory(datetimeBegin).then((data) => {
+        let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["startDatetime"];
+        console.log(datetime + '---' + datetimeBegin);
+        getTagsHistoryByActivationTime(datetimeBegin).then((data) => {
             if (this.state.tagsHistory) {
-                // ne passe pas par ici par défaut
-                // console.log(data);
-                // this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
-
+                console.log("👍state.tagsHistory:\n" + JSON.stringify(data, null, 1));
+                this.setState({tagsHistory: this.state.tagsHistory.concat(data)})
             } else {
-                // console.log(data);
-                let startDatetimeTmp = data.map(x => x.startDatetime);
-                // console.log(startDatetimeTmp);
-                // for (const elem of data) {
-                //     console.log(elem);
-                // }
-                startDatetimeTmp.sort().reverse();
-                console.log(startDatetimeTmp);
-
-                let orderedData = [];
-                let i = 0;
-                for (const orderedDate of startDatetimeTmp) {
-                    for (const element of data) {
-
-                        // console.log(orderedDate + '=?=?=?=?=' + element.startDatetime);
-                        if(orderedDate.localeCompare(element.startDatetime) === 0) {
-                            // console.log(element);
-                            // data[i] = element; ça ça remplace le premier qui est 28 puis il n'existe plus...
-                            orderedData[i] = element;
-                            // console.log(orderedData[i]);
-                        }
-                    }
-                    i++;
-                }
-                // console.log('orderedData --> ' + JSON.stringify(orderedData));
-                // data.map(x => x.s)
-                this.setState({tagsHistory: orderedData});
-                // this.setState({tagsHistory: data});
-                // console.log(this.state.tagsHistory);
+                console.log("👎!state.tagsHistory:\n" + JSON.stringify(data, null, 1));
+                this.setState({tagsHistory: data})
             }
         });
     }
+
+    // loadMoreTags = (datetime) => {
+    //     let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
+    //     console.log(datetime + '---' + datetimeBegin);
+    //     console.log(JSON.stringify(this.state.tagsHistory, null, 1));
+    // }
+
+    loadTagsByCreateDate = (datetime) => {
+        let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
+        getTagsHistory(datetimeBegin).then((data) => {
+            if (this.state.tagsHistory) {
+                this.setState({tagsHistory: this.state.tagsHistory.concat(data)})
+            } else {
+                this.setState({tagsHistory: data})
+            }
+        });
+    }
+
+
+    // loadTags = (datetime) => {
+    //     let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"];
+    //     getTagsHistory(datetimeBegin).then((data) => {
+    //         if (this.state.tagsHistory) {
+    //             // ne passe pas par ici par défaut
+    //             // console.log(data);
+    //             // this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
+    //
+    //         } else {
+    //             // console.log(data);
+    //             let startDatetimeTmp = data.map(x => x.startDatetime);
+    //             // console.log(startDatetimeTmp);
+    //             // for (const elem of data) {
+    //             //     console.log(elem);
+    //             // }
+    //             startDatetimeTmp.sort().reverse();
+    //             console.log(startDatetimeTmp);
+    //
+    //             let orderedData = [];
+    //             let i = 0;
+    //             for (const orderedDate of startDatetimeTmp) {
+    //                 for (const element of data) {
+    //
+    //                     // console.log(orderedDate + '=?=?=?=?=' + element.startDatetime);
+    //                     if(orderedDate.localeCompare(element.startDatetime) === 0) {
+    //                         // console.log(element);
+    //                         // data[i] = element; ça ça remplace le premier qui est 28 puis il n'existe plus...
+    //                         orderedData[i] = element;
+    //                         // console.log(orderedData[i]);
+    //                     }
+    //                 }
+    //                 i++;
+    //             }
+    //             // console.log('orderedData --> ' + JSON.stringify(orderedData));
+    //             // data.map(x => x.s)
+    //             this.setState({tagsHistory: orderedData});
+    //             // this.setState({tagsHistory: data});
+    //             // console.log(this.state.tagsHistory);
+    //         }
+    //     });
+    // }
 
     buttonDeleteClick = () => {
 
