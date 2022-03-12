@@ -109,6 +109,32 @@ class TagsHistory extends Component {
         );
     }
 
+    // showCardExampleNextDiv(){
+    //     return (
+    //         <div className={"text-lg text-center mt-2 text-gray-700"}>
+    //             Created at
+    //         </div>
+    //     );
+    // }
+
+    showCardExample(){
+        return (
+            <div className="card-header collapsed">
+                <div className={"d-flex justify-content-between"}>
+                    <div className={"font-weight-bold text-lg text-primary"}>
+                        Event name
+                    </div>
+                    <div className={"small text-gray-500"}>
+                        Created at
+                    </div>
+                </div>
+                <div className={"text-lg text-center mt-2 text-gray-700"}>
+                    Event date and time
+                </div>
+            </div>
+        );
+    }
+
     setInfiniteScrollContent() {
         let message = (<div>Loading...</div>)
         // this.state.tagsHistory.map((tag) => (console.log(tag)));
@@ -162,6 +188,10 @@ class TagsHistory extends Component {
                 // <div>ok</div>
                 <div>
                     {this.showBasicConfirmButton()}
+                    <CardMobile>
+                        {this.showCardExample()}
+                        {/*{this.showCardExampleNextDiv()}*/}
+                    </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
                         next={this.loadTags}
@@ -182,6 +212,10 @@ class TagsHistory extends Component {
             return (
                 <div>
                     {this.showNewConfirmButton()}
+                    <CardMobile>
+                        {this.showCardExample()}
+                        {/*{this.showCardExampleNextDiv()}*/}
+                    </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
                         next={this.loadTagsByCreateDate}
