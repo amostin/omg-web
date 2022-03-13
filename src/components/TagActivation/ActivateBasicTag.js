@@ -9,7 +9,8 @@ class ActivateBasicTag extends Component {
         super(props);
         this.state = {
             recentTags: [],
-            chosenDatetime: this.getDatePickerFormat(new Date(Date.now())),
+            roundedDatetime: this.getDatePickerFormat(new Date(Date.now())),
+            chosenDatetime: this.getDatePickerBeforeRound(new Date(Date.now())),
             chosenTag: "",
             status: ""
         }
@@ -23,6 +24,8 @@ class ActivateBasicTag extends Component {
                 console.log(res);
             }
         });
+
+        console.log('chosenDatatimeISO :\n'+new Date(this.state.chosenDatetime).toISOString());
     }
 
     // componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,7 +36,8 @@ class ActivateBasicTag extends Component {
 
     chosenDatetimeChange = (event) => {
         console.log(event.target.value);
-        this.setState({chosenDatetime: this.getDatePickerFormat(new Date(event.target.value))});
+        this.setState({roundedDatetime: this.getDatePickerFormat(new Date(event.target.value))});
+        this.setState({chosenDatetime: this.getDatePickerBeforeRound(new Date(event.target.value))});
         if (this.state.status !== 0) {
             this.setState({status: 0});
         }
@@ -67,7 +71,7 @@ class ActivateBasicTag extends Component {
     basicConfirmButtonClick = () => {
         if (this.state.chosenTag) {
             this.setState({status: 1});
-            let chosenDatatimeISO = new Date(this.state.chosenDatetime).toISOString();
+            let chosenDatatimeISO = new Date(this.state.roundedDatetime).toISOString();
             postBasicTag(this.state.chosenTag, chosenDatatimeISO).then(res => {
                 if (res){
                     this.setState({status: 2});
@@ -183,20 +187,34 @@ class ActivateBasicTag extends Component {
                     id="datetimePickerBasicTag"
                     type="datetime-local"
                     className={"w-100 rounded"}
-                    // disabled
                 />
             </div>
         );
     }
 
     roundTo5Minutes(date) {
+        // console.log('avant arrondi:\n'+date);
         let coeff = 1000 * 60 * 5;
         return new Date(Math.round(date.getTime() / coeff) * coeff);
     }
 
+    getDatePickerBeforeRound(date) {
+        let initDate = date;
+        initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
+        return initDate.toISOString().substr(0, 16);
+    }
+
+
     getDatePickerFormat(date) {
         let initDate = this.roundTo5Minutes(date);
+        // let initDate = date;
+        // console.log('date arrondie:\n'+initDate);
+
         initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
+        // console.log('date après UTC hours:\n'+initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60));
+        // console.log('date ISO string:\n'+initDate.toISOString().substr(0, 16));
+
+
         return initDate.toISOString().substr(0, 16);
     }
 

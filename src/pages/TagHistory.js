@@ -183,7 +183,7 @@ class TagsHistory extends Component {
                         Event name
                     </div>
                     <div className={"small text-gray-500"}>
-                        Created at
+                        Creation date and time
                     </div>
                 </div>
                 <div className={"text-lg text-center mt-2 text-gray-700"}>
