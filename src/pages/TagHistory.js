@@ -5,8 +5,32 @@ import CardMobile from "../components/Cards/CardMobile";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 
+
+/**
+ * This class represents a list of tags created.
+ * The list is sorted by event name by default.
+ * A toggle button is shown at the top and used to sort by
+ * created time and go back to the default sort.
+ * There is an example card to display the column names.
+ * The 10 most recent tags will be displayed.
+ * While scrolling, the next tags will be loaded
+ * so that you can see every tag from the
+ * first day you start to monitor the data.
+ */
 class TagsHistory extends Component {
 
+    /**
+     * First thing loaded with this page.
+     * Props is an external storage (while state is local (inside this  class only)).
+     * Props not used for the moment.
+     * items also not used.
+     * tagsHistory is loaded with most recent tags sorted by event date.
+     * sortByActivationTime is a boolean which will
+     * defines what to render (sort by event or created time ?).
+     * lastDatetime filled when the last of the most recent tags is known.
+     * tagHistoryCount will contain the number of entries in the DB (tags).
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +42,13 @@ class TagsHistory extends Component {
         }
     }
 
+    /**
+     * Called after the render so DOM nodes exists.
+     * setState causes the re render but its happening right after
+     * the first render (called by constructor). (We won't see the two render, only the last)
+     * getCountAllActivations fetches the number of entries in the DB (tags)
+     * and store it in tagHistoryCount.
+     */
     componentDidMount() {
         getCountAllActivations().then((res) => this.setState({tagHistoryCount: res}));
         // getCountAllActivations().then((res) => console.log(res));
@@ -33,60 +64,88 @@ class TagsHistory extends Component {
     //     }
     // }
 
-    loadTags = (datetime, isSorted = true) => {
-            let datetimeBegin = datetime ? datetime : this.state.tagsHistory[this.state.tagsHistory.length - 1]["startDatetime"];
-            console.log(datetime + '---' + datetimeBegin);
-            getTagsHistoryByActivationTime(datetimeBegin).then((data) => {
+    /**
+     * Called on the page loading to fill state.tagsHistory
+     * then called by buttonNewSortClick and eventually by InfiniteScroll.
+     * The default param is only used when the call is made from
+     * InfiniteScroll (to get to next data knowing the last data we have).
+     * getTagsHistoryByActivationTime (omgServer.js) fetches data with
+     * this url : /tags/recentHistory?datetimeBegin=
+     * Then it sets state.tagsHistory (last else) on the page loading
+     * It concat data if state.lastDatetime is not undefined (scroll case, first if)
+     * Last case when the user has already sorted and want to sort by
+     * event datetime again (it reset the state at the initial value).
+     * Be careful, nasty behaviour. A small change can break the scroll or whatever
+     * @param datetime
+     */
+    loadTags = (datetime = this.state.tagsHistory[this.state.tagsHistory.length - 1]["startDatetime"]) => {
+            getTagsHistoryByActivationTime(datetime).then((data) => {
                 if (this.state.tagsHistory) {
                     if(!this.state.lastDatetime){
-                        console.log("👍state.tagsHistory:\n" + JSON.stringify(data, null, 1));
+                        // console.log("👍state.tagsHistory:\n" + JSON.stringify(data, null, 1));
                         this.setState({tagsHistory: this.state.tagsHistory.concat(data)})
                     } else {
-                        console.log("👎👎!state.tagsHistory:\n" + JSON.stringify(data, null, 1));
+                        // console.log("👎👎!state.tagsHistory:\n" + JSON.stringify(data, null, 1));
                         this.setState({tagsHistory: data});
                         this.setState({lastDatetime: undefined});
 
                     }
                 } else {
-                    console.log("👎!state.tagsHistory:\n" + JSON.stringify(data, null, 1));
+                    // console.log("👎!state.tagsHistory:\n" + JSON.stringify(data, null, 1));
                     this.setState({tagsHistory: data})
                 }
             });
         // }
     }
 
-    loadTagsByCreateDate = (datetime) => {
-        let datetimeBegin = datetime ? datetime : this.state.lastDatetime;
-        getTagsHistory(datetimeBegin).then((data) => {
-            // console.log("QUAND EST CE QUE DATA SE VIDE ??\nc'est parce que tagshistory est jamais vide donc on fait jamais le concat");
-            // console.log(this.state.tagsHistory);
+    /**
+     * Called by buttonSortClick and eventually by InfiniteScroll.
+     * The default param is only used when the call is made from
+     * InfiniteScroll (to get to next data knowing the last data we have).
+     * By default, lastDatetime is undefined so tagsHitsory will be filled.
+     * LastDatetime is not undefined so next time it will
+     * only concat data (to load while you scroll).
+     * Be careful, nasty behaviour. A small change can break the scroll or whatever
+     * @param datetime
+     */
+    loadTagsByCreateDate = (datetime = this.state.lastDatetime) => {
+        getTagsHistory(datetime).then((data) => {
             if (!this.state.lastDatetime) {
                 this.setState({tagsHistory: data});
-                console.log("by created time: \n");
-                console.log(this.state.tagsHistory);
                 this.setState({lastDatetime: this.state.tagsHistory[this.state.tagsHistory.length - 1]["updatedAt"]});
 
             } else {
-                console.log("by created time (after scroll): \n");
                 this.setState({tagsHistory: this.state.tagsHistory.concat(data)});
             }
         });
     }
-
+    /**
+     * This is the first click you can do (on the sort button).
+     * It changes the value of sortByActivationTime
+     * and causes the re rendering of the page (with new button, data and scroll params).
+     * Then it calls loadTagsByCreateDate which
+     * will set state.tagsHistory with the data from the DB.
+     */
     buttonSortClick = () => {
-        console.log("click");
         this.setState({sortByActivationTime: false}, () => {
             this.loadTagsByCreateDate(new Date(Date.now()).toISOString());
         });
     }
 
+    /**
+     * This is the next click you can do (on the sort button).
+     * It will sort the data by event time.
+     */
     buttonNewSortClick = () => {
-        console.log("new click");
         this.setState({sortByActivationTime: true}, () => {
             this.loadTags(new Date(Date.now()).toISOString());
         });
     }
 
+    /**
+     * Button showed by default. Used to sort data below by created (updated ?) time.
+     * @returns {JSX.Element}
+     */
     showBasicConfirmButton() {
         return (
             <div className="align-self-center d-flex flex-column">
@@ -97,7 +156,10 @@ class TagsHistory extends Component {
             </div>
         );
     }
-
+    /**
+     * Button showed after the click on the previous button. Used to sort data below by event time.
+     * @returns {JSX.Element}
+     */
     showNewConfirmButton() {
         return (
             <div className="align-self-center d-flex flex-column">
@@ -109,14 +171,10 @@ class TagsHistory extends Component {
         );
     }
 
-    // showCardExampleNextDiv(){
-    //     return (
-    //         <div className={"text-lg text-center mt-2 text-gray-700"}>
-    //             Created at
-    //         </div>
-    //     );
-    // }
-
+    /**
+     * Card with static data to show the meaning of each data displayed below
+     * @returns {JSX.Element}
+     */
     showCardExample(){
         return (
             <div className="card-header collapsed">
@@ -135,6 +193,13 @@ class TagsHistory extends Component {
         );
     }
 
+    /**
+     * It checks state.tagsHistory to display the tag name,
+     * the created (updatedAt ?) datetime and the event datetime of each tag retrieved from the DB.
+     * The three data are wrapped in a <a> which works as a toggle button to
+     * display an edit button and a delete button.
+     * @returns {JSX.Element}
+     */
     setInfiniteScrollContent() {
         let message = (<div>Loading...</div>)
         // this.state.tagsHistory.map((tag) => (console.log(tag)));
@@ -172,6 +237,14 @@ class TagsHistory extends Component {
         return message;
     }
 
+    /**
+     * Once the component is ready, state.tagHistoryCount is loaded with
+     * the result of getAllActivation (should be renamed getAllEventTag) which is
+     * the number of entries in the DB related to tags.
+     * hasMore is called in the params of InfiniteScroll which calls loadTags if true. Then
+     * state.tagsHistory will be loaded with data until its reaches the number stored in tagHistoryCount
+     * @returns {boolean}
+     */
     hasMore = () => {
         let ret = true;
         if (this.state.tagHistoryCount) {
@@ -182,15 +255,23 @@ class TagsHistory extends Component {
         return ret;
     }
 
+    /**
+     * state.tagsHistory should be loaded with data (from DB)
+     * This component show a button (used to sort data),
+     * a cardExample (name of column) wrapped with
+     * CardMobile component (used to change style if mobile screen detected),
+     * call setInfiniteScrollContent (which creates a card for each tag found in state.tagsHistory).
+     * infiniteScroll (react lib import) will check if there is more data coming and load more while you scroll.
+     * The div mt-3 is useless ?
+     * @returns {JSX.Element}
+     */
     setInfiniteScrollComponent() {
         if (this.state.tagsHistory) {
             return (
-                // <div>ok</div>
                 <div>
                     {this.showBasicConfirmButton()}
                     <CardMobile>
                         {this.showCardExample()}
-                        {/*{this.showCardExampleNextDiv()}*/}
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
@@ -207,6 +288,11 @@ class TagsHistory extends Component {
         }
     }
 
+    /**
+     * Almost the same as setInfiniteScrollComponent but call
+     * loadTagsByCreateDate instead of loadTags (by event datetime)
+     * @returns {JSX.Element}
+     */
     setSortedInfiniteScrollComponent() {
         if (this.state.tagsHistory) {
             return (
@@ -214,7 +300,6 @@ class TagsHistory extends Component {
                     {this.showNewConfirmButton()}
                     <CardMobile>
                         {this.showCardExample()}
-                        {/*{this.showCardExampleNextDiv()}*/}
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
@@ -231,6 +316,12 @@ class TagsHistory extends Component {
         }
     }
 
+    /**
+     * Render setInfiniteScrollComponent (data sorted by event datetime) by default.
+     * When buttonSortClick is triggered, state.sortByActivationTime update its value and
+     * render setSortedInfiniteScrollComponent (data sorted by creation datetime)
+     * @returns {JSX.Element}
+     */
     render() {
         const sortByActivationTime = this.state.sortByActivationTime;
         let scrollCompo;
