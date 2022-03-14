@@ -6,7 +6,7 @@ name: Deploy
 # when a push is made on the branch specified, it'll trigger the workflow
 on:
   push:
-    branches: [ test ]
+    branches: [ master ]
 # There is only one job (at the moment) named build (<job_id> = build).
 # It runs on ubuntu-latest because it's the OS docker uses
 # Steps is a sequence of tasks (name will be displayed in github action)

@@ -80,7 +80,7 @@ class TagsManager extends Component {
         } else {
             selector = (
                 <div>
-                    <label className={"form-check-label"} htmlFor={"chooseTagsManager"}>Choose a tag</label>
+                    <label className={"form-check-label"} htmlFor={"chooseTagsManager"}>Choose a taga</label>
                     <select id={"chooseTagsManager"} className={"form-control mb-3"} onChange={this.selectedTagNameChange} defaultValue={"All"}>
                         {this.state.tagNames.map(tag => (<option key={tag} value={tag}>{tag}</option>))}
                     </select>
