@@ -27,6 +27,8 @@ jobs:
           script: |
             cd git/omg-web/
             git pull
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             npm run build
             pm2 restart app.js
             echo "Job done."
