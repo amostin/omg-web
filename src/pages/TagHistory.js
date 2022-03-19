@@ -179,15 +179,15 @@ class TagsHistory extends Component {
         return (
             <div className="card-header collapsed">
                 <div className={"d-flex justify-content-between"}>
-                    <div className={"font-weight-bold text-lg text-primary"}>
-                        Event name
+                    <div className={"font-weight-bold text-lg"}>
+                        <u>Event name</u>
                     </div>
-                    <div className={"small text-gray-500"}>
-                        Creation date and time
+                    <div className={"font-weight-bold text-lg"}>
+                        <u>Creation date</u>
                     </div>
                 </div>
-                <div className={"text-lg text-center mt-2 text-gray-700"}>
-                    Event date and time
+                <div className={"font-weight-bold text-lg text-center"}>
+                    <u>Event date</u>
                 </div>
             </div>
         );
