@@ -75,7 +75,7 @@ class TagsHistory extends Component {
      * It concat data if state.lastDatetime is not undefined (scroll case, first if)
      * Last case when the user has already sorted and want to sort by
      * event datetime again (it reset the state at the initial value).
-     * Be careful, nasty behaviour. A small change can break the scroll or whatever
+     * Be careful, scroll nasty behaviour. A small change can break the scroll or something else
      * @param datetime
      */
     loadTags = (datetime = this.state.tagsHistory[this.state.tagsHistory.length - 1]["startDatetime"]) => {
@@ -105,7 +105,7 @@ class TagsHistory extends Component {
      * By default, lastDatetime is undefined so tagsHitsory will be filled.
      * LastDatetime is not undefined so next time it will
      * only concat data (to load while you scroll).
-     * Be careful, nasty behaviour. A small change can break the scroll or whatever
+     * Be careful, scroll nasty behaviour. A small change can break the scroll or something else
      * @param datetime
      */
     loadTagsByCreateDate = (datetime = this.state.lastDatetime) => {
@@ -151,7 +151,7 @@ class TagsHistory extends Component {
             <div className="align-self-center d-flex flex-column">
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
                 <button id={"basicConfirmButton"} className="btn btn-primary align-self-center" onClick={this.buttonSortClick}>
-                    <span id={"basicConfirmButtonText"} className="text">Sort by created time</span>
+                    <span id={"basicConfirmButtonText"} className="text">Sort by creation time</span>
                 </button>
             </div>
         );
@@ -165,7 +165,7 @@ class TagsHistory extends Component {
             <div className="align-self-center d-flex flex-column">
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
                 <button id={"basicConfirmButton"} className="btn btn-primary align-self-center" onClick={this.buttonNewSortClick}>
-                    <span id={"basicConfirmButtonText"} className="text">Sort by activation time</span>
+                    <span id={"basicConfirmButtonText"} className="text">Sort by event time</span>
                 </button>
             </div>
         );
@@ -194,6 +194,19 @@ class TagsHistory extends Component {
     }
 
     /**
+     * It takes the string, check if it includes non authorized character
+     * to set an id, removes it and return the cleaned string
+     * @param string
+     * @returns string
+     */
+    formatStringForId = (str) => {
+        // let regex = /[A-Za-z]|[0-9]|\.|\-|\:|\_/gi;
+        let regex = /[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\uFFFF]/gu;
+        let newStr = str.replaceAll(regex, '');
+        return newStr;
+    }
+
+    /**
      * It checks state.tagsHistory to display the tag name,
      * the created (updatedAt ?) datetime and the event datetime of each tag retrieved from the DB.
      * The three data are wrapped in a <a> which works as a toggle button to
@@ -205,10 +218,11 @@ class TagsHistory extends Component {
         // this.state.tagsHistory.map((tag) => (console.log(tag)));
         if (this.state.tagsHistory) {
             message = this.state.tagsHistory.map((tag) => (
-                <div key={"containerTagsHistoryCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
+                // tag["name"].replace(/\s.*\s.*\s.* .* /i, '');
+                <div key={"containerTagsHistoryCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
                     <CardMobile>
                         {/* <!-- Card Header - Accordion --> */}
-                        <a href={"#tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
+                        <a href={"#tagCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
                            aria-controls={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
                             <div className={"d-flex justify-content-between"}>
                                 <div className={"font-weight-bold text-lg text-primary"}>
@@ -224,7 +238,7 @@ class TagsHistory extends Component {
 
                         </a>
                         {/*<!-- Card Content - Collapse -->*/}
-                        <div className="collapse" id={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
+                        <div className="collapse" id={"tagCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
                             <div className="card-body d-flex justify-content-around">
                                 <EditTagActivationDialog tagName={tag["name"]} tagDatetime={tag["startDatetime"]} tagId={tag["id"]}/>
                                 <DeleteTagActivationDialog tagId={tag["id"]}/>

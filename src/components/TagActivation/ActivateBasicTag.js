@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CardBasicTitle from "../Cards/CardBasicTitle";
 import {getRecentTags, postBasicTag} from "../../services/omgServer";
 import TextField from '@material-ui/core/TextField';
+import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 
 /**
  * This class represents a card with 4 sections :
@@ -27,7 +28,11 @@ class ActivateBasicTag extends Component {
             roundedDatetime: this.getDatePickerFormat(new Date(Date.now())),
             chosenDatetime: this.getDatePickerBeforeRound(new Date(Date.now())),
             chosenTag: "",
-            status: ""
+            status: "",
+            isManual: true,
+            dtrp: null,
+            testset: ["Tue Mar 10 2022 07:00:00 GMT+0100 (heure normale d’Europe centrale)", "Tue Mar 10 2022 08:00:00 GMT+0100 (heure normale d’Europe centrale)"],
+
         }
     }
 
@@ -39,6 +44,7 @@ class ActivateBasicTag extends Component {
      * (ctrTag is where the orm will make the DB request)
      */
     componentDidMount() {
+        console.log("isManual on load ?(should)\n"+this.state.isManual);
         getRecentTags().then((res) => {
             if (res) {
                 this.setState({recentTags: res});
@@ -103,6 +109,17 @@ class ActivateBasicTag extends Component {
             this.setState({status: 0});
         }
     }
+
+    toggleDetectButtonClick = () => {
+        this.setState({isManual: false});
+        //bizarre ça me met true donc j'imagine que c'est pas synchro
+        console.log("isManual on auto click ? (shoudnt)\n"+this.state.isManual);
+    }
+
+    toggleManualButtonClick = () => {
+        this.setState({isManual: true});
+        console.log("isManual on manual click ? (should)\n"+this.state.isManual);
+    }
     /**
      * Called in showBasicConfirmButton.
      * If the manualTag input is not empty,
@@ -115,19 +132,33 @@ class ActivateBasicTag extends Component {
      * Then set state.status to "success" (2) or "error" (-1)
      */
     basicConfirmButtonClick = () => {
-        if (this.state.chosenTag) {
-            this.setState({status: 1});
-            let chosenDatatimeISO = new Date(this.state.roundedDatetime).toISOString();
-            postBasicTag(this.state.chosenTag, chosenDatatimeISO).then(res => {
+        if (!this.state.isManual){
+            console.log("Is there an entry for carb input within this range ?\n" + this.state.testset);
+            console.log("Yes there is !\nHere is the datetime of the 1st match:\n\"2022-03-10 07:45:00\"");
+            postBasicTag("testset pending", "2022-03-10 07:45:00").then(res => {
                 if (res){
                     this.setState({status: 2});
                 } else {
                     this.setState({status: -1});
                 }
             });
-        } else {
-            document.getElementById("basicConfirmButtonInvalidText").innerText = "You have to select/enter a tag";
         }
+        else {
+            if (this.state.chosenTag) {
+                this.setState({status: 1});
+                let roundedDatatimeISO = new Date(this.state.roundedDatetime).toISOString();
+                postBasicTag(this.state.chosenTag, roundedDatatimeISO).then(res => {
+                    if (res){
+                        this.setState({status: 2});
+                    } else {
+                        this.setState({status: -1});
+                    }
+                });
+            } else {
+                document.getElementById("basicConfirmButtonInvalidText").innerText = "You have to select/enter a tag";
+            }
+        }
+
     }
 
     /**
@@ -241,6 +272,27 @@ class ActivateBasicTag extends Component {
         );
     }
 
+    showDTRP() {
+        return (
+            <div className={"mt-3 d-flex flex-column"}>
+                <p className={"mb-1 text-uppercase"}>Datetime Range</p>
+                <DateTimeRangePicker
+                    // PROD
+                    // onChange={value => this.setState({dtrp: value})}
+                    // value={this.state.dtrp}
+
+                    // DEV
+                    //pas cliquer sur dtrp si value=testset
+                    value={this.state.testset}
+                    disabled={true}
+                    // [Wed Mar 16 2022 00:00:00 GMT+0100 (heure normale d’Europe centrale),
+                    // Fri Mar 18 2022 23:59:59 GMT+0100 (heure normale d’Europe centrale)]
+                    //
+                />
+            </div>
+        );
+    }
+
     /**
      * The initial value is now (datetime).
      * onChange is called when the value changes (with a manual input or the calendar)
@@ -307,6 +359,28 @@ class ActivateBasicTag extends Component {
         return initDate.toISOString().substr(0, 16);
     }
 
+    showToggleManualButton() {
+        return (
+            <div className="mb-2 align-self-center d-flex flex-column">
+                <div className={"text-danger mb-2 align-self-center"}/>
+                <button className="btn btn-primary align-self-center" onClick={this.toggleManualButtonClick}>
+                    <span className="text">Toggle to manual creation</span>
+                </button>
+            </div>
+        );
+    }
+
+    showToggleDetectButton() {
+        return (
+            <div className="mb-2 align-self-center d-flex flex-column">
+                <div className={"text-danger mb-2 align-self-center"}/>
+                <button className="btn btn-primary align-self-center" onClick={this.toggleDetectButtonClick}>
+                    <span className="text">Toggle to auto detection</span>
+                </button>
+            </div>
+        );
+    }
+
     /**
      * Contains a div where requirement error will be displayed
      * and a button which will trigger an api call.
@@ -334,12 +408,33 @@ class ActivateBasicTag extends Component {
      * @returns {JSX.Element}
      */
     render() {
+        const isManual = this.state.isManual;
+        let toggleButton;
+        // let manualTag;
+        let showDatetime;
+        let showDTRP;
+        if (isManual) {
+            toggleButton = this.showToggleDetectButton();
+            // manualTag = this.manualTag();
+            showDatetime = this.showDatetime();
+            showDTRP = null;
+        } else {
+            toggleButton = this.showToggleManualButton();
+            // manualTag = null;
+            showDatetime = null;
+            showDTRP = this.showDTRP();
+        }
+
+
         return (
             <CardBasicTitle title={"Activate basic tag"}>
                 <div className={"d-flex flex-column"}>
                     {this.showRecentTags()}
                     {this.manualTag()}
-                    {this.showDatetime()}
+                    {toggleButton}
+                    {/*{manualTag}*/}
+                    {showDatetime}
+                    {showDTRP}
                     {this.showBasicConfirmButton()}
                     {this.activationResults()}
                 </div>
