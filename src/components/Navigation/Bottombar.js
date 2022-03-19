@@ -14,7 +14,7 @@ class Bottombar extends Component {
             },{
                 route: "/tagactivation",
                 icon: "fa-plus-circle",
-                label: "Activate"
+                label: "Create"
             },{
                 route: "/tagsmanager",
                 icon: "fa-wrench",

@@ -47,7 +47,7 @@ export default function DeleteTagDialog(props) {
             </button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="deleteTag-dialog-title">
                 <DialogContent className={"ml-2 mr-2"}>
-                    <div className={"text-center"}> Are you sure you want to delete {tagName === "All" ? "all tags" : "this tag"} ? All associated activations will also be deleted. This action is irreversible.</div>
+                    <div className={"text-center"}> Are you sure you want to delete {tagName === "All" ? "all tags" : "this tag"} ? All associated tags will also be deleted. This action is irreversible.</div>
                     <div id={"responseTextDeleteTagDialog"} className={"text-center text-danger small mt-2"}/>
                 </DialogContent>
                 <DialogActions>

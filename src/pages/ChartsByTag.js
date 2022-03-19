@@ -161,7 +161,7 @@ class ChartsByTag extends Component {
                         </div>
                     </CardBasicTitle>
                     <CardBasicTitle title={"Dates and week days"}>
-                        <p className={"text-center small"}>Default : all tag activations are displayed</p>
+                        <p className={"text-center small"}>Default : all tags are displayed</p>
                         <div className="d-flex align-items-center flex-column justify-content-center">
                             <DateTimeRangePicker
                                 onChange={value => this.setState({dtrp: value})}

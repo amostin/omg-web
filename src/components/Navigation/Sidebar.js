@@ -54,7 +54,7 @@ class Sidebar extends Component {
                 <li className="nav-item">
                     <Link className="nav-link pb-2" to="/tagactivation">
                         <i className="fas fa-fw fa-plus-circle"/>
-                        <span>Tag activation</span></Link>
+                        <span>Tag creation</span></Link>
                 </li>
 
                 {/* <!-- Nav Item - tag activation --> */}

@@ -145,7 +145,7 @@ class ActivateBasicTag extends Component {
             document.getElementById("uploadButtonInvalidText").innerText = this.state.resultRequest;
         }
         if (this.state.status === 0) {
-            this.changeBasicConfirmButtonStatus("btn-primary", "Activate tag");
+            this.changeBasicConfirmButtonStatus("btn-primary", "Create tag");
             basicBtn.removeAttribute("disabled");
             document.getElementById("basicConfirmButtonInvalidText").innerText = "";
         }
@@ -153,7 +153,7 @@ class ActivateBasicTag extends Component {
             this.changeBasicConfirmButtonStatus("btn-primary", "activating...");
         }
         if (this.state.status === 2) {
-            this.changeBasicConfirmButtonStatus("btn-success", "tag activated !");
+            this.changeBasicConfirmButtonStatus("btn-success", "tag created !");
         }
     }
 
@@ -216,7 +216,7 @@ class ActivateBasicTag extends Component {
             );
         } else {
             return (
-                <p>No tag previously activated.</p>
+                <p>No tag previously created.</p>
             );
         }
     };
@@ -317,7 +317,7 @@ class ActivateBasicTag extends Component {
             <div className="mt-4 align-self-center d-flex flex-column">
                 <div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>
                 <button id={"basicConfirmButton"} className="btn btn-primary align-self-center" onClick={this.basicConfirmButtonClick}>
-                    <span id={"basicConfirmButtonText"} className="text">Activate tag</span>
+                    <span id={"basicConfirmButtonText"} className="text">Create tag</span>
                 </button>
             </div>
         );
@@ -335,7 +335,7 @@ class ActivateBasicTag extends Component {
      */
     render() {
         return (
-            <CardBasicTitle title={"Activate basic tag"}>
+            <CardBasicTitle title={"Create a tag"}>
                 <div className={"d-flex flex-column"}>
                     {this.showRecentTags()}
                     {this.manualTag()}
