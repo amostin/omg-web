@@ -93,7 +93,7 @@ class TagsManager extends Component {
     setCalendar() {
         return (
             <div className={"mb-4 d-flex flex-column align-items-center"}>
-                <label className={"form-check-label"}>Select a day to see all activated tags </label>
+                <label className={"form-check-label"}>Select a day to see all related tags </label>
                 <Calendar
                     onChange={this.selectedDayChange}
                     tileClassName={({date, view}) => {
@@ -145,7 +145,7 @@ class TagsManager extends Component {
             } else {
                 return (
                     <div className={"mb-4"}>
-                        No tag activated this day
+                        No tag created this day
                     </div>
                 );
             }

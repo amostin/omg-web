@@ -24,7 +24,7 @@ export default function DeleteTagActivationDialog(props) {
         deleteBtn.innerText = "deleting...";
         deleteOneTag(tagId).then(res => {
             if (res[0].ok) {
-                deleteBtn.innerText = "Tag activation deleted";
+                deleteBtn.innerText = "Tag deleted";
                 handleClose();
             } else {
                 deleteBtn.innerText = "Error";
@@ -46,7 +46,7 @@ export default function DeleteTagActivationDialog(props) {
             </button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="deleteTag-dialog-title">
                 <DialogContent className={"ml-2 mr-2"}>
-                    <div className={"text-center"}> Are you sure you want to delete this tag activation ?</div>
+                    <div className={"text-center"}> Are you sure you want to delete this tag ?</div>
                     <div id={"responseTextDeleteTagActivationDialog"} className={"text-center text-danger small mt-2"}/>
                 </DialogContent>
                 <DialogActions>
