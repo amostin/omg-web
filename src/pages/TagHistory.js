@@ -150,7 +150,7 @@ class TagsHistory extends Component {
         return (
             <div className="align-self-center d-flex flex-column">
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
-                <button id={"basicConfirmButton"} className="btn btn-primary align-self-center" onClick={this.buttonSortClick}>
+                <button id={"basicConfirmButton"} className="btn btn-primary align-self-center mb-2" onClick={this.buttonSortClick}>
                     <span id={"basicConfirmButtonText"} className="text">Sort by creation time</span>
                 </button>
             </div>
@@ -164,7 +164,7 @@ class TagsHistory extends Component {
         return (
             <div className="align-self-center d-flex flex-column">
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
-                <button id={"basicConfirmButton"} className="btn btn-primary align-self-center" onClick={this.buttonNewSortClick}>
+                <button id={"basicConfirmButton"} className="btn btn-primary align-self-center mb-2" onClick={this.buttonNewSortClick}>
                     <span id={"basicConfirmButtonText"} className="text">Sort by event time</span>
                 </button>
             </div>
@@ -177,7 +177,7 @@ class TagsHistory extends Component {
      */
     showCardExample(){
         return (
-            <div className="card-header collapsed">
+            <div className="card-header collapsed ">
                 <div className={"d-flex justify-content-between"}>
                     <div className={"font-weight-bold text-lg"}>
                         <u>Event name</u>
