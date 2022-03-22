@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CardBasicTitle from "../Cards/CardBasicTitle";
-import {getRecentTags, postBasicTag} from "../../services/omgServer";
+import {getAllTagsFromUserId, getRecentTags, postBasicTag} from "../../services/omgServer";
 import TextField from '@material-ui/core/TextField';
 
 /**
@@ -181,6 +181,20 @@ class ActivateBasicTag extends Component {
     }
 
     /**
+     * The 8 most recent tags are shown by default.
+     * This will show 8 more tags each time it is called.
+     */
+    loadMoreSuggestion = () => {
+        getAllTagsFromUserId().then((res) => {
+            if (res) {
+                this.setState({recentTags: res});
+            } else {
+                console.log(res);
+            }
+        });
+    }
+
+    /**
      * Displays recent tags.
      * Each tag name will be displayed in a radio input
      * (only one can be selected, name is the same for each input
@@ -212,6 +226,9 @@ class ActivateBasicTag extends Component {
                             ))
                         }
                     </div>
+                    <button className="btn btn-primary align-self-center mt-2" onClick={this.loadMoreSuggestion}>
+                        <span className="text">Load all</span>
+                    </button>
                 </div>
             );
         } else {
