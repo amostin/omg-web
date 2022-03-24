@@ -16,6 +16,10 @@ class Bottombar extends Component {
                 icon: "fa-plus-circle",
                 label: "Create"
             },{
+                route: "/tagdetection",
+                icon: "fa-indent",
+                label: "Detect"
+            },{
                 route: "/tagsmanager",
                 icon: "fa-wrench",
                 label: "Manage"
