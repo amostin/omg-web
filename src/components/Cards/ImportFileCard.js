@@ -175,6 +175,10 @@ class ImportFileCard extends Component {
                                 <span id={"uploadButtonText"} className="text">Upload data</span>
                             </button>
                         </div>
+                        <div className="float-right">
+                            <input className="form-check-input " type="checkbox" id={"checkIt"} checked/>
+                            <label className="form-check-label " htmlFor={"checkIt"}>auto detection</label>
+                        </div>
                         {this.uploadResults()}
                     </div>
                 </div>
