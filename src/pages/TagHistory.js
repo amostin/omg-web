@@ -4,6 +4,8 @@ import {getCountAllActivations, getTagsHistory, getTagsHistoryByActivationTime} 
 import CardMobile from "../components/Cards/CardMobile";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
+import {useFormatStringForId} from "../hooks/useFormatStringForId";
+
 
 
 /**
@@ -194,6 +196,7 @@ class TagsHistory extends Component {
     }
 
     /**
+     * EDIT: removed into src/hooks/use...
      * It takes the string, check if it includes non authorized character
      * to set an id, removes it and return the cleaned string
      * @param string
@@ -218,10 +221,10 @@ class TagsHistory extends Component {
         // this.state.tagsHistory.map((tag) => (console.log(tag)));
         if (this.state.tagsHistory) {
             message = this.state.tagsHistory.map((tag) => (
-                <div key={"containerTagsHistoryCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
+                <div key={"containerTagsHistoryCard" + useFormatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
                     <CardMobile>
                         {/* <!-- Card Header - Accordion --> */}
-                        <a href={"#tagCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
+                        <a href={"#tagCard" + useFormatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
                            aria-controls={"tagCard" + tag["name"] + this.state.tagsHistory.indexOf(tag)}>
                             <div className={"d-flex justify-content-between"}>
                                 <div className={"font-weight-bold text-lg text-primary"}>
@@ -237,7 +240,7 @@ class TagsHistory extends Component {
 
                         </a>
                         {/*<!-- Card Content - Collapse -->*/}
-                        <div className="collapse" id={"tagCard" + this.formatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
+                        <div className="collapse" id={"tagCard" + useFormatStringForId(tag["name"]) + this.state.tagsHistory.indexOf(tag)}>
                             <div className="card-body d-flex justify-content-around">
                                 <EditTagActivationDialog tagName={tag["name"]} tagDatetime={tag["startDatetime"]} tagId={tag["id"]}/>
                                 <DeleteTagActivationDialog tagId={tag["id"]}/>
