@@ -35,6 +35,26 @@ export async function getAllTagsFromUserId() {
 }
 
 /**
+ * get all datetime of a user
+ *
+ * @return {Promise<any>} : all datetime of a user or an error
+ */
+export async function getDataDatetime() {
+    let url = hostUrl + "/data/datetime";
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Authorization': "Bearer " + store.getState().storeApiKey.apiKey
+        }
+    });
+    return res.json();
+}
+/**
  * post a file data for data importation
  *
  * @param file

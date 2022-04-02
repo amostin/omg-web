@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {postUpload} from "../../services/omgServer";
+import {getDataDatetime} from "../../services/omgServer";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -24,6 +25,7 @@ class ImportFileCard extends Component {
             if (this.state.file) {
                 if (this.state.importName) {
                     this.setState({upload: 1});
+                    // console.log(getDataDatetime());
                     postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
                         if (res[0].ok) {
                             this.setState({upload: 2})
@@ -32,6 +34,7 @@ class ImportFileCard extends Component {
                         }
                         this.setState({'resultRequest': res[1]})
                     }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+
                 } else {
                     if (!document.getElementById("importName").classList.contains("is-invalid")) {
                         document.getElementById("importName").classList.add("is-invalid");

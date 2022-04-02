@@ -42,6 +42,7 @@ class ActivateBasicTag extends Component {
         getRecentTags().then((res) => {
             if (res) {
                 this.setState({recentTags: res});
+                console.log(this.getDatePickerFormat(new Date(Date.now())));
             } else {
                 console.log(res);
             }
@@ -227,7 +228,7 @@ class ActivateBasicTag extends Component {
                         }
                     </div>
                     <button className="btn btn-primary align-self-center mt-2" onClick={this.loadMoreSuggestion}>
-                        <span className="text">Load all</span>
+                        <span className="text">Display all</span>
                     </button>
                 </div>
             );
