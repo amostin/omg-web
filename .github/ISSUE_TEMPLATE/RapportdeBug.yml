@@ -1,4 +1,3 @@
-
 name: "Rapport de bug version formulaire"
 description: "Aidez à améliorer le programme en envoyant des rapports de bug"
 title: "[Bug] "
@@ -10,13 +9,13 @@ body:
     attributes:
       value: |
         Merci pour le temps que vous prenez pour nous aider !
-- type: textarea
-  id: repro
-  attributes:
-    label: Comment reproduire le bug ?
-    description: "Étapes pour reproduire le comportement: "
-    value: |
-      1.
-      2.
-      3.
-      ...
+  - type: textarea
+    id: repro
+    attributes:
+      label: Comment reproduire le bug ?
+      description: "Étapes pour reproduire le comportement: "
+      value: |
+        1.
+        2.
+        3.
+        ...
