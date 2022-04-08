@@ -61,7 +61,7 @@ body:
     id: appa
     attributes:
       label: Quel est l'appareil utilisé ?
-      placeholder: Par exemple : iPhone 6
+      placeholder: "Par exemple : iPhone 6"
   - type: textarea
     id: contex
     attributes:
