@@ -1,7 +1,7 @@
 ---
 name: 'Rapport de bug '
-about: 'Aider à améliorer le programme en envoyant des rapports de bug'
-title: '[BUG] '
+about: Aider à améliorer le programme en envoyant des rapports de bug
+title: "[BUG] "
 labels: ''
 assignees: ''
 
@@ -34,5 +34,4 @@ assignees: ''
  - Appareil : 
  - OS : 
  - Navigateur : 
- - Version : 
-
+ - Version :
