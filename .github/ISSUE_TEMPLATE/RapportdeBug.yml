@@ -33,9 +33,8 @@ body:
     attributes:
       label: Capture d'écran
       description: |
-        "Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.
-        
-        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in."
+        Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.
+        💡Vous pouvez attacher des images ou des fichiers en cliquant sur cette zone pour la mettre en surbrillance pour ensuite pouvoir glisser les fichiers"
   - type: textarea
     id: contex
     attributes:
