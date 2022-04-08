@@ -34,7 +34,34 @@ body:
       label: Capture d'écran
       description: |
         Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.
-        💡Vous pouvez attacher des images ou des fichiers en cliquant sur cette zone pour la mettre en surbrillance pour ensuite pouvoir glisser les fichiers"
+        💡Vous pouvez attacher des images ou des fichiers en cliquant sur cette zone pour la mettre en surbrillance pour ensuite pouvoir glisser les fichiers
+  - type: dropdown
+    id: os
+    attributes:
+      label: Quel est le système d'exploitation utilisé ?
+      multiple: true
+      options:
+        - MacOS
+        - iOS
+        - Windows
+        - Windows Phone
+        - GNU/Linux
+        - Android
+  - type: dropdown
+    id: navi
+    attributes:
+      label: Dans quel navigateur voyez-vous le problème ?
+      multiple: true
+      options:
+        - Safari
+        - Chrome
+        - Firefox
+        - Microsoft Edge
+  - type: textarea
+    id: appa
+    attributes:
+      label: Quel est l'appareil utilisé ?
+      placeholder: Par exemple : iPhone 6
   - type: textarea
     id: contex
     attributes:
