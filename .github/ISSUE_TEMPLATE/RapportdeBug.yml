@@ -13,7 +13,7 @@ body:
     id: descri
     attributes:
       label: Description du bug
-      description: "(vous pouvez vous contenter de remplir seulement ce champs si c'est suffisant)"
+      description: "(vous pouvez vous contenter de remplir seulement ce champ si c'est suffisant)"
   - type: textarea
     id: repro
     attributes:
@@ -24,3 +24,17 @@ body:
         2.
         3.
         ...
+  - type: textarea
+    id: result
+    attributes:
+      label: Résultat initialement attendu
+  - type: textarea
+    id: captu
+    attributes:
+      label: Capture d'écran
+      description: "Si possible, ajoutez des captures d'écran pour aider à expliquer le problème."
+  - type: textarea
+    id: contex
+    attributes:
+      label: Contexte supplémentaire
+      description: "Ajoutez tout autre contexte à propos du problème ici."
