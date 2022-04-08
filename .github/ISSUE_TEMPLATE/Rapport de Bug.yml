@@ -4,5 +4,9 @@ title: "[Bug] "
 labels: [bug, ]
 assignees:
   - amostin
-
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour le temps que vous prenez pour nous aider !
 
