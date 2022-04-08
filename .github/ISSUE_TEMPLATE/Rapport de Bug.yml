@@ -1,0 +1,8 @@
+name: Rapport de bug
+description: Aidez à améliorer le programme en envoyant des rapports de bug
+title: "[Bug] "
+labels: [bug, ]
+assignees:
+  - amostin
+
+
