@@ -57,7 +57,7 @@ body:
         - Chrome
         - Firefox
         - Microsoft Edge
-  - type: textarea
+  - type: input
     id: appa
     attributes:
       label: Quel est l'appareil utilisé ?
