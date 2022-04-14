@@ -28,9 +28,10 @@ jobs:
       - run: npm install
       - run: npm run build --if-present
       - run: npm test
-      - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.3.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: 'owasp/zap2docker-stable'
-          target: 'https://www.zaproxy.org/'
+#      - name: ZAP Scan
+#        uses: zaproxy/action-full-scan@v0.3.0
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          docker_name: 'owasp/zap2docker-weekly'
+#          target: 'http://localhost:3000/'
+#          cmd_options: -z "-config view.locale=fr_FR"
