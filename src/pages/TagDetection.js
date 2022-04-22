@@ -87,7 +87,11 @@ class TagDetection extends Component {
             newRange.name = this.state.chosenDetectionTag;
             newRange["fromTime"] = this.state.fromTime;
             newRange["toTime"] = this.state.toTime;
-            newRange["daysSelected"] = this.state.weekDaysSelected;
+            const sum = this.state.weekDaysSelected.reduce((accumulator, value) => {
+                return accumulator + value;
+            }, 0);
+            newRange["daysSelected"] = sum;
+            // newRange["daysSelected"] = this.state.weekDaysSelected;
             this.state.rangesHistoryCount++;
             let rangesHistoryNew = this.state.rangesHistory;
             rangesHistoryNew.unshift(newRange);
@@ -120,7 +124,7 @@ class TagDetection extends Component {
     }
 
     setDaysCheckboxes () {
-        let weekDays = [["Mon", 1], ["Tue", 2], ["Wed", 3], ["Thu",4], ["Fri", 5], ["Sat", 6], ["Sun", 0]];
+        let weekDays = [["Mon", 1], ["Tue", 2], ["Wed", 4], ["Thu",8], ["Fri", 16], ["Sat", 32], ["Sun", 64]];
         let checkboxes = [];
         weekDays.forEach(day => {
             checkboxes.push((
@@ -145,10 +149,11 @@ class TagDetection extends Component {
     }
 
     showDays(days){
-        let message = !days.length ? <div>Every day</div> : days.map((day) => (
-            <div>{day}</div>
-        ));
-        return message;
+        // let message = !days.length ? <div>Every day</div> : days.map((day) => (
+        //     <div>{day}</div>
+        // ));
+        // return message;
+        return <div>{days}</div>
     }
 
     showCreatedRange(){
