@@ -343,6 +343,33 @@ export async function postBasicTag(tag, date) {
     }
 }
 
+export async function postRange(rangeName, from, to, daysSelected) {
+    try {
+        const url = hostUrl + '/ranges/one';
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: rangeName,
+                fromTime: from,
+                toTime: to,
+                daysSelected: daysSelected,
+            }),
+        });
+        if (res.ok) {
+            return await res.json();
+        } else {
+            return null;
+        }
+    } catch (e) {
+        return e;
+    }
+}
+
 /**
  * Retrieves the 10 most recent tags based on the activation date passed in parameters
  *

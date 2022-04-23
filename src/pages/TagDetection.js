@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CardBasicTitle from "../components/Cards/CardBasicTitle";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import CardMobile from "../components/Cards/CardMobile";
-import {postBasicTag} from "../services/omgServer";
+import {getAllRangesFromUserId, getRecentRanges, postRange} from "../services/omgServer";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -17,6 +17,7 @@ class TagDetection extends Component {
             fromTime: null,
             toTime: null,
             weekDaysSelected: [],
+            status: "",
             rangesHistoryCount: 3,
             // get created range will fill this array
             rangesHistory: [
@@ -53,16 +54,25 @@ class TagDetection extends Component {
         this.setState({chosenDetectionTag: event.target.value});
         // console.log('input value :\n'+ event.target.value);
         // console.log('state chosenDetectionTag :\n'+ this.state.chosenDetectionTag);
+        if (this.state.status !== 0) {
+            this.setState({status: 0});
+        }
     }
 
     setFrom = (event) => {
         this.setState({fromTime: event.target.value});
         // console.log('from input :\n'+ event.target.value);
         // console.log('from state :\n'+ this.state.fromTime);
+        if (this.state.status !== 0) {
+            this.setState({status: 0});
+        }
     }
 
     setTo = (event) => {
         this.setState({toTime: event.target.value});
+        if (this.state.status !== 0) {
+            this.setState({status: 0});
+        }
     }
 
     weekDaysChange(day) {
@@ -76,13 +86,16 @@ class TagDetection extends Component {
         }
         this.setState({weekDaysSelected: selected});
         console.log(selected);
+        if (this.state.status !== 0) {
+            this.setState({status: 0});
+        }
     }
 
     basicConfirmButtonClick = () => {
         if (this.state.chosenDetectionTag && this.state.fromTime && this.state.toTime) {
-            console.log("loading");
-            console.log("format data to post");
-            console.log("post name, from, to and optionally days\nthen success or error");
+            // console.log("loading");
+            // console.log("format data to post");
+            // console.log("post name, from, to and optionally days\nthen success or error");
             let newRange = {};
             newRange.name = this.state.chosenDetectionTag;
             newRange["fromTime"] = this.state.fromTime;
@@ -96,8 +109,18 @@ class TagDetection extends Component {
             let rangesHistoryNew = this.state.rangesHistory;
             rangesHistoryNew.unshift(newRange);
             this.setState({rangesHistory: rangesHistoryNew});
-            console.log(this.state.rangesHistoryCount);
-            console.log(JSON.stringify(newRange));
+            // console.log(this.state.rangesHistoryCount);
+            // console.log(JSON.stringify(newRange)); // {"name":"fr","fromTime":"19:53","toTime":"19:53","daysSelected":112}
+            // OK donc newrange doit être envoyé en db
+            this.setState({status: 1});
+            console.log(newRange.name, newRange.fromTime, newRange.toTime, newRange.daysSelected);
+            postRange(this.state.chosenDetectionTag, this.state.fromTime, this.state.toTime, sum).then(res => {
+                if (res){
+                    this.setState({status: 2});
+                } else {
+                    this.setState({status: -1});
+                }
+            });
         } else {
             document.getElementById("basicConfirmButtonInvalidText").innerText = "Tag name and time range required";
         }
@@ -148,12 +171,45 @@ class TagDetection extends Component {
         );
     }
 
+    changeBasicConfirmButtonStatus = (newBtnColor, btnText) => {
+        let basicBtn = document.getElementById("basicConfirmButton");
+        let basicBtnTxt = document.getElementById("basicConfirmButtonText");
+        basicBtn.classList.forEach((className) => {
+            if (className.startsWith('btn-primary') || className.startsWith('btn-danger') || className.startsWith('btn-success')) {
+                basicBtn.classList.remove(className);
+            }
+        });
+        basicBtn.setAttribute("disabled", "true");
+        basicBtn.classList.add(newBtnColor);
+        basicBtnTxt.innerText = btnText;
+    }
+
+    activationResults() {
+        let basicBtn = document.getElementById("basicConfirmButton");
+        if (this.state.status === -1) {
+            this.changeBasicConfirmButtonStatus("btn-danger", "error");
+            document.getElementById("basicConfirmButtonText").innerText = this.state.resultRequest;
+            // document.getElementById("basicConfirmButtonText").innerText = "error";
+        }
+        if (this.state.status === 0) {
+            this.changeBasicConfirmButtonStatus("btn-primary", "Create range");
+            basicBtn.removeAttribute("disabled");
+            document.getElementById("basicConfirmButtonInvalidText").innerText = "";
+        }
+        if (this.state.status === 1) {
+            this.changeBasicConfirmButtonStatus("btn-primary", "activating...");
+        }
+        if (this.state.status === 2) {
+            this.changeBasicConfirmButtonStatus("btn-success", "range created !");
+        }
+    }
+
     showDays(days){
         // let message = !days.length ? <div>Every day</div> : days.map((day) => (
         //     <div>{day}</div>
         // ));
         // return message;
-        return <div>{days}</div>
+        return <div>{days}</div>;
     }
 
     showCreatedRange(){
@@ -222,8 +278,10 @@ class TagDetection extends Component {
                                 <div>
                                     {this.setDaysCheckboxes()}
                                 </div>
+                                <div>Default: every day</div>
                             </CardMobile>
                             {this.showBasicConfirmButton()}
+                            {this.activationResults()}
                         </div>
                     </CardBasicTitle>
                     <InfiniteScroll
