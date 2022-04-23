@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {postUpload} from "../../services/omgServer";
-import {getDataDatetime} from "../../services/omgServer";
+import {postUpload, detectEventInRange} from "../../services/omgServer";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -9,7 +8,7 @@ class ImportFileCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upload: "",  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, -1 -> error)
+            upload: "",  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, 3 -> detecting event -1 -> error)
             file: '',   // CSV data file
             sensorModel: 'none',  // Chosen model pump
             resultRequest: '', // API results of the request
@@ -28,7 +27,8 @@ class ImportFileCard extends Component {
                     // console.log(getDataDatetime());
                     postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
                         if (res[0].ok) {
-                            this.setState({upload: 2})
+                            this.setState({upload: 3});
+                            detectEventInRange();
                         } else {
                             this.setState({upload: -1})
                         }
@@ -104,6 +104,9 @@ class ImportFileCard extends Component {
         }
         if (this.state.upload === 2) {
             this.changeUploadButtonStatus("fa-check", "btn-success", "uploaded !");
+        }
+        if (this.state.upload === 3) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "detecting event...");
         }
     }
 
