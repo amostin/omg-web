@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CardBasicTitle from "../components/Cards/CardBasicTitle";
 import DateTimeRangePicker from "@wojtekmaj/react-datetimerange-picker";
 import CardMobile from "../components/Cards/CardMobile";
-import {getAllRangesFromUserId, getRecentRanges, postRange} from "../services/omgServer";
+import {getCountAllRanges, getRangesHistory, postRange} from "../services/omgServer";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -46,9 +46,20 @@ class TagDetection extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log(JSON.stringify(this.state.rangesHistory));
+    componentDidMount() {
+        getCountAllRanges().then((res) => this.setState({rangesHistoryCount: res}));
+        getRangesHistory().then((res) => {
+            if (res) {
+                this.setState({rangesHistory: res});
+            } else {
+                console.log(res);
+            }
+        });
     }
+
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     console.log(JSON.stringify(this.state.rangesHistory));
+    // }
 
     detectionTagInputChange = (event) => {
         this.setState({chosenDetectionTag: event.target.value});

@@ -34,6 +34,23 @@ export async function getAllTagsFromUserId() {
     return res.json();
 }
 
+
+export async function getRangesHistory() {
+    let url = hostUrl + "/ranges/all";
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Authorization': "Bearer " + store.getState().storeApiKey.apiKey
+        }
+    });
+    return res.json();
+}
+
 /**
  * get all datetime of a user
  *
@@ -427,6 +444,25 @@ export async function getTagsHistory(datetimeBegin) {
  */
 export async function getCountAllActivations() {
     let url = hostUrl + '/tags/countAllActivations';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+        },
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}
+
+export async function getCountAllRanges() {
+    let url = hostUrl + '/ranges/countAll';
     let res = await fetch(url, {
         credentials: 'same-origin',
         method: 'GET',
