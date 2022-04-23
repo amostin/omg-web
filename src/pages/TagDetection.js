@@ -158,7 +158,7 @@ class TagDetection extends Component {
     }
 
     setDaysCheckboxes () {
-        let weekDays = [["Mon", 1], ["Tue", 2], ["Wed", 4], ["Thu",8], ["Fri", 16], ["Sat", 32], ["Sun", 64]];
+        let weekDays = [["Sun", 1], ["Mon", 2], ["Tue", 4], ["Wed",8], ["Thu", 16], ["Fri", 32], ["Sat", 64]];
         let checkboxes = [];
         weekDays.forEach(day => {
             checkboxes.push((
