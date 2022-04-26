@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {postUpload, detectEventInRange, getRangesWithFormattedTimes} from "../../services/omgServer";
+import {postUpload, getBolusWithFormattedDateAndTime, getRangesWithFormattedTimes} from "../../services/omgServer";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -29,14 +29,17 @@ class ImportFileCard extends Component {
                         this.setState({upload: 3});
                         // (peut etre fait en meme temps que postUpload mais faut quand meme attendre l'import donc je laisse comme ça)
                         let ranges = await getRangesWithFormattedTimes();
-                        console.log(ranges);
                         if (ranges.length) {
+                            console.log(ranges);
                             this.setState({upload: 4});
                         }
-                        // convert daysSelected->bit->getDayFormat
-                        // combine les ranges pour supprimer les éventuels ranges qui se chevauchent
+                        // combine les daysselected pour supprimer les éventuels days redondants ?
                         // (en meme temps que getRanges si je laisse getRange après upload)
-                        // let bolusEvent = await getBolusWithFormattedDateAndTime();
+                        let bolusEvents = await getBolusWithFormattedDateAndTime();
+                        if (bolusEvents.length) {
+                            console.log(bolusEvents);
+                            this.setState({upload: 5});
+                        }
                         // si time in range && date == dayselected
                         // (insert into tags)
                         // let insertIntoTag = await postPendingTag();
@@ -130,6 +133,9 @@ class ImportFileCard extends Component {
         }
         if (this.state.upload === 4) {
             this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting bolus events...");
+        }
+        if (this.state.upload === 5) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "detecting events...");
         }
     }
 

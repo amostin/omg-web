@@ -67,6 +67,22 @@ export async function getRangesWithFormattedTimes() {
     return res.json();
 }
 
+export async function getBolusWithFormattedDateAndTime() {
+    let url = hostUrl + "/bolus/dateandtime";
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Authorization': "Bearer " + store.getState().storeApiKey.apiKey
+        }
+    });
+    return res.json();
+}
+
 export async function detectEventInRange() {
     let url = hostUrl + "/ranges/detect";
     let res = await fetch(url, {
