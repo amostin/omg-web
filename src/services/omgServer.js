@@ -408,6 +408,30 @@ export async function postBasicTag(tag, date) {
     }
 }
 
+export async function postPendingTag(pendingTags) {
+    try {
+        const url = hostUrl + '/tags/pending';
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pendingTags: pendingTags
+            }),
+        });
+        if (res.ok) {
+            return await res.json();
+        } else {
+            return null;
+        }
+    } catch (e) {
+        return e;
+    }
+}
+
 export async function postRange(rangeName, from, to, daysSelected) {
     try {
         const url = hostUrl + '/ranges/one';

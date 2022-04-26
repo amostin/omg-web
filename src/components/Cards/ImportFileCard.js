@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {postUpload, getBolusWithFormattedDateAndTime, getRangesWithFormattedTimes} from "../../services/omgServer";
+import {postUpload, getRangesWithFormattedTimes, getBolusWithFormattedDateAndTime, postPendingTag} from "../../services/omgServer";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -30,19 +30,40 @@ class ImportFileCard extends Component {
                         // (peut etre fait en meme temps que postUpload mais faut quand meme attendre l'import donc je laisse comme ça)
                         let ranges = await getRangesWithFormattedTimes();
                         if (ranges.length) {
-                            console.log(ranges);
+                            // console.log(ranges);
                             this.setState({upload: 4});
                         }
                         // combine les daysselected pour supprimer les éventuels days redondants ?
                         // (en meme temps que getRanges si je laisse getRange après upload)
                         let bolusEvents = await getBolusWithFormattedDateAndTime();
                         if (bolusEvents.length) {
-                            console.log(bolusEvents);
+                            // console.log(bolusEvents);
                             this.setState({upload: 5});
                         }
-                        // si time in range && date == dayselected
-                        // (insert into tags)
-                        // let insertIntoTag = await postPendingTag();
+                        let pendingTags = [];
+                        for(const range of ranges){
+                            for(const event of bolusEvents){
+                                let date = event.date;
+                                let time = event.time;
+                                if (time >= range.from && time <= range.to) {
+                                    let daysNumbers = range.daysNumbers;
+                                    if (daysNumbers.includes(new Date(date).getDay())) {
+                                        const datetime = this.roundTo5MinutesAndAddSummerTime(new Date(date + "T" + time));
+                                        let pendingTag = {};
+                                        pendingTag.pendingName = range.name;
+                                        pendingTag.pendingDatetime = datetime;
+                                        pendingTags.push(pendingTag);
+                                        // console.log(pendingTag);
+                                    }
+                                }
+                            }
+                        }
+                        console.log(pendingTags);
+                        let insertIntoTag = await postPendingTag(pendingTags);
+                        if (ranges.length) {
+                            console.log(insertIntoTag);
+                            this.setState({upload: 2});
+                        }
                     }
                     else {this.setState({upload: -1})}
                     // postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
@@ -74,6 +95,13 @@ class ImportFileCard extends Component {
             }
 
         }
+    }
+
+    roundTo5MinutesAndAddSummerTime = (date) => {
+        let coeff = 1000 * 60 * 5;
+        let rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
+
+        return new Date(rounded.setHours(rounded.getHours()+1));
     }
 
     fileChange = (event) => {
