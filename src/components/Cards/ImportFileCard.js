@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {postUpload, detectEventInRange} from "../../services/omgServer";
+import {postUpload, detectEventInRange, getRangesWithFormattedTimes} from "../../services/omgServer";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -19,21 +19,41 @@ class ImportFileCard extends Component {
     /**
      * manages the sending and the result of the data import request.
      */
-    uploadFile = () => {
+    uploadFile = async () => {
         if (this.state.sensorModel !== "none") {
             if (this.state.file) {
                 if (this.state.importName) {
                     this.setState({upload: 1});
-                    // console.log(getDataDatetime());
-                    postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
-                        if (res[0].ok) {
-                            this.setState({upload: 3});
-                            detectEventInRange();
-                        } else {
-                            this.setState({upload: -1})
+                    let res = await postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName);
+                    if (res[0].ok) {
+                        this.setState({upload: 3});
+                        // (peut etre fait en meme temps que postUpload mais faut quand meme attendre l'import donc je laisse comme ça)
+                        let ranges = await getRangesWithFormattedTimes();
+                        console.log(ranges);
+                        if (ranges.length) {
+                            this.setState({upload: 4});
                         }
-                        this.setState({'resultRequest': res[1]})
-                    }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+                        // convert daysSelected->bit->getDayFormat
+                        // combine les ranges pour supprimer les éventuels ranges qui se chevauchent
+                        // (en meme temps que getRanges si je laisse getRange après upload)
+                        // let bolusEvent = await getBolusWithFormattedDateAndTime();
+                        // si time in range && date == dayselected
+                        // (insert into tags)
+                        // let insertIntoTag = await postPendingTag();
+                    }
+                    else {this.setState({upload: -1})}
+                    // postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
+                    //     if (res[0].ok) {
+                    //         this.setState({upload: 3});
+                    //         detectEventInRange().then((rep) => {
+                    //             this.setState({upload: 2});
+                    //             console.log(rep);
+                    //         }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+                    //     } else {
+                    //         this.setState({upload: -1})
+                    //     }
+                    //     this.setState({'resultRequest': res[1]})
+                    // }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
 
                 } else {
                     if (!document.getElementById("importName").classList.contains("is-invalid")) {
@@ -106,7 +126,10 @@ class ImportFileCard extends Component {
             this.changeUploadButtonStatus("fa-check", "btn-success", "uploaded !");
         }
         if (this.state.upload === 3) {
-            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "detecting event...");
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting the detection config...");
+        }
+        if (this.state.upload === 4) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting bolus events...");
         }
     }
 
