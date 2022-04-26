@@ -57,6 +57,13 @@ class Sidebar extends Component {
                         <span>Tag detection</span></Link>
                 </li>
 
+                {/* <!-- Nav Item - pending tags --> */}
+                <li className="nav-item">
+                    <Link className="nav-link pt-2 pb-2" to="/pendingtags">
+                        <i className="fas fa-fw fa-clock"/>
+                        <span>Pending tags</span></Link>
+                </li>
+
                 {/* <!-- Nav Item - tag activation --> */}
                 <li className="nav-item">
                     <Link className="nav-link pt-2 pb-2" to="/tagactivation">

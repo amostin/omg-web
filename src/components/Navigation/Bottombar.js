@@ -20,6 +20,10 @@ class Bottombar extends Component {
                 icon: "fa-indent",
                 label: "Detect"
             },{
+                route: "/pendingtags",
+                icon: "fa-clock",
+                label: "Pending Tags"
+            },{
                 route: "/tagsmanager",
                 icon: "fa-wrench",
                 label: "Manage"

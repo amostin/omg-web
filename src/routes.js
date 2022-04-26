@@ -21,6 +21,7 @@ import Bottombar from "./components/Navigation/Bottombar";
 import TagActivation from "./pages/TagActivation";
 import TagsHistory from "./pages/TagHistory";
 import TagDetection from "./pages/TagDetection";
+import PendingTags from "./pages/PendingTags";
 
 /**
  * Routing component. Manage authentification too.
@@ -142,6 +143,7 @@ class Routes extends Component {
                                     <Route path="/import" component={Import}/>
                                     <Route path="/chartsbytag" component={ChartsByTag}/>
                                     <Route path="/tagdetection" component={TagDetection}/>
+                                    <Route path="/pendingtags" component={PendingTags}/>
                                     <Route path="*" component={NotFound}/>
                                 </Switch>
                             </div>
