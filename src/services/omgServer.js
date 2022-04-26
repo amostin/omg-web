@@ -552,6 +552,22 @@ export async function getCountAllRanges() {
     }
 }
 
+
+export async function getPendingTags() {
+    let url = hostUrl + '/tags/pending';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+        },
+    });
+    return await res.json();
+}
+
 /**
  *  Edit one activation tag of a user
  *
