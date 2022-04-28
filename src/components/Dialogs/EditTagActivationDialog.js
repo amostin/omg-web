@@ -61,7 +61,7 @@ export default function EditTagActivationDialog(props) {
                     <i className={"fas fa-edit"}/>
                 </span>
                 <span className={"text"}>
-                    Edit
+                    Edit & Confirm
                 </span>
             </button>
             {/*<button className={"btn btn-warning"} onClick={handleClickOpen}>*/}

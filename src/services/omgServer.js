@@ -620,6 +620,25 @@ export async function deleteOneTag(tagId) {
     return [res, await res.json()];
 }
 
+export async function deleteOneRange(rangeId) {
+    let url = hostUrl + '/ranges/one';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'DELETE',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            rangeId: rangeId
+        })
+    });
+    return [res, await res.json()];
+}
+
 export async function deleteAllTags(tagName) {
     let url = hostUrl + '/tags/all';
     let res = await fetch(url, {

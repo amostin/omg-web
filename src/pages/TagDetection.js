@@ -113,7 +113,7 @@ class TagDetection extends Component {
             newRange["toTime"] = this.state.toTime;
             const sum = this.state.weekDaysSelected.reduce((accumulator, value) => {
                 return accumulator + value;
-            }, 0);
+            }, 127);
             newRange["daysSelected"] = sum;
             // newRange["daysSelected"] = this.state.weekDaysSelected;
             this.state.rangesHistoryCount++;
@@ -247,8 +247,10 @@ class TagDetection extends Component {
                         {/*<!-- Card Content - Collapse -->*/}
                         <div className="collapse" id={"rangeCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
                             <div className="card-body d-flex justify-content-around">
-                                <button>future edit</button>
-                                <button>future delete</button>
+                                {/*<EditTagActivationDialog rangeName={range.name} rangeFrom={range.from} rangeId={range.id}/>*/}
+                                <DeleteTagActivationDialog rangeId={range["id"]}/>
+                                {/*<button>future edit</button>*/}
+                                {/*<button>future delete</button>*/}
                                 {/*<EditrangeActivationDialog rangeName={range["name"]} rangeDatetime={range["startDatetime"]} rangeId={range["id"]}/>*/}
                                 {/*<DeleterangeActivationDialog rangeId={range["id"]}/>*/}
                             </div>
