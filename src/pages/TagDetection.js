@@ -173,7 +173,7 @@ class TagDetection extends Component {
                 <input
                     id={"detectionTagInput"}
                     className={"form-control form-control-plaintext border pl-2 border-bottom-primary"}
-                    placeholder={"Enter a tag"}
+                    placeholder={"Enter a name"}
                     onChange={this.detectionTagInputChange}
                 />
             </div>
