@@ -601,6 +601,33 @@ export async function putOneTag(tagName, tagId, tagDatetime) {
     }
 }
 
+export async function putOneRange(rangeName, rangeFrom, rangeTo, rangeDaysSelected, rangeId) {
+    let url = hostUrl + '/ranges/one';
+    let res = await fetch(url, {
+        credentials: 'same-origin',
+        method: 'PUT',
+        headers: {
+            Authorization: 'Bearer ' + store.getState().storeApiKey.apiKey,
+            Accept: 'application/json',
+            'Accept-Charset': 'utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            rangeName: rangeName,
+            rangeFrom: rangeFrom,
+            rangeTo: rangeTo,
+            rangeDaysSelected: rangeDaysSelected,
+            rangeId: rangeId,
+        })
+    });
+    if (res.ok) {
+        return await res.json();
+    } else {
+        return null;
+    }
+}
+
 export async function deleteOneTag(tagId) {
     let url = hostUrl + '/tags/one';
     let res = await fetch(url, {

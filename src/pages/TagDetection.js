@@ -17,32 +17,11 @@ class TagDetection extends Component {
             fromTime: null,
             toTime: null,
             weekDaysSelected: [],
+            daysName: "",
             status: "",
             rangesHistoryCount: 3,
             // get created range will fill this array
-            rangesHistory: [
-                {
-                    "name": "dej",
-                    "fromTime": "07:00",
-                    "toTime": "09:00",
-                    "daysSelected": [],
-                    "id": "e8a8f560-46eb-4b3a-934b-rj45"
-                },
-                {
-                    "name": "diner",
-                    "fromTime": "12:00",
-                    "toTime": "13:00",
-                    "daysSelected": ["mon", "fri"],
-                    "id": "e8a8f560-46eb-4b3a-934b-rj45"
-                },
-                {
-                    "name": "souper",
-                    "fromTime": "18:00",
-                    "toTime": "19:00",
-                    "daysSelected": ["sat", "sun"],
-                    "id": "e8a8f560-46eb-4b3a-934b-rj45"
-                },
-            ]
+            rangesHistory: [],
         }
     }
 
@@ -50,7 +29,48 @@ class TagDetection extends Component {
         getCountAllRanges().then((res) => this.setState({rangesHistoryCount: res}));
         getRangesHistory().then((res) => {
             if (res) {
-                this.setState({rangesHistory: res});
+                Promise.all(res.map((range) => {
+                    range.fromTime = range.fromTime.substring(0,5);
+                    range.toTime = range.toTime.substring(0,5);
+                    let daysNumbers = [];
+                    let bitDays = range.daysSelected.toString(2);
+                    let j = 0;
+                    for (let i = bitDays.length; i > 0; i--) {
+                        // console.log(bitDays[i-1]);
+                        if (bitDays[i - 1] == "1") {
+                            daysNumbers.push(j);
+                        }
+                        j++;
+                    }
+                    let daysSelectedString = "";
+                    for (let dayNumber of daysNumbers){
+                        switch (dayNumber) {
+                            case 0:
+                                daysSelectedString += 'Sun, ';
+                                break;
+                            case 1:
+                                daysSelectedString += 'Mon, ';
+                                break;
+                            case 2:
+                                daysSelectedString += 'Tue, ';
+                                break;
+                            case 3:
+                                daysSelectedString += 'Wed, ';
+                                break;
+                            case 4:
+                                daysSelectedString += 'Thu, ';
+                                break;
+                            case 5:
+                                daysSelectedString += 'Fri, ';
+                                break;
+                            case 6:
+                                daysSelectedString += 'Sat, ';
+                                break;
+                        }
+                    }
+                    // this.setState({daysName: daysSelectedString})
+                    range["daysString"] = daysSelectedString;
+                })).then(() => this.setState({rangesHistory: res}));
             } else {
                 console.log(res);
             }
@@ -111,9 +131,12 @@ class TagDetection extends Component {
             newRange.name = this.state.chosenDetectionTag;
             newRange["fromTime"] = this.state.fromTime;
             newRange["toTime"] = this.state.toTime;
-            const sum = this.state.weekDaysSelected.reduce((accumulator, value) => {
-                return accumulator + value;
-            }, 127);
+            let sum = 127;
+            if(this.state.weekDaysSelected.length > 0) {
+                sum = this.state.weekDaysSelected.reduce((accumulator, value) => {
+                    return accumulator + value;
+                }, 0);
+            }
             newRange["daysSelected"] = sum;
             // newRange["daysSelected"] = this.state.weekDaysSelected;
             this.state.rangesHistoryCount++;
@@ -215,18 +238,18 @@ class TagDetection extends Component {
         }
     }
 
-    showDays(days){
+    showDays(daysString){
         // let message = !days.length ? <div>Every day</div> : days.map((day) => (
         //     <div>{day}</div>
         // ));
         // return message;
-        return <div>{days}</div>;
+        return <div>{daysString}</div>;
     }
 
     showCreatedRange(){
         let message = (<CardMobile>No range found</CardMobile>);
         if (this.state.rangesHistory) {
-            message = this.state.rangesHistory.map((range) => (
+            message = this.state.rangesHistory.map((range, i) => (
                 <div key={"containerRangesHistoryCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
                     <CardMobile>
                         {/* <!-- Card Header - Accordion --> */}
@@ -240,14 +263,14 @@ class TagDetection extends Component {
                                     From {range["fromTime"]} to {range["toTime"]}
                                 </div>
                                 <div className={"text-lg text-center mt-2 text-gray-700"}>
-                                    {this.showDays(range["daysSelected"])}
+                                    {this.showDays(range["daysString"])}
                                 </div>
                             </div>
                         </a>
                         {/*<!-- Card Content - Collapse -->*/}
                         <div className="collapse" id={"rangeCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
                             <div className="card-body d-flex justify-content-around">
-                                {/*<EditTagActivationDialog rangeName={range.name} rangeFrom={range.from} rangeId={range.id}/>*/}
+                                <EditTagActivationDialog rangeName={range["name"]} rangeFrom={range["fromTime"]} rangeTo={range["toTime"]} rangeDaysSelected={range["daysSelected"]} rangeId={range["id"]} tagDatetime={"2021-02-12"}/>
                                 <DeleteTagActivationDialog rangeId={range["id"]}/>
                                 {/*<button>future edit</button>*/}
                                 {/*<button>future delete</button>*/}
