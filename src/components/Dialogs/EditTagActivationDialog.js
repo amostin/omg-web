@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from "@material-ui/core/TextField";
 import {putOneTag, putOneRange} from "../../services/omgServer";
 import CardMobile from "../Cards/CardMobile";
+import {useNumberToArrayDayNameNumber} from "../../hooks/useNumberToArrayDayNameNumber";
 
 export default function EditTagActivationDialog(props) {
 
@@ -104,16 +105,17 @@ export default function EditTagActivationDialog(props) {
         let checkboxes = [];
         // console.log(rangeDaysSelected);
         //trad dec->bin
-        let daysNumbers = [];
-        let bitDays = rangeDaysSelected.toString(2);
-        let j = 0;
-        for (let i = bitDays.length; i > 0; i--) {
-            // console.log(bitDays[i-1]);
-            if (bitDays[i - 1] == "1") {
-                daysNumbers.push(j);
-            }
-            j++;
-        }
+        // let daysNumbers = [];
+        // let bitDays = rangeDaysSelected.toString(2);
+        // let j = 0;
+        // for (let i = bitDays.length; i > 0; i--) {
+        //     // console.log(bitDays[i-1]);
+        //     if (bitDays[i - 1] == "1") {
+        //         daysNumbers.push(j);
+        //     }
+        //     j++;
+        // }
+        const daysNumbers = useNumberToArrayDayNameNumber(rangeDaysSelected);
         // console.log(daysNumbers);
         weekDays.forEach((day, i) => {
             let checked = daysNumbers.includes(i);

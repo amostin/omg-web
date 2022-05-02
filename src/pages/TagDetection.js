@@ -6,6 +6,7 @@ import {getCountAllRanges, getRangesHistory, postRange} from "../services/omgSer
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {useNumberToArrayDayNameNumber} from "../hooks/useNumberToArrayDayNameNumber";
 // import ActivateBasicTag from "../components/TagActivation/ActivateBasicTag";
 
 class TagDetection extends Component {
@@ -32,16 +33,17 @@ class TagDetection extends Component {
                 Promise.all(res.map((range) => {
                     range.fromTime = range.fromTime.substring(0,5);
                     range.toTime = range.toTime.substring(0,5);
-                    let daysNumbers = [];
-                    let bitDays = range.daysSelected.toString(2);
-                    let j = 0;
-                    for (let i = bitDays.length; i > 0; i--) {
-                        // console.log(bitDays[i-1]);
-                        if (bitDays[i - 1] == "1") {
-                            daysNumbers.push(j);
-                        }
-                        j++;
-                    }
+                    // let daysNumbers = [];
+                    // let bitDays = range.daysSelected.toString(2);
+                    // let j = 0;
+                    // for (let i = bitDays.length; i > 0; i--) {
+                    //     // console.log(bitDays[i-1]);
+                    //     if (bitDays[i - 1] == "1") {
+                    //         daysNumbers.push(j);
+                    //     }
+                    //     j++;
+                    // }
+                    const daysNumbers = useNumberToArrayDayNameNumber(range.daysSelected);
                     let daysSelectedString = "";
                     for (let dayNumber of daysNumbers){
                         switch (dayNumber) {
