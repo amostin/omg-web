@@ -5,6 +5,7 @@ import CardMobile from "../components/Cards/CardMobile";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import {useFormatStringForId} from "../hooks/useFormatStringForId";
+import {useHasMore} from "../hooks/useHasMore";
 
 
 
@@ -262,13 +263,15 @@ class TagsHistory extends Component {
      * @returns {boolean}
      */
     hasMore = () => {
-        let ret = true;
-        if (this.state.tagHistoryCount) {
-            if (this.state.tagHistoryCount <= this.state.tagsHistory.length) {
-                ret = false;
-            }
-        }
-        return ret;
+        // let ret = true;
+        // if (this.state.tagHistoryCount) {
+        //     if (this.state.tagHistoryCount <= this.state.tagsHistory.length) {
+        //         ret = false;
+        //     }
+        // }
+        // return ret;
+        useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
+
     }
 
     /**

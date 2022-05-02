@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import {useNumberToArrayDayNameNumber} from "../hooks/useNumberToArrayDayNameNumber";
 import {useDayToAddDayInArray} from "../hooks/useDayToAddDayInArray";
 import {useFormatStringForId} from "../hooks/useFormatStringForId";
+import {useHasMore} from "../hooks/useHasMore";
 
 class TagDetection extends Component {
 
@@ -289,13 +290,14 @@ class TagDetection extends Component {
     }
 
     hasMore = () => {
-        let ret = true;
-        if (this.state.rangesHistoryCount) {
-            if (this.state.rangesHistoryCount <= this.state.rangesHistory.length) {
-                ret = false;
-            }
-        }
-        return ret;
+        // let ret = true;
+        // if (this.state.rangesHistoryCount) {
+        //     if (this.state.rangesHistoryCount <= this.state.rangesHistory.length) {
+        //         ret = false;
+        //     }
+        // }
+        // return ret;
+        useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
     }
 
     render() {
