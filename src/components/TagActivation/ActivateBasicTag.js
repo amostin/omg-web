@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CardBasicTitle from "../Cards/CardBasicTitle";
 import {getAllTagsFromUserId, getRecentTags, postBasicTag} from "../../services/omgServer";
 import TextField from '@material-ui/core/TextField';
+import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
 
 /**
  * This class represents a card with 4 sections :
@@ -291,10 +292,10 @@ class ActivateBasicTag extends Component {
      * @param date
      * @returns {Date}
      */
-    roundTo5Minutes(date) {
-        let coeff = 1000 * 60 * 5;
-        return new Date(Math.round(date.getTime() / coeff) * coeff);
-    }
+    // roundTo5Minutes(date) {
+    //     let coeff = 1000 * 60 * 5;
+    //     return new Date(Math.round(date.getTime() / coeff) * coeff);
+    // }
 
     /**
      * Used to set the initial value and
@@ -320,7 +321,7 @@ class ActivateBasicTag extends Component {
      * @returns {string}
      */
     getDatePickerFormat(date) {
-        let initDate = this.roundTo5Minutes(date);
+        let initDate = useRoundMinutesAndAddSummerTime(date, 1);
         initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
         return initDate.toISOString().substr(0, 16);
     }

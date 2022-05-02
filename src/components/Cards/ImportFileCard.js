@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {postUpload, getRangesWithFormattedTimes, getBolusWithFormattedDateAndTime, postPendingTag} from "../../services/omgServer";
+import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -48,7 +49,7 @@ class ImportFileCard extends Component {
                                 if (time >= range.from && time <= range.to) {
                                     let daysNumbers = range.daysNumbers;
                                     if (daysNumbers.includes(new Date(date).getDay())) {
-                                        const datetime = this.roundTo5MinutesAndAddSummerTime(new Date(date + "T" + time));
+                                        const datetime = useRoundMinutesAndAddSummerTime(new Date(date + "T" + time), 1);
                                         let pendingTag = {};
                                         pendingTag.pendingName = range.name;
                                         pendingTag.pendingDatetime = datetime;
@@ -97,12 +98,12 @@ class ImportFileCard extends Component {
         }
     }
 
-    roundTo5MinutesAndAddSummerTime = (date) => {
-        let coeff = 1000 * 60 * 5;
-        let rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
-
-        return new Date(rounded.setHours(rounded.getHours()+1));
-    }
+    // roundTo5MinutesAndAddSummerTime = (date) => {
+    //     let coeff = 1000 * 60 * 5;
+    //     let rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
+    //
+    //     return new Date(rounded.setHours(rounded.getHours()+1));
+    // }
 
     fileChange = (event) => {
         let now = new Date(Date.now());

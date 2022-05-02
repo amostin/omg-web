@@ -7,16 +7,17 @@ import TextField from "@material-ui/core/TextField";
 import {putOneTag, putOneRange} from "../../services/omgServer";
 import CardMobile from "../Cards/CardMobile";
 import {useNumberToArrayDayNameNumber} from "../../hooks/useNumberToArrayDayNameNumber";
+import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
 
 export default function EditTagActivationDialog(props) {
 
-    const roundTo5Minutes = (date) => {
-        let coeff = 1000 * 60 * 5;
-        return new Date(Math.round(date.getTime() / coeff) * coeff);
-    }
+    // const roundTo5Minutes = (date) => {
+    //     let coeff = 1000 * 60 * 5;
+    //     return new Date(Math.round(date.getTime() / coeff) * coeff);
+    // }
 
     const getDatePickerFormat = (date) => {
-        let initDate = roundTo5Minutes(date);
+        let initDate = useRoundMinutesAndAddSummerTime(date, -1);
         initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
         return initDate.toISOString().substr(0, 16);
     }
