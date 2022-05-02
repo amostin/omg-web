@@ -8,6 +8,7 @@ import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivation
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useNumberToArrayDayNameNumber} from "../hooks/useNumberToArrayDayNameNumber";
 import {useDayToAddDayInArray} from "../hooks/useDayToAddDayInArray";
+import {useFormatStringForId} from "../hooks/useFormatStringForId";
 
 class TagDetection extends Component {
 
@@ -162,12 +163,12 @@ class TagDetection extends Component {
         }
     }
 
-    formatStringForId = (str) => {
-        // let regex = /[A-Za-z]|[0-9]|\.|\-|\:|\_/gi;
-        let regex = /[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\uFFFF]/gu;
-        let newStr = str.replaceAll(regex, '');
-        return newStr;
-    }
+    // formatStringForId = (str) => {
+    //     // let regex = /[A-Za-z]|[0-9]|\.|\-|\:|\_/gi;
+    //     let regex = /[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\uFFFF]/gu;
+    //     let newStr = str.replaceAll(regex, '');
+    //     return newStr;
+    // }
 
     manualTagInput() {
         return (
@@ -252,10 +253,10 @@ class TagDetection extends Component {
         let message = (<CardMobile>No range found</CardMobile>);
         if (this.state.rangesHistory) {
             message = this.state.rangesHistory.map((range, i) => (
-                <div key={"containerRangesHistoryCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
+                <div key={"containerRangesHistoryCard" + useFormatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
                     <CardMobile>
                         {/* <!-- Card Header - Accordion --> */}
-                        <a href={"#rangeCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
+                        <a href={"#rangeCard" + useFormatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)} className="card-header collapsed" data-toggle="collapse" role="button" aria-expanded="true"
                            aria-controls={"rangeCard" + range["name"] + this.state.rangesHistory.indexOf(range)}>
                             <div className={"d-flex justify-content-between"}>
                                 <div className={"font-weight-bold text-lg text-primary"}>
@@ -270,7 +271,7 @@ class TagDetection extends Component {
                             </div>
                         </a>
                         {/*<!-- Card Content - Collapse -->*/}
-                        <div className="collapse" id={"rangeCard" + this.formatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
+                        <div className="collapse" id={"rangeCard" + useFormatStringForId(range["name"]) + this.state.rangesHistory.indexOf(range)}>
                             <div className="card-body d-flex justify-content-around">
                                 <EditTagActivationDialog rangeName={range["name"]} rangeFrom={range["fromTime"]} rangeTo={range["toTime"]} rangeDaysSelected={range["daysSelected"]} rangeId={range["id"]} tagDatetime={"2021-02-12"}/>
                                 <DeleteTagActivationDialog rangeId={range["id"]}/>
