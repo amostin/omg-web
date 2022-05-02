@@ -3,6 +3,7 @@ import {getAllTagsFromUserId} from "../services/omgServer";
 import ChartBasic from "../components/Charts/Line/ChartBasic";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import CardBasicTitle from "../components/Cards/CardBasicTitle";
+import {useDayToAddDayInArray} from "../hooks/useDayToAddDayInArray";
 
 /**
  * "web page" ChartsByTag. Displays a graph according to the chosen tag
@@ -49,15 +50,15 @@ class ChartsByTag extends Component {
     }
 
     weekDaysChange(day) {
-        let selected = this.state.weekDaysSelected
-        let find = selected.indexOf(day)
-
-        if(find > -1) {
-            selected.splice(find, 1);
-        } else {
-            selected.push(day);
-        }
-        this.setState({weekDaysSelected: selected});
+        // let selected = this.state.weekDaysSelected
+        // let find = selected.indexOf(day)
+        //
+        // if(find > -1) {
+        //     selected.splice(find, 1);
+        // } else {
+        //     selected.push(day);
+        // }
+        this.setState({weekDaysSelected: useDayToAddDayInArray(day, this.state.weekDaysSelected)});
     }
 
     /**

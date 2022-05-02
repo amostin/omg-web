@@ -7,7 +7,7 @@ import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDial
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useNumberToArrayDayNameNumber} from "../hooks/useNumberToArrayDayNameNumber";
-// import ActivateBasicTag from "../components/TagActivation/ActivateBasicTag";
+import {useDayToAddDayInArray} from "../hooks/useDayToAddDayInArray";
 
 class TagDetection extends Component {
 
@@ -109,16 +109,16 @@ class TagDetection extends Component {
     }
 
     weekDaysChange(day) {
-        let selected = this.state.weekDaysSelected
-        let find = selected.indexOf(day)
-
-        if(find > -1) {
-            selected.splice(find, 1);
-        } else {
-            selected.push(day);
-        }
-        this.setState({weekDaysSelected: selected});
-        console.log(selected);
+        // let selected = this.state.weekDaysSelected
+        // let find = selected.indexOf(day)
+        //
+        // if(find > -1) {
+        //     selected.splice(find, 1);
+        // } else {
+        //     selected.push(day);
+        // }
+        this.setState({weekDaysSelected: useDayToAddDayInArray(day, this.state.weekDaysSelected)});
+        // console.log(selected);
         if (this.state.status !== 0) {
             this.setState({status: 0});
         }
