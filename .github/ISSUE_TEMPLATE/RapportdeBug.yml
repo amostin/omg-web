@@ -1,0 +1,77 @@
+name: Rapport de bug (version formulaire)
+description: Aidez à améliorer le programme en envoyant des rapports de bug
+title: "[Bug] "
+labels: [bug, ]
+assignees:
+  - amostin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour le temps que vous prenez pour nous aider !
+  - type: textarea
+    id: descri
+    attributes:
+      label: Description du bug
+      description: "(vous pouvez vous contenter de remplir seulement ce champ si c'est suffisant)"
+  - type: textarea
+    id: repro
+    attributes:
+      label: Comment reproduire le bug ?
+      description: "Étapes pour reproduire le comportement:"
+      value: |
+        1.
+        2.
+        3.
+        ...
+  - type: textarea
+    id: result
+    attributes:
+      label: Résultat initialement attendu
+  - type: textarea
+    id: captu
+    attributes:
+      label: Capture d'écran
+      description: |
+        Si possible, ajoutez des captures d'écran pour aider à expliquer le problème.
+        💡Vous pouvez attacher des images ou des fichiers en cliquant sur cette zone pour la mettre en surbrillance pour ensuite pouvoir glisser les fichiers
+  - type: dropdown
+    id: os
+    attributes:
+      label: Quel est le système d'exploitation utilisé ?
+      multiple: true
+      options:
+        - MacOS
+        - iOS
+        - Windows
+        - Windows Phone
+        - GNU/Linux
+        - Android
+  - type: input
+    id: verOS
+    attributes:
+      label: Quelle version ?
+  - type: dropdown
+    id: navi
+    attributes:
+      label: Dans quel navigateur voyez-vous le problème ?
+      multiple: true
+      options:
+        - Safari
+        - Chrome
+        - Firefox
+        - Microsoft Edge
+  - type: input
+    id: verNav
+    attributes:
+      label: Quelle version ?
+  - type: input
+    id: appa
+    attributes:
+      label: Quel est l'appareil utilisé ?
+      placeholder: "Par exemple : iPhone 6"
+  - type: textarea
+    id: contex
+    attributes:
+      label: Contexte supplémentaire
+      description: "Ajoutez tout autre contexte à propos du problème ici."

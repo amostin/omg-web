@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {postUpload} from "../../services/omgServer";
+import {postUpload, getRangesWithFormattedTimes, getBolusWithFormattedDateAndTime, postPendingTag} from "../../services/omgServer";
+import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -8,7 +9,7 @@ class ImportFileCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upload: "",  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, -1 -> error)
+            upload: "",  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, 3 -> detecting event -1 -> error)
             file: '',   // CSV data file
             sensorModel: 'none',  // Chosen model pump
             resultRequest: '', // API results of the request
@@ -19,19 +20,66 @@ class ImportFileCard extends Component {
     /**
      * manages the sending and the result of the data import request.
      */
-    uploadFile = () => {
+    uploadFile = async () => {
         if (this.state.sensorModel !== "none") {
             if (this.state.file) {
                 if (this.state.importName) {
                     this.setState({upload: 1});
-                    postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
-                        if (res[0].ok) {
-                            this.setState({upload: 2})
-                        } else {
-                            this.setState({upload: -1})
+                    let res = await postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName);
+                    if (res[0].ok) {
+                        this.setState({upload: 3});
+                        // (peut etre fait en meme temps que postUpload mais faut quand meme attendre l'import donc je laisse comme ça)
+                        let ranges = await getRangesWithFormattedTimes();
+                        if (ranges.length) {
+                            // console.log(ranges);
+                            this.setState({upload: 4});
                         }
-                        this.setState({'resultRequest': res[1]})
-                    }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+                        // combine les daysselected pour supprimer les éventuels days redondants ?
+                        // (en meme temps que getRanges si je laisse getRange après upload)
+                        let bolusEvents = await getBolusWithFormattedDateAndTime();
+                        if (bolusEvents.length) {
+                            // console.log(bolusEvents);
+                            this.setState({upload: 5});
+                        }
+                        let pendingTags = [];
+                        for(const range of ranges){
+                            for(const event of bolusEvents){
+                                let date = event.date;
+                                let time = event.time;
+                                if (time >= range.from && time <= range.to) {
+                                    let daysNumbers = range.daysNumbers;
+                                    if (daysNumbers.includes(new Date(date).getDay())) {
+                                        const datetime = useRoundMinutesAndAddSummerTime(new Date(date + "T" + time), 1);
+                                        let pendingTag = {};
+                                        pendingTag.pendingName = range.name;
+                                        pendingTag.pendingDatetime = datetime;
+                                        pendingTags.push(pendingTag);
+                                        // console.log(pendingTag);
+                                    }
+                                }
+                            }
+                        }
+                        console.log(pendingTags);
+                        let insertIntoTag = await postPendingTag(pendingTags);
+                        if (ranges.length) {
+                            console.log(insertIntoTag);
+                            this.setState({upload: 2});
+                        }
+                    }
+                    else {this.setState({upload: -1})}
+                    // postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
+                    //     if (res[0].ok) {
+                    //         this.setState({upload: 3});
+                    //         detectEventInRange().then((rep) => {
+                    //             this.setState({upload: 2});
+                    //             console.log(rep);
+                    //         }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+                    //     } else {
+                    //         this.setState({upload: -1})
+                    //     }
+                    //     this.setState({'resultRequest': res[1]})
+                    // }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
+
                 } else {
                     if (!document.getElementById("importName").classList.contains("is-invalid")) {
                         document.getElementById("importName").classList.add("is-invalid");
@@ -49,6 +97,13 @@ class ImportFileCard extends Component {
 
         }
     }
+
+    // roundTo5MinutesAndAddSummerTime = (date) => {
+    //     let coeff = 1000 * 60 * 5;
+    //     let rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
+    //
+    //     return new Date(rounded.setHours(rounded.getHours()+1));
+    // }
 
     fileChange = (event) => {
         let now = new Date(Date.now());
@@ -101,6 +156,15 @@ class ImportFileCard extends Component {
         }
         if (this.state.upload === 2) {
             this.changeUploadButtonStatus("fa-check", "btn-success", "uploaded !");
+        }
+        if (this.state.upload === 3) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting the detection config...");
+        }
+        if (this.state.upload === 4) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting bolus events...");
+        }
+        if (this.state.upload === 5) {
+            this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "detecting events...");
         }
     }
 
@@ -174,6 +238,10 @@ class ImportFileCard extends Component {
                                 </span>
                                 <span id={"uploadButtonText"} className="text">Upload data</span>
                             </button>
+                        </div>
+                        <div className="float-right">
+                            <input className="form-check-input " type="checkbox" id={"checkIt"} checked/>
+                            <label className="form-check-label " htmlFor={"checkIt"}>auto detection</label>
                         </div>
                         {this.uploadResults()}
                     </div>
