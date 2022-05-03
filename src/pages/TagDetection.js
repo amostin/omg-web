@@ -30,6 +30,10 @@ class TagDetection extends Component {
 
     componentDidMount() {
         getCountAllRanges().then((res) => this.setState({rangesHistoryCount: res}));
+        this.getAllRanges();
+    }
+
+    getAllRanges() {
         getRangesHistory().then((res) => {
             if (res) {
                 Promise.all(res.map((range) => {
@@ -46,6 +50,7 @@ class TagDetection extends Component {
                     //     j++;
                     // }
                     const daysNumbers = useNumberToArrayDayNameNumber(range.daysSelected);
+                    console.log("ici   "+ daysNumbers);
                     let daysSelectedString = "";
                     for (let dayNumber of daysNumbers){
                         switch (dayNumber) {
@@ -80,10 +85,6 @@ class TagDetection extends Component {
             }
         });
     }
-
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     console.log(JSON.stringify(this.state.rangesHistory));
-    // }
 
     detectionTagInputChange = (event) => {
         this.setState({chosenDetectionTag: event.target.value});
@@ -143,7 +144,8 @@ class TagDetection extends Component {
             }
             newRange["daysSelected"] = sum;
             // newRange["daysSelected"] = this.state.weekDaysSelected;
-            this.state.rangesHistoryCount++;
+            let currentCount = this.state.rangesHistoryCount;
+            this.setState({rangesHistoryCount: currentCount++});
             let rangesHistoryNew = this.state.rangesHistory;
             rangesHistoryNew.unshift(newRange);
             this.setState({rangesHistory: rangesHistoryNew});
@@ -152,9 +154,11 @@ class TagDetection extends Component {
             // OK donc newrange doit être envoyé en db
             this.setState({status: 1});
             console.log(newRange.name, newRange.fromTime, newRange.toTime, newRange.daysSelected);
-            postRange(this.state.chosenDetectionTag, this.state.fromTime, this.state.toTime, sum).then(res => {
+            postRange(this.state.chosenDetectionTag, this.state.fromTime, this.state.toTime, sum).then((res) => {
                 if (res){
-                    this.setState({status: 2});
+                    // this.setState({status: 2});
+                    // this.getAllRanges();
+                    window.location.reload(false);
                 } else {
                     this.setState({status: -1});
                 }
