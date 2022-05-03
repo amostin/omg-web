@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import {deleteOneTag} from "../../services/omgServer";
+import {deleteOneTag, deleteOneRange} from "../../services/omgServer";
 
 export default function DeleteTagActivationDialog(props) {
 
     const [open, setOpen] = React.useState(false);
     const [tagId] = useState(props.tagId);
+    const [rangeId] = useState(props.rangeId);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,15 +23,28 @@ export default function DeleteTagActivationDialog(props) {
         const deleteBtn = document.getElementById("buttonDeleteTagActivationDialog");
         deleteBtn.setAttribute("disabled", "true");
         deleteBtn.innerText = "deleting...";
-        deleteOneTag(tagId).then(res => {
-            if (res[0].ok) {
-                deleteBtn.innerText = "Tag deleted";
-                handleClose();
-            } else {
-                deleteBtn.innerText = "Error";
-                document.getElementById("responseTextDeleteTagActivationDialog").innerText = "Something wrong happened. Try Later.";
-            }
-        });
+        if(tagId) {
+            deleteOneTag(tagId).then(res => {
+                if (res[0].ok) {
+                    deleteBtn.innerText = "Tag deleted";
+                    handleClose();
+                } else {
+                    deleteBtn.innerText = "Error";
+                    document.getElementById("responseTextDeleteTagActivationDialog").innerText = "Something wrong happened. Try Later.";
+                }
+            });
+        }
+        if(rangeId) {
+            deleteOneRange(rangeId).then(res => {
+                if (res[0].ok) {
+                    deleteBtn.innerText = "Range deleted";
+                    handleClose();
+                } else {
+                    deleteBtn.innerText = "Error";
+                    document.getElementById("responseTextDeleteTagActivationDialog").innerText = "Something wrong happened. Try Later.";
+                }
+            });
+        }
 
     }
 

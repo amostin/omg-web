@@ -5,6 +5,8 @@ import CardMobile from "../components/Cards/CardMobile";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import {useFormatStringForId} from "../hooks/useFormatStringForId";
+import {useHasMore} from "../hooks/useHasMore";
+import CardExample from "../components/Cards/CardExample";
 
 
 
@@ -154,6 +156,9 @@ class TagsHistory extends Component {
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
                 <button id={"basicConfirmButton"} className="btn btn-primary align-self-center mb-2" onClick={this.buttonSortClick}>
                     <span id={"basicConfirmButtonText"} className="text">Sort by creation time</span>
+                    <div>
+                        <span id={"basicConfirmButtonHint"} className="font-italic text-gray-300 small">current: by <b>event</b> date</span>
+                    </div>
                 </button>
             </div>
         );
@@ -168,6 +173,9 @@ class TagsHistory extends Component {
                 {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
                 <button id={"basicConfirmButton"} className="btn btn-primary align-self-center mb-2" onClick={this.buttonNewSortClick}>
                     <span id={"basicConfirmButtonText"} className="text">Sort by event time</span>
+                    <div>
+                        <span id={"basicConfirmButtonHint"} className="font-italic text-gray-300 small">current: by <b>creation</b> date</span>
+                    </div>
                 </button>
             </div>
         );
@@ -177,23 +185,23 @@ class TagsHistory extends Component {
      * Card with static data to show the meaning of each data displayed below
      * @returns {JSX.Element}
      */
-    showCardExample(){
-        return (
-            <div className="card-header collapsed ">
-                <div className={"d-flex justify-content-between"}>
-                    <div className={"font-weight-bold text-lg"}>
-                        <u>Event name</u>
-                    </div>
-                    <div className={"font-weight-bold text-lg"}>
-                        <u>Creation date</u>
-                    </div>
-                </div>
-                <div className={"font-weight-bold text-lg text-center"}>
-                    <u>Event date</u>
-                </div>
-            </div>
-        );
-    }
+    // showCardExample(){
+    //     return (
+    //         <div className="card-header collapsed ">
+    //             <div className={"d-flex justify-content-between"}>
+    //                 <div className={"font-weight-bold text-lg"}>
+    //                     <u>Event name</u>
+    //                 </div>
+    //                 <div className={"font-weight-bold text-lg"}>
+    //                     <u>Creation date</u>
+    //                 </div>
+    //             </div>
+    //             <div className={"font-weight-bold text-lg text-center"}>
+    //                 <u>Event date</u>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     /**
      * EDIT: removed into src/hooks/use...
@@ -237,6 +245,9 @@ class TagsHistory extends Component {
                             <div className={"text-lg text-center mt-2 text-gray-700"}>
                                 {new Date(tag["startDatetime"]).toLocaleDateString([], {"weekday": "short", 'day': '2-digit', 'month': "short", "year": "numeric", "hour": '2-digit', "minute": "2-digit"})}
                             </div>
+                            <div className={"small text-center mt-2 font-italic text-gray-600"}>
+                                {tag["wasAuto"] ? "Automatically generated" : "Manually generated"}
+                            </div>
 
                         </a>
                         {/*<!-- Card Content - Collapse -->*/}
@@ -269,6 +280,8 @@ class TagsHistory extends Component {
             }
         }
         return ret;
+        // useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
+
     }
 
     /**
@@ -287,7 +300,7 @@ class TagsHistory extends Component {
                 <div>
                     {this.showBasicConfirmButton()}
                     <CardMobile>
-                        {this.showCardExample()}
+                        <CardExample isHistoryTag={true} />
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
@@ -315,7 +328,7 @@ class TagsHistory extends Component {
                 <div>
                     {this.showNewConfirmButton()}
                     <CardMobile>
-                        {this.showCardExample()}
+                        <CardExample isHistoryTag={true} />
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}

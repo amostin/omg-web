@@ -9,6 +9,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "@wojtekmaj/react-datetimerange-picker": "^3.3.0",
+    "@wojtekmaj/react-timerange-picker": "^3.5.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "chartjs-plugin-annotation": "^0.5.7",

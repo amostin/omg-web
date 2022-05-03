@@ -25,7 +25,8 @@ class Topbar extends Component {
             "/tagsmanager": "Tags Manager",
             "/tagactivation": "Tag Creation",
             "/tagshistory": "History",
-            "/fileUpload": "Import data",
+            "/fileUpload": "Import Data",
+            "/tagdetection": "Tag Detection",
             "/chartsbyTag": "Charts by tag"
         };
         if (routesDict.hasOwnProperty(window.location.pathname)) {
