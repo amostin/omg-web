@@ -6,6 +6,7 @@ import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDial
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import {useFormatStringForId} from "../hooks/useFormatStringForId";
 import {useHasMore} from "../hooks/useHasMore";
+import CardExample from "../components/Cards/CardExample";
 
 
 
@@ -178,23 +179,23 @@ class TagsHistory extends Component {
      * Card with static data to show the meaning of each data displayed below
      * @returns {JSX.Element}
      */
-    showCardExample(){
-        return (
-            <div className="card-header collapsed ">
-                <div className={"d-flex justify-content-between"}>
-                    <div className={"font-weight-bold text-lg"}>
-                        <u>Event name</u>
-                    </div>
-                    <div className={"font-weight-bold text-lg"}>
-                        <u>Creation date</u>
-                    </div>
-                </div>
-                <div className={"font-weight-bold text-lg text-center"}>
-                    <u>Event date</u>
-                </div>
-            </div>
-        );
-    }
+    // showCardExample(){
+    //     return (
+    //         <div className="card-header collapsed ">
+    //             <div className={"d-flex justify-content-between"}>
+    //                 <div className={"font-weight-bold text-lg"}>
+    //                     <u>Event name</u>
+    //                 </div>
+    //                 <div className={"font-weight-bold text-lg"}>
+    //                     <u>Creation date</u>
+    //                 </div>
+    //             </div>
+    //             <div className={"font-weight-bold text-lg text-center"}>
+    //                 <u>Event date</u>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     /**
      * EDIT: removed into src/hooks/use...
@@ -263,14 +264,14 @@ class TagsHistory extends Component {
      * @returns {boolean}
      */
     hasMore = () => {
-        // let ret = true;
-        // if (this.state.tagHistoryCount) {
-        //     if (this.state.tagHistoryCount <= this.state.tagsHistory.length) {
-        //         ret = false;
-        //     }
-        // }
-        // return ret;
-        useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
+        let ret = true;
+        if (this.state.tagHistoryCount) {
+            if (this.state.tagHistoryCount <= this.state.tagsHistory.length) {
+                ret = false;
+            }
+        }
+        return ret;
+        // useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
 
     }
 
@@ -290,7 +291,7 @@ class TagsHistory extends Component {
                 <div>
                     {this.showBasicConfirmButton()}
                     <CardMobile>
-                        {this.showCardExample()}
+                        <CardExample isHistoryTag={true} />
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}
@@ -318,7 +319,7 @@ class TagsHistory extends Component {
                 <div>
                     {this.showNewConfirmButton()}
                     <CardMobile>
-                        {this.showCardExample()}
+                        <CardExample isHistoryTag={true} />
                     </CardMobile>
                     <InfiniteScroll
                         dataLength={this.state.tagsHistory.length}

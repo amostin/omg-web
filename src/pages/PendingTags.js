@@ -5,6 +5,7 @@ import {useFormatStringForId} from "../hooks/useFormatStringForId";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
+import CardExample from "../components/Cards/CardExample";
 
 class PendingTags extends Component {
 
@@ -47,23 +48,23 @@ class PendingTags extends Component {
         }
     }
 
-    showCardExample(){
-        return (
-            <div className="card-header collapsed ">
-                <div className={"d-flex justify-content-between"}>
-                    <div className={"font-weight-bold text-lg"}>
-                        <u>Event name</u>
-                    </div>
-                    <div className={"font-weight-bold small"}>
-                        <u>Confirm button</u>
-                    </div>
-                </div>
-                <div className={"font-weight-bold text-lg text-center"}>
-                    <u>Event date</u>
-                </div>
-            </div>
-        );
-    }
+    // showCardExample(){
+    //     return (
+    //         <div className="card-header collapsed ">
+    //             <div className={"d-flex justify-content-between"}>
+    //                 <div className={"font-weight-bold text-lg"}>
+    //                     <u>Event name</u>
+    //                 </div>
+    //                 <div className={"font-weight-bold small"}>
+    //                     <u>Confirm button</u>
+    //                 </div>
+    //             </div>
+    //             <div className={"font-weight-bold text-lg text-center"}>
+    //                 <u>Event date</u>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     showConfirmEachButton() {
         return (
@@ -130,7 +131,7 @@ class PendingTags extends Component {
                 <div >
                     {this.showConfirmAllButton()}
                     <CardMobile>
-                        {this.showCardExample()}
+                        <CardExample isPendingTag={true}/>
                     </CardMobile>
                     {this.showEachPendingTag()}
                 </div>

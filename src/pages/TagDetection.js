@@ -290,14 +290,14 @@ class TagDetection extends Component {
     }
 
     hasMore = () => {
-        // let ret = true;
-        // if (this.state.rangesHistoryCount) {
-        //     if (this.state.rangesHistoryCount <= this.state.rangesHistory.length) {
-        //         ret = false;
-        //     }
-        // }
-        // return ret;
-        useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
+        let ret = true;
+        if (this.state.rangesHistoryCount) {
+            if (this.state.rangesHistoryCount <= this.state.rangesHistory.length) {
+                ret = false;
+            }
+        }
+        return ret;
+        // useHasMore(this.state.rangesHistoryCount, this.state.rangesHistory);
     }
 
     render() {
