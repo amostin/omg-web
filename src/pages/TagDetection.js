@@ -50,7 +50,7 @@ class TagDetection extends Component {
                     //     j++;
                     // }
                     const daysNumbers = useNumberToArrayDayNameNumber(range.daysSelected);
-                    console.log("ici   "+ daysNumbers);
+                    // console.log("ici   "+ daysNumbers);
                     let daysSelectedString = "";
                     for (let dayNumber of daysNumbers){
                         switch (dayNumber) {

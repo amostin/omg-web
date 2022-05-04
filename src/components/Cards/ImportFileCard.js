@@ -152,7 +152,7 @@ class ImportFileCard extends Component {
             document.getElementById("uploadButtonInvalidText").innerText = "";
         }
         if (this.state.upload === 1) {
-            this.changeUploadButtonStatus("fa-sync-alt", "btn-primary", "uploading...");
+            // this.changeUploadButtonStatus("fa-sync-alt", "btn-primary", "uploading...");
         }
         if (this.state.upload === 2) {
             this.changeUploadButtonStatus("fa-check", "btn-success", "uploaded !");
@@ -195,6 +195,27 @@ class ImportFileCard extends Component {
         upBtnTxt.innerText = btnText;
     }
 
+    showButton(){
+        if (this.state.upload === 1) {
+            return (
+                <button id={"uploadButton"} className="btn btn-primary" type="button" disabled>
+                    <span  id={"uploadButtonIcon"} className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span id={"uploadButtonText"} className="text">Loading...</span>
+                </button>
+            );
+        }
+        else{
+            return (
+                <button id={"uploadButton"} className="btn btn-primary btn-icon-split" onClick={this.uploadFile}>
+                                <span className="icon text-white-50">
+                                    <i id={"uploadButtonIcon"} className="fas fa-upload"/>
+                                </span>
+                    <span id={"uploadButtonText"} className="text">Upload data</span>
+                </button>
+            );
+        }
+    }
+
     render() {
         return (
             <div>
@@ -218,7 +239,6 @@ class ImportFileCard extends Component {
                                 </select>
                                 <div className={"invalid-feedback"}>You have to choose a model</div>
                             </div>
-
                             <div className="row form-group mt-2">
                                 <label className={"form-check-label"} htmlFor="importName">Import name (default : filename)</label>
                                 <input type="text" className={"form-control"} id="importName" onChange={this.importNameChange}/>
@@ -232,12 +252,7 @@ class ImportFileCard extends Component {
                         </form>
                         <div className="row d-flex align-items-center justify-content-end mr-2">
                             <div id={"uploadButtonInvalidText"} className={"text-danger mr-4"}/>
-                            <button id={"uploadButton"} className="btn btn-primary btn-icon-split" onClick={this.uploadFile}>
-                                <span className="icon text-white-50">
-                                    <i id={"uploadButtonIcon"} className="fas fa-upload"/>
-                                </span>
-                                <span id={"uploadButtonText"} className="text">Upload data</span>
-                            </button>
+                            {this.showButton()}
                         </div>
                         <div className="float-right">
                             <input className="form-check-input " type="checkbox" id={"checkIt"} checked/>
