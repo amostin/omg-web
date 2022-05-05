@@ -47,7 +47,7 @@ class DataManager extends Component {
                     this.state.importNames.forEach(name => {
                         let opt = document.createElement('option');
                         opt.value = name;
-                        opt.innerHTML = name;
+                        opt.textContent = name;
                         document.getElementById("revertImportSelector").appendChild(opt);
                     });
                 }
