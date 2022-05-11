@@ -54,8 +54,8 @@ class ImportFileCard extends Component {
                             this.setState({upload: 5});
                         }
                         let pendingTags = [];
-                        let prevDate = [];
                         for(const range of ranges){
+                            let prevDate = [];
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
