@@ -54,11 +54,12 @@ class ImportFileCard extends Component {
                             this.setState({upload: 5});
                         }
                         let pendingTags = [];
-                        let prevDate = "";
+                        let prevDate = [];
                         for(const range of ranges){
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
+                                // console.log("date"+date);
                                 //faut que range.from soit gmt 0 car si event.time=6:49 et que j'ai demandé 7h15, faut que range.from=6h15
                                 // if date+time == GMT+1 alors range.from et to -1
                                 // console.log(date+" "+time);
@@ -89,15 +90,17 @@ class ImportFileCard extends Component {
                                             datetime.setUTCHours(datetime.getUTCHours() - datetime.getTimezoneOffset() / 60);
 
                                             let pendingTag = {};
-                                            if(prevDate === date){
+                                            if(prevDate.includes(date)){
                                                 console.log("multiple meal detected: " + prevDate +"==="+date);
+
                                             }
                                             else {
                                                 pendingTag.pendingName = range.name;
                                                 pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
                                                 pendingTags.push(pendingTag);
                                                 console.log(pendingTag);
-                                                prevDate = date;
+                                                prevDate.push(date);
+                                                // console.log("prevDate"+prevDate);
                                             }
                                         }
                                     }
