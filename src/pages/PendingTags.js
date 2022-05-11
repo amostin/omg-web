@@ -107,7 +107,7 @@ class PendingTags extends Component {
                                 </div>
                             </div>
                             <div className={"text-lg text-center mt-2 text-gray-700"}>
-                                {new Date(pendingTag.startDatetime).toLocaleDateString([], {timeZone: 'UTC', "weekday": "short", 'day': '2-digit', 'month': "short", "year": "numeric", "hour": '2-digit', "minute": "2-digit"})}
+                                {new Date(pendingTag.startDatetime).toLocaleDateString([], {"weekday": "short", 'day': '2-digit', 'month': "short", "year": "numeric", "hour": '2-digit', "minute": "2-digit"})/*{new Date(pendingTag.startDatetime).toLocaleDateString([], {timeZone: 'UTC', "weekday": "short", 'day': '2-digit', 'month': "short", "year": "numeric", "hour": '2-digit', "minute": "2-digit"})}*/}
                             </div>
 
                         </a>

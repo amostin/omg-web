@@ -3,6 +3,7 @@ import CardBasicTitle from "../Cards/CardBasicTitle";
 import {getAllTagsFromUserId, getRecentTags, postBasicTag} from "../../services/omgServer";
 import TextField from '@material-ui/core/TextField';
 import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
+import {useToIsoString} from "../../hooks/useToIsoString";
 
 /**
  * This class represents a card with 4 sections :
@@ -115,11 +116,17 @@ class ActivateBasicTag extends Component {
      * (body : endDatetime useless ?),
      * routeTag post ctrTag.postOne
      * Then set state.status to "success" (2) or "error" (-1)
+     * ------
+     * EDIT: roundedDatetime = current GMT (+1 OR +2)
+     * toISOString = GMT 0
      */
     basicConfirmButtonClick = () => {
         if (this.state.chosenTag) {
             this.setState({status: 1});
             let chosenDatatimeISO = new Date(this.state.roundedDatetime).toISOString();
+            // console.log("yo yo yo: "+chosenDatatimeISO);  // 2022-05-07T10:35:00.000Z alors qu'il est 12:35
+            // let chosenDatatimeISO = useToIsoString(new Date(this.state.roundedDatetime));
+            console.log("yo yo yo: "+chosenDatatimeISO);
             postBasicTag(this.state.chosenTag, chosenDatatimeISO).then(res => {
                 if (res){
                     this.setState({status: 2});
@@ -292,10 +299,10 @@ class ActivateBasicTag extends Component {
      * @param date
      * @returns {Date}
      */
-    // roundTo5Minutes(date) {
-    //     let coeff = 1000 * 60 * 5;
-    //     return new Date(Math.round(date.getTime() / coeff) * coeff);
-    // }
+    roundTo5Minutes(date) {
+        let coeff = 1000 * 60 * 5;
+        return new Date(Math.round(date.getTime() / coeff) * coeff);
+    }
 
     /**
      * Used to set the initial value and
@@ -314,14 +321,15 @@ class ActivateBasicTag extends Component {
      * date is either now or the chosen datetime (event.target.value).
      * Used to set the initial value and
      * the updated value (onchange) of state.roundedDatetime.
-     * It will round the date the nearest multiple of 5.
-     * It will add the timezone offset (GMT+1) to have the local hour.
+     * It will round the date to the nearest multiple of 5.
+     * It will add the timezone offset (GMT+1 OR +2 after april) to have the local hour.
      * It converts it into iso format and removes the zeros at end.
      * @param date
      * @returns {string}
      */
     getDatePickerFormat(date) {
-        let initDate = useRoundMinutesAndAddSummerTime(date, 1);
+        // let initDate = useRoundMinutesAndAddSummerTime(date, 1);
+        let initDate = this.roundTo5Minutes(date);
         initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
         return initDate.toISOString().substr(0, 16);
     }

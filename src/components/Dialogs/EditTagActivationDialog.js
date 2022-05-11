@@ -11,13 +11,14 @@ import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAdd
 
 export default function EditTagActivationDialog(props) {
 
-    // const roundTo5Minutes = (date) => {
-    //     let coeff = 1000 * 60 * 5;
-    //     return new Date(Math.round(date.getTime() / coeff) * coeff);
-    // }
+    const roundTo5Minutes = (date) => {
+        let coeff = 1000 * 60 * 5;
+        return new Date(Math.round(date.getTime() / coeff) * coeff);
+    }
 
     const getDatePickerFormat = (date) => {
-        let initDate = useRoundMinutesAndAddSummerTime(date, -1);
+        // let initDate = useRoundMinutesAndAddSummerTime(date, -1);
+        let initDate = roundTo5Minutes(date);
         initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
         return initDate.toISOString().substr(0, 16);
     }

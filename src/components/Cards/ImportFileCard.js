@@ -17,6 +17,18 @@ class ImportFileCard extends Component {
         }
     }
 
+    roundTo5Minutes(date) {
+        let coeff = 1000 * 60 * 5;
+        return new Date(Math.round(date.getTime() / coeff) * coeff);
+    }
+
+    getDatePickerFormat(date) {
+        // let initDate = useRoundMinutesAndAddSummerTime(date, 1);
+        let initDate = this.roundTo5Minutes(date);
+        initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60);
+        return initDate.toISOString().substr(0, 16);
+    }
+
     /**
      * manages the sending and the result of the data import request.
      */
@@ -42,21 +54,67 @@ class ImportFileCard extends Component {
                             this.setState({upload: 5});
                         }
                         let pendingTags = [];
+                        let prevDate = "";
                         for(const range of ranges){
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
-                                if (time >= range.from && time <= range.to) {
-                                    let daysNumbers = range.daysNumbers;
-                                    if (daysNumbers.includes(new Date(date).getDay())) {
-                                        const datetime = useRoundMinutesAndAddSummerTime(new Date(date + "T" + time), 1);
-                                        let pendingTag = {};
-                                        pendingTag.pendingName = range.name;
-                                        pendingTag.pendingDatetime = datetime;
-                                        pendingTags.push(pendingTag);
-                                        // console.log(pendingTag);
+                                //faut que range.from soit gmt 0 car si event.time=6:49 et que j'ai demandé 7h15, faut que range.from=6h15
+                                // if date+time == GMT+1 alors range.from et to -1
+                                // console.log(date+" "+time);
+                                // console.log(new Date(date+" "+time)); // Thu Feb 17 2022 06:47:00 GMT+0100
+                                // console.log(new Date(date+" "+time).toString().substr(25,6)); //GMT+0100
+                                // let currentGmt = new Date(date+" "+time).toString().substr(25,6);
+                                // let offset = currentGmt.substr(5, 2);
+                                // // console.log(offset == 1);
+                                // if (offset == 1){
+                                    // console.log(range.from);
+
+                                    let initDate = new Date(date + " " +range.from);
+                                    let basicGmt = new Date(initDate.setUTCHours(initDate.getUTCHours() + initDate.getTimezoneOffset() / 60));
+                                    let fromSameGmt = basicGmt.getHours() < 10 ? "0" + basicGmt.getHours() + ":" + basicGmt.getMinutes() : basicGmt.getHours() + ":" + basicGmt.getMinutes();
+                                    // console.log(fromSameGmt);
+
+                                    let initDateTo = new Date(date + " " +range.to);
+                                    let basicGmtTo = new Date(initDateTo.setUTCHours(initDateTo.getUTCHours() + initDateTo.getTimezoneOffset() / 60));
+                                    let toSameGmt = basicGmtTo.getHours() < 10 ? "0" + basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes() : basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes();
+                                    // console.log(toSameGmt);
+
+                                    if (time >= fromSameGmt && time <= toSameGmt) {
+                                        console.log(fromSameGmt + "plus petit que " + time + "plus petit que " + toSameGmt);
+                                        let daysNumbers = range.daysNumbers;
+                                        if (daysNumbers.includes(new Date(date).getDay())) {
+                                            // const datetime = this.getDatePickerFormat(new Date(date + " " + time));
+                                            const datetime = this.roundTo5Minutes(new Date(date + " " + time));
+                                            datetime.setUTCHours(datetime.getUTCHours() - datetime.getTimezoneOffset() / 60);
+
+                                            let pendingTag = {};
+                                            if(prevDate === date){
+                                                console.log("multiple meal detected: " + prevDate +"==="+date);
+                                            }
+                                            else {
+                                                pendingTag.pendingName = range.name;
+                                                pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
+                                                pendingTags.push(pendingTag);
+                                                console.log(pendingTag);
+                                                prevDate = date;
+                                            }
+                                        }
                                     }
-                                }
+                                // }
+                                // if (time >= range.from && time <= range.to) {
+                                //     let daysNumbers = range.daysNumbers;
+                                //     if (daysNumbers.includes(new Date(date).getDay())) {
+                                //         // const datetime = useRoundMinutesAndAddSummerTime(new Date(date + "T" + time), 1);
+                                //         const datetime = this.getDatePickerFormat(new Date(date + "T" + time));
+                                //         // let datetimeISO = new Date(datetime).toISOString();
+                                //         let pendingTag = {};
+                                //         pendingTag.pendingName = range.name;
+                                //         pendingTag.pendingDatetime = datetime;
+                                //         pendingTags.push(pendingTag);
+                                //         // console.log(pendingTag);
+                                //     }
+                                // }
                             }
                         }
                         console.log(pendingTags);
