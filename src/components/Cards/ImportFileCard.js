@@ -75,8 +75,8 @@ class ImportFileCard extends Component {
                                 // if (offset == 1){
                                     // console.log(range.from);
 
-                                console.log("Date Bolus: "+date+"\nTime Bolus: "+time);
-                                let initBolusDate = new Date(date + " " +time);
+                                console.log("Date Bolus: "+date.replace(/-/g, "/")+"\nTime Bolus: "+time); // before replace: 22-05-03 18:32
+                                let initBolusDate = new Date(date.replace(/-/g, "/") + " " +time);
                                 console.log("initBolusGMT0: "+initBolusDate); // Invalid Date
                                 // code pour mettre en heure locale (db-->ui)
                                 let basicBolusGmt = new Date(initBolusDate.setUTCHours(initBolusDate.getUTCHours() - initBolusDate.getTimezoneOffset() / 60));
