@@ -26,7 +26,7 @@ class PendingTags extends Component {
     clickConfirmAll = () => {
         if (this.state.pendingTags) {
             this.state.pendingTags.map((pendingTag) => (
-                putOneTag(pendingTag.name, pendingTag.id, pendingTag.startDatetime).then((res) => {
+                putOneTag(pendingTag.name, pendingTag.id, new Date(pendingTag.startDatetime).toISOString()).then((res) => {
                     console.log("my res: "+res);
                     window.location.reload(false);
                 })
