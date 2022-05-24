@@ -76,7 +76,8 @@ class ImportFileCard extends Component {
                                     // console.log(range.from);
 
                                 console.log("Date Bolus: "+date.replace(/-/g, "/")+"\nTime Bolus: "+time); // before replace: 22-05-03 18:32
-                                let initBolusDate = new Date(date.replace(/-/g, "/") + " " +time);
+                                let cleanedDate = date.replace(/-/g, "/");
+                                let initBolusDate = new Date(cleanedDate + " " +time);
                                 console.log("initBolusGMT0: "+initBolusDate); // Invalid Date
                                 // code pour mettre en heure locale (db-->ui)
                                 let basicBolusGmt = new Date(initBolusDate.setUTCHours(initBolusDate.getUTCHours() - initBolusDate.getTimezoneOffset() / 60));
@@ -86,12 +87,12 @@ class ImportFileCard extends Component {
                                 let timeSameGmt =  basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes();
                                 console.log(time+ "<<<<<<<"+timeSameGmt);
 
-                                let initDate = new Date(date + " " +range.from);
+                                let initDate = new Date(cleanedDate + " " +range.from);
                                 let basicGmt = new Date(initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60));
                                 let fromSameGmt = basicGmt.getHours() + ":" + basicGmt.getMinutes();
                                 // console.log(fromSameGmt);
 
-                                let initDateTo = new Date(date + " " +range.to);
+                                let initDateTo = new Date(cleanedDate + " " +range.to);
                                 let basicGmtTo = new Date(initDateTo.setUTCHours(initDateTo.getUTCHours() - initDateTo.getTimezoneOffset() / 60));
                                 let toSameGmt = basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes();
                                 // console.log(toSameGmt);
@@ -99,25 +100,25 @@ class ImportFileCard extends Component {
                                 if (timeSameGmt >= fromSameGmt && timeSameGmt <= toSameGmt) {
                                     console.log(fromSameGmt + "plus petit que " + timeSameGmt + "plus petit que " + toSameGmt);
                                     let daysNumbers = range.daysNumbers;
-                                    if (daysNumbers.includes(new Date(date).getDay())) {
+                                    if (daysNumbers.includes(new Date(cleanedDate).getDay())) {
                                         // const datetime = this.getDatePickerFormat(new Date(date + " " + time));
-                                        const datetime = this.roundTo5Minutes(new Date(date + " " + timeSameGmt));
+                                        const datetime = this.roundTo5Minutes(new Date(cleanedDate + " " + timeSameGmt));
                                         console.log("datetime should be same as time in middle: "+datetime);
                                         console.log("this should be -1 ou -2: "+time);
 
                                         let pendingTag = {};
-                                        if(prevDate.includes(date)){
-                                            console.log("multiple meal detected: " + prevDate +"==="+date);
+                                        if(prevDate.includes(cleanedDate)){
+                                            console.log("multiple meal detected: " + prevDate +"==="+cleanedDate);
 
                                         }
                                         else {
                                             pendingTag.pendingName = range.name;
-                                            // vu que je lui donne Sun Mar 20 2022 13:40:00 GMT+0100 il sait qu'il faut enlever gmt
+                                            // vu que je lui donne Sun Mar 20 2022 13:40:00 GMT+0100 CHROME (pas SAFARI) sait qu'il faut enlever gmt
                                             // mais si je lui donne un iso deja avant il na pas de GMT+XX donc il insère tel quel
                                             pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
                                             pendingTags.push(pendingTag);
                                             console.log(pendingTag);
-                                            prevDate.push(date);
+                                            prevDate.push(cleanedDate);
                                             // console.log("prevDate"+prevDate);
                                         }
                                     }
