@@ -75,48 +75,52 @@ class ImportFileCard extends Component {
                                 // if (offset == 1){
                                     // console.log(range.from);
 
-                                    let initBolusDate = new Date(date + " " +time);
-                                    // code pour mettre en heure locale (db-->ui)
-                                    let basicBolusGmt = new Date(initBolusDate.setUTCHours(initBolusDate.getUTCHours() - initBolusDate.getTimezoneOffset() / 60));
-                                    let timeSameGmt = basicBolusGmt.getHours() < 10 ? "0" + basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes() : basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes();
-                                    console.log(time+ "<<<<<<<"+timeSameGmt);
+                                let initBolusDate = new Date(date + " " +time);
+                                console.log("initBolusGMT0"+initBolusDate);
+                                // code pour mettre en heure locale (db-->ui)
+                                let basicBolusGmt = new Date(initBolusDate.setUTCHours(initBolusDate.getUTCHours() - initBolusDate.getTimezoneOffset() / 60));
+                                console.log("bolusGMTok: "+ basicBolusGmt);
+                                // timeSameGmt is NaN
+                                // let timeSameGmt = basicBolusGmt.getHours() < 10 ? "0" + basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes() : basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes();
+                                let timeSameGmt =  basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes();
+                                console.log(time+ "<<<<<<<"+timeSameGmt);
 
-                                    let initDate = new Date(date + " " +range.from);
-                                    let basicGmt = new Date(initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60));
-                                    let fromSameGmt = basicGmt.getHours() < 10 ? "0" + basicGmt.getHours() + ":" + basicGmt.getMinutes() : basicGmt.getHours() + ":" + basicGmt.getMinutes();
-                                    // console.log(fromSameGmt);
+                                let initDate = new Date(date + " " +range.from);
+                                let basicGmt = new Date(initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60));
+                                let fromSameGmt = basicGmt.getHours() + ":" + basicGmt.getMinutes();
+                                // console.log(fromSameGmt);
 
-                                    let initDateTo = new Date(date + " " +range.to);
-                                    let basicGmtTo = new Date(initDateTo.setUTCHours(initDateTo.getUTCHours() - initDateTo.getTimezoneOffset() / 60));
-                                    let toSameGmt = basicGmtTo.getHours() < 10 ? "0" + basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes() : basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes();
-                                    // console.log(toSameGmt);
+                                let initDateTo = new Date(date + " " +range.to);
+                                let basicGmtTo = new Date(initDateTo.setUTCHours(initDateTo.getUTCHours() - initDateTo.getTimezoneOffset() / 60));
+                                let toSameGmt = basicGmtTo.getHours() + ":" + basicGmtTo.getMinutes();
+                                // console.log(toSameGmt);
 
-                                    if (timeSameGmt >= fromSameGmt && timeSameGmt <= toSameGmt) {
-                                        console.log(fromSameGmt + "plus petit que " + timeSameGmt + "plus petit que " + toSameGmt);
-                                        let daysNumbers = range.daysNumbers;
-                                        if (daysNumbers.includes(new Date(date).getDay())) {
-                                            // const datetime = this.getDatePickerFormat(new Date(date + " " + time));
-                                            const datetime = this.roundTo5Minutes(new Date(date + " " + timeSameGmt));
-                                            console.log("datetime should be same as time in middle: "+datetime);
-                                            console.log("this should be -1 ou -2: "+time);
+                                if (timeSameGmt >= fromSameGmt && timeSameGmt <= toSameGmt) {
+                                    console.log(fromSameGmt + "plus petit que " + timeSameGmt + "plus petit que " + toSameGmt);
+                                    let daysNumbers = range.daysNumbers;
+                                    if (daysNumbers.includes(new Date(date).getDay())) {
+                                        // const datetime = this.getDatePickerFormat(new Date(date + " " + time));
+                                        const datetime = this.roundTo5Minutes(new Date(date + " " + timeSameGmt));
+                                        console.log("datetime should be same as time in middle: "+datetime);
+                                        console.log("this should be -1 ou -2: "+time);
 
-                                            let pendingTag = {};
-                                            if(prevDate.includes(date)){
-                                                console.log("multiple meal detected: " + prevDate +"==="+date);
+                                        let pendingTag = {};
+                                        if(prevDate.includes(date)){
+                                            console.log("multiple meal detected: " + prevDate +"==="+date);
 
-                                            }
-                                            else {
-                                                pendingTag.pendingName = range.name;
-                                                // vu que je lui donne Sun Mar 20 2022 13:40:00 GMT+0100 il sait qu'il faut enlever gmt
-                                                // mais si je lui donne un iso deja avant il na pas de GMT+XX donc il insère tel quel
-                                                pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
-                                                pendingTags.push(pendingTag);
-                                                console.log(pendingTag);
-                                                prevDate.push(date);
-                                                // console.log("prevDate"+prevDate);
-                                            }
+                                        }
+                                        else {
+                                            pendingTag.pendingName = range.name;
+                                            // vu que je lui donne Sun Mar 20 2022 13:40:00 GMT+0100 il sait qu'il faut enlever gmt
+                                            // mais si je lui donne un iso deja avant il na pas de GMT+XX donc il insère tel quel
+                                            pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
+                                            pendingTags.push(pendingTag);
+                                            console.log(pendingTag);
+                                            prevDate.push(date);
+                                            // console.log("prevDate"+prevDate);
                                         }
                                     }
+                                }
                                 // }
                                 // if (time >= range.from && time <= range.to) {
                                 //     let daysNumbers = range.daysNumbers;
