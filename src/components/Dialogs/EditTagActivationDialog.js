@@ -68,8 +68,9 @@ export default function EditTagActivationDialog(props) {
 
     const applyChanges = () => {
         if(tagId) {
-            console.log(tagName + "  " + tagId + "  " + new Date(tagDatetime));
-            putOneTag(tagName, tagId, tagDatetime).then((res) => {
+            console.log(tagName + "  " + tagId + "\n Date to display: " + new Date(tagDatetime));
+            console.log("Date to DB: " + new Date(tagDatetime).toISOString());
+            putOneTag(tagName, tagId, new Date(tagDatetime).toISOString()).then((res) => {
                 document.getElementById("editTagActivationResultRequestTag").innerText = res;
             })
         }
