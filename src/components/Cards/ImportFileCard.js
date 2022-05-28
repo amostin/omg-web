@@ -56,7 +56,7 @@ class ImportFileCard extends Component {
                         let pendingTags = [];
                         for(const range of ranges){
                             let prevDate = [];
-                            bolusEvents.reverse();
+                            // bolusEvents.reverse();
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
