@@ -12,7 +12,7 @@ class ImportFileCard extends Component {
         this.state = {
             upload: "",  // state of the upload (0 -> not started, 1 -> request sent, 2 -> success, 3 -> detecting event -1 -> error)
             file: '',   // CSV data file
-            sensorModel: 'none',  // Chosen model pump
+            sensorModel: 'minimed',  // Chosen model pump
             resultRequest: '', // API results of the request
             importName: '', // Name of the import saved in database for deletion
             redirect: false,
@@ -273,9 +273,9 @@ class ImportFileCard extends Component {
                             <div className="row form-group">
                                 <label className={"form-check-label"} htmlFor="sensorModelSelector">Sensor model</label>
                                 <select className="form-control" id="sensorModelSelector" name="pumpModel"
-                                        onChange={this.sensorModelChange} defaultValue={{value: "none"}}>
-                                    <option value="none">Choose a model...</option>
+                                        onChange={this.sensorModelChange} >
                                     <option value="minimed">MiniMed</option>
+                                    <option value="none">No other model yet...</option>
                                 </select>
                                 <div className={"invalid-feedback"}>You have to choose a model</div>
                             </div>
