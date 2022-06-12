@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {postUpload, getRangesWithFormattedTimes, getBolusWithFormattedDateAndTime, postPendingTag} from "../../services/omgServer";
 import {useRoundMinutesAndAddSummerTime} from "../../hooks/useRoundMinutesAndAddSummerTime";
+import {Redirect} from "react-router-dom";
 
 /**
  * component that implements the method of importing the data of a user via a CSV file
@@ -14,6 +15,7 @@ class ImportFileCard extends Component {
             sensorModel: 'none',  // Chosen model pump
             resultRequest: '', // API results of the request
             importName: '', // Name of the import saved in database for deletion
+            redirect: false,
         }
     }
 
@@ -40,14 +42,11 @@ class ImportFileCard extends Component {
                     let res = await postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName);
                     if (res[0].ok) {
                         this.setState({upload: 3});
-                        // (peut etre fait en meme temps que postUpload mais faut quand meme attendre l'import donc je laisse comme ça)
                         let ranges = await getRangesWithFormattedTimes();
                         if (ranges.length) {
                             // console.log(ranges);
                             this.setState({upload: 4});
                         }
-                        // combine les daysselected pour supprimer les éventuels days redondants ?
-                        // (en meme temps que getRanges si je laisse getRange après upload)
                         let bolusEvents = await getBolusWithFormattedDateAndTime();
                         if (bolusEvents.length) {
                             // console.log(bolusEvents);
@@ -60,21 +59,6 @@ class ImportFileCard extends Component {
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
-                                // console.log("date: "+date+" temps: "+time);
-                                // let localGmtDate = new Date(date+" "+time).toLocaleString('fr-BE', { timeZone: 'UTC' })
-                                // console.log("localGmtDate: "+localGmtDate+" (should be +1 if < 27 or +2 else)");
-
-                                // console.log("date"+date);
-                                //faut que range.from soit gmt 0 car si event.time=6:49 et que j'ai demandé 7h15, faut que range.from=6h15
-                                // if date+time == GMT+1 alors range.from et to -1
-                                // console.log(date+" "+time);
-                                // console.log(new Date(date+" "+time)); // Thu Feb 17 2022 06:47:00 GMT+0100
-                                // console.log(new Date(date+" "+time).toString().substr(25,6)); //GMT+0100
-                                // let currentGmt = new Date(date+" "+time).toString().substr(25,6);
-                                // let offset = currentGmt.substr(5, 2);
-                                // // console.log(offset == 1);
-                                // if (offset == 1){
-                                    // console.log(range.from);
 
                                 console.log("Date Bolus: "+date.replace(/-/g, "/")+"\nTime Bolus: "+time); // before replace: 22-05-03 18:32
                                 let cleanedDate = date.replace(/-/g, "/");
@@ -90,28 +74,12 @@ class ImportFileCard extends Component {
                                 let timeSameGmt = zeroHours + basicBolusGmt.getHours() + ":" + zeroMinutes + basicBolusGmt.getMinutes();
                                 console.log(time+ "<<<<<<<"+timeSameGmt);
 
-                                // let initDate = new Date(cleanedDate + " " +range.from);
-                                // let basicGmt = new Date(initDate.setUTCHours(initDate.getUTCHours() - initDate.getTimezoneOffset() / 60));
-                                // zeroHours = basicGmt.getHours() < 10 ? "0" : "";
-                                // zeroMinutes = basicGmt.getMinutes() < 10 ? "0" : "";
-                                // let fromSameGmt = zeroHours + basicGmt.getHours() + ":" +  zeroMinutes + basicGmt.getMinutes();
-                                // console.log("from: "+fromSameGmt);
-                                //
-                                // let initDateTo = new Date(cleanedDate + " " +range.to);
-                                // let basicGmtTo = new Date(initDateTo.setUTCHours(initDateTo.getUTCHours() - initDateTo.getTimezoneOffset() / 60));
-                                // zeroHours = basicGmtTo.getHours() < 10 ? "0" : "";
-                                // zeroMinutes = basicGmtTo.getMinutes() < 10 ? "0" : "";
-                                // let toSameGmt = zeroHours + basicGmtTo.getHours() + ":" + zeroMinutes + basicGmtTo.getMinutes();
-                                // console.log("to: "+toSameGmt);
-
                                 console.log(range.from + " plus petit que " + timeSameGmt + " plus petit que " + range.to);
 
                                 if (timeSameGmt >= range.from && timeSameGmt <= range.to) {
                                     console.log("comparaison ok, check selecteddays");
                                     let daysNumbers = range.daysNumbers;
                                     if (daysNumbers.includes(new Date(cleanedDate).getDay())) {
-                                        // const datetime = this.getDatePickerFormat(new Date(date + " " + time));
-                                        // const datetime = this.roundTo5Minutes(new Date(cleanedDate + " " + timeSameGmt));
                                         const datetime = this.roundTo5Minutes(initBolusDate);
                                         console.log("datetime should be same as time in middle: "+datetime);
                                         console.log("this should be -1 ou -2: "+time);
@@ -123,9 +91,7 @@ class ImportFileCard extends Component {
                                         }
                                         else {
                                             pendingTag.pendingName = range.name;
-                                            // vu que je lui donne Sun Mar 20 2022 13:40:00 GMT+0100 CHROME (pas SAFARI) sait qu'il faut enlever gmt
-                                            // mais si je lui donne un iso deja avant il na pas de GMT+XX donc il insère tel quel
-                                            pendingTag.pendingDatetime = datetime//.toISOString().substr(0, 16);
+                                            pendingTag.pendingDatetime = datetime;
                                             pendingTags.push(pendingTag);
                                             console.log(pendingTag);
                                             prevDate.push(cleanedDate);
@@ -133,42 +99,24 @@ class ImportFileCard extends Component {
                                         }
                                     }
                                 }
-                                // }
-                                // if (time >= range.from && time <= range.to) {
-                                //     let daysNumbers = range.daysNumbers;
-                                //     if (daysNumbers.includes(new Date(date).getDay())) {
-                                //         // const datetime = useRoundMinutesAndAddSummerTime(new Date(date + "T" + time), 1);
-                                //         const datetime = this.getDatePickerFormat(new Date(date + "T" + time));
-                                //         // let datetimeISO = new Date(datetime).toISOString();
-                                //         let pendingTag = {};
-                                //         pendingTag.pendingName = range.name;
-                                //         pendingTag.pendingDatetime = datetime;
-                                //         pendingTags.push(pendingTag);
-                                //         // console.log(pendingTag);
-                                //     }
-                                // }
                             }
                         }
                         console.log(pendingTags);
                         let insertIntoTag = await postPendingTag(pendingTags);
                         if (ranges.length) {
                             console.log(insertIntoTag);
+                            // console.log(res[0]);
                             this.setState({upload: 2});
+                            if(insertIntoTag === "alreadyexists") {
+                                this.setState({resultRequest: "⚠️All detected tags are already existing."});
+                            }
+                            if(insertIntoTag === "redirect"){
+                                console.log("le champ est libre pour le redirection");
+                                this.setState({redirect: true});
+                            }
                         }
                     }
                     else {this.setState({upload: -1})}
-                    // postUpload(document.getElementById('dataFileAutoInput'), this.state.sensorModel, this.state.importName).then((res) => {
-                    //     if (res[0].ok) {
-                    //         this.setState({upload: 3});
-                    //         detectEventInRange().then((rep) => {
-                    //             this.setState({upload: 2});
-                    //             console.log(rep);
-                    //         }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
-                    //     } else {
-                    //         this.setState({upload: -1})
-                    //     }
-                    //     this.setState({'resultRequest': res[1]})
-                    // }).catch(res => this.setState({'upload': -1, 'resultRequest': res.toString()}));
 
                 } else {
                     if (!document.getElementById("importName").classList.contains("is-invalid")) {
@@ -246,6 +194,7 @@ class ImportFileCard extends Component {
         }
         if (this.state.upload === 2) {
             this.changeUploadButtonStatus("fa-check", "btn-success", "uploaded !");
+            document.getElementById("uploadButtonInvalidText").innerText = this.state.resultRequest;
         }
         if (this.state.upload === 3) {
             this.changeUploadButtonStatus("fa-sync-alt", "btn-success", "getting the detection config...");
@@ -307,6 +256,7 @@ class ImportFileCard extends Component {
     }
 
     render() {
+        if(this.state.redirect) return <Redirect to="/pendingtags"/>;
         return (
             <div>
                 <div id="uploadCard" className="card d-flex border-bottom-primary shadow h-100 py-2">
@@ -345,7 +295,7 @@ class ImportFileCard extends Component {
                             {this.showButton()}
                         </div>
                         <div className="float-right">
-                            <input className="form-check-input " type="checkbox" id={"checkIt"} checked/>
+                            <input className="form-check-input " type="checkbox" id={"checkIt"} defaultChecked/>
                             <label className="form-check-label " htmlFor={"checkIt"}>auto detection</label>
                         </div>
                         {this.uploadResults()}

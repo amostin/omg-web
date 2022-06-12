@@ -16,7 +16,6 @@ describe('useDayToAddDayInArray', () => {
     });
     test('add saturday (64) into array already containing sunday (1)', () => {
         const { result } = renderHook(() => useDayToAddDayInArray(64, [1]));
-        // console.log(result.current);
         const exactResult = [1, 64];
         expect(result.current).toStrictEqual(exactResult);
     });
