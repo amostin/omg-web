@@ -6,6 +6,40 @@ import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDial
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CardExample from "../components/Cards/CardExample";
+import * as PropTypes from "prop-types";
+import ConfirmEachButton from "../components/TagActivation/ConfirmEachButton";
+
+// class ConfirmEachButton extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             tagName: props.tagName,
+//             tagId: props.tagId,
+//             tagDatetime: props.tagDatetime,
+//         }
+//
+//     }
+//
+//     applyChanges() {
+//         console.log(this.state.tagName);
+//         putOneTag(this.state.tagName, this.state.tagId, new Date(this.state.tagDatetime).toISOString()).then((res) => {
+//             console.log("tag confirmé");
+//             window.location.reload(true);
+//         })
+//     }
+//
+//     render() {
+//         return (
+//             <div className="align-self-center d-flex flex-column">
+//             {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
+//             <button id={"showConfirmEachButton"} className="btn btn-primary " onClick={this.applyChanges}>
+//                 <span id={"showConfirmEachButtonText"} className="text">Confirm it!</span>
+//             </button>
+//         </div>);
+//     }
+// }
+
+ConfirmEachButton.propTypes = {tagDatetime: PropTypes.any};
 
 class PendingTags extends Component {
 
@@ -48,24 +82,6 @@ class PendingTags extends Component {
         }
     }
 
-    // showCardExample(){
-    //     return (
-    //         <div className="card-header collapsed ">
-    //             <div className={"d-flex justify-content-between"}>
-    //                 <div className={"font-weight-bold text-lg"}>
-    //                     <u>Event name</u>
-    //                 </div>
-    //                 <div className={"font-weight-bold small"}>
-    //                     <u>Confirm button</u>
-    //                 </div>
-    //             </div>
-    //             <div className={"font-weight-bold text-lg text-center"}>
-    //                 <u>Event date</u>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     showConfirmEachButton() {
         return (
             <div className="align-self-center d-flex flex-column">
@@ -102,7 +118,8 @@ class PendingTags extends Component {
                                     {pendingTag.name}
                                 </div>
                                 <div className={"small text-gray-500"}>
-                                    {this.showConfirmEachButton()}
+                                    <ConfirmEachButton tagName={pendingTag.name} tagDatetime={pendingTag.startDatetime} tagId={pendingTag.id}/>
+                                    {/*{this.showConfirmEachButton()}*/}
                                     {/*{new Date(pendingTag.updatedAt).toLocaleString('fr-BE', { timeZone: 'UTC' })}*/}
                                 </div>
                             </div>
