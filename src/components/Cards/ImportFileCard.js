@@ -55,54 +55,100 @@ class ImportFileCard extends Component {
                         let pendingTags = [];
                         for(const range of ranges){
                             let prevDate = [];
+                            let prevDateAndTime = [];
                             // bolusEvents.reverse();
                             for(const event of bolusEvents){
                                 let date = event.date;
                                 let time = event.time;
 
-                                console.log("Date Bolus: "+date.replace(/-/g, "/")+"\nTime Bolus: "+time); // before replace: 22-05-03 18:32
+                                // console.log("Date Bolus: "+date.replace(/-/g, "/")+"\nTime Bolus: "+time); // before replace: 22-05-03 18:32
                                 let cleanedDate = date.replace(/-/g, "/");
                                 let initBolusDate = new Date(cleanedDate + " " +time);
-                                console.log("initBolusGMT0: "+initBolusDate); // Invalid Date
+                                // console.log("initBolusGMT0: "+initBolusDate); // Invalid Date
                                 // code pour mettre en heure locale (db-->ui)
                                 let basicBolusGmt = new Date(initBolusDate.setUTCHours(initBolusDate.getUTCHours() - initBolusDate.getTimezoneOffset() / 60));
-                                console.log("bolusGMTok: "+ basicBolusGmt);
+                                // console.log("bolusGMTok: "+ basicBolusGmt);
                                 // timeSameGmt is NaN
                                 // let timeSameGmt = basicBolusGmt.getHours() < 10 ? "0" + basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes() : basicBolusGmt.getHours() + ":" + basicBolusGmt.getMinutes();
                                 let zeroHours = basicBolusGmt.getHours() < 10 ? "0" : "";
                                 let zeroMinutes = basicBolusGmt.getMinutes() < 10 ? "0" : "";
                                 let timeSameGmt = zeroHours + basicBolusGmt.getHours() + ":" + zeroMinutes + basicBolusGmt.getMinutes();
-                                console.log(time+ "<<<<<<<"+timeSameGmt);
-
-                                console.log(range.from + " plus petit que " + timeSameGmt + " plus petit que " + range.to);
+                                // console.log(time+ "<<<<<<<"+timeSameGmt);
+                                //
+                                // console.log(range.from + " plus petit que " + timeSameGmt + " plus petit que " + range.to);
 
                                 if (timeSameGmt >= range.from && timeSameGmt <= range.to) {
-                                    console.log("comparaison ok, check selecteddays");
+                                    // console.log("comparaison ok, check selecteddays");
                                     let daysNumbers = range.daysNumbers;
                                     if (daysNumbers.includes(new Date(cleanedDate).getDay())) {
                                         const datetime = this.roundTo5Minutes(initBolusDate);
-                                        console.log("datetime should be same as time in middle: "+datetime);
-                                        console.log("this should be -1 ou -2: "+time);
+                                        // console.log("datetime should be same as time in middle: "+datetime);
+                                        // console.log("this should be -1 ou -2: "+time);
 
                                         let pendingTag = {};
+                                        pendingTag.pendingName = range.name;
+                                        pendingTag.pendingDatetime = datetime;
+                                        // pendingTags.push(pendingTag);
+                                        console.log("témoin: ");
+                                        console.log(pendingTag);
                                         if(prevDate.includes(cleanedDate)){
-                                            console.log("multiple meal detected: " + prevDate +"==="+cleanedDate);
+                                            // prevDateAndTime.push(cleanedDate+" "+time);
+                                            // console.log("multiple meal detected (date only): " + prevDate +"==="+cleanedDate);
+
+                                            let minOfRange;
+                                            for(let i=0; i < prevDateAndTime.length; i++){
+                                                if(prevDateAndTime[i].substr(0, 10) === cleanedDate){ // 2022/05/06
+                                                    // console.log("ok: "+prevDateAndTime[i] +"==="+ cleanedDate);
+                                                    // minOfRange = prevDateAndTime[i];
+                                                    let minTime = prevDateAndTime[i].substr(11, 5);
+                                                    // console.log("SAVOIR TIME: "+time+"<<<<<< que minTime "+minTime);
+                                                    if (time < minTime){
+                                                        // prevTime est déjà dans PendingTag mais où ? faut le retrouver et puis le remplacer par datetime
+                                                        // console.log("@@@@@@@@@@@@@@@@@@@@");
+                                                        pendingTags.forEach((tag, ind, arr) => {
+                                                            // console.log(tag);
+                                                            // console.log(ind);
+                                                            // console.log("GO TO TRASH"+prevDateAndTime[i].substr(17, prevDateAndTime[i].length-17));
+                                                            // console.log("IF I WILL"+tag.pendingDatetime);
+                                                            if(tag.pendingDatetime == prevDateAndTime[i].substr(17, prevDateAndTime[i].length-17)){
+                                                                if(prevDateAndTime[i].substr(5, 2) == "05"){
+                                                                    console.log("GO TO TRASH: "+prevDateAndTime[i].substr(17, prevDateAndTime[i].length-17));
+                                                                }
+                                                                // console.log("yeeees lets replace it by the current datetime:");
+                                                                // console.log(datetime);
+                                                                tag.pendingDatetime = datetime;
+                                                                prevDate.push(cleanedDate);
+                                                                // console.log("current cleanedDate: "+cleanedDate);
+                                                                prevDateAndTime.push(cleanedDate+" "+time+" "+datetime);
+                                                                // console.log("AFTER: ");
+                                                                // console.log(tag.pendingDatetime);
+
+                                                            }
+                                                            // console.log("derniere instruction du foreach");
+                                                        })
+                                                    }
+                                                }
+                                            }
 
                                         }
                                         else {
                                             pendingTag.pendingName = range.name;
                                             pendingTag.pendingDatetime = datetime;
                                             pendingTags.push(pendingTag);
+                                            console.log("PREMIER ? PAS SUR ! : ");
                                             console.log(pendingTag);
                                             prevDate.push(cleanedDate);
-                                            // console.log("prevDate"+prevDate);
+                                            // console.log("current cleanedDate: "+cleanedDate);
+                                            prevDateAndTime.push(cleanedDate+" "+time+" "+datetime);
+                                            // console.log("current date + time : "+cleanedDate+" "+time+"\ncorresponding to: "+datetime);
+                                            // console.log("date length : "+cleanedDate.length);
                                         }
                                     }
                                 }
                             }
                         }
                         console.log(pendingTags);
-                        let insertIntoTag = await postPendingTag(pendingTags);
+                        let insertIntoTag = await postPendingTag(pendingTags); // pendingtags contient bien 1/range mais faut que ce soit le premier
                         if (ranges.length) {
                             console.log(insertIntoTag);
                             // console.log(res[0]);

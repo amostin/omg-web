@@ -4,42 +4,8 @@ import CardMobile from "../components/Cards/CardMobile";
 import {useFormatStringForId} from "../hooks/useFormatStringForId";
 import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDialog";
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
-import InfiniteScroll from "react-infinite-scroll-component";
 import CardExample from "../components/Cards/CardExample";
-import * as PropTypes from "prop-types";
 import ConfirmEachButton from "../components/TagActivation/ConfirmEachButton";
-
-// class ConfirmEachButton extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             tagName: props.tagName,
-//             tagId: props.tagId,
-//             tagDatetime: props.tagDatetime,
-//         }
-//
-//     }
-//
-//     applyChanges() {
-//         console.log(this.state.tagName);
-//         putOneTag(this.state.tagName, this.state.tagId, new Date(this.state.tagDatetime).toISOString()).then((res) => {
-//             console.log("tag confirmé");
-//             window.location.reload(true);
-//         })
-//     }
-//
-//     render() {
-//         return (
-//             <div className="align-self-center d-flex flex-column">
-//             {/*<div id={"basicConfirmButtonInvalidText"} className={"text-danger mb-2 align-self-center"}/>*/}
-//             <button id={"showConfirmEachButton"} className="btn btn-primary " onClick={this.applyChanges}>
-//                 <span id={"showConfirmEachButtonText"} className="text">Confirm it!</span>
-//             </button>
-//         </div>);
-//     }
-// }
-
-ConfirmEachButton.propTypes = {tagDatetime: PropTypes.any};
 
 class PendingTags extends Component {
 
