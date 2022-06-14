@@ -28,9 +28,10 @@ class PendingTags extends Component {
             this.state.pendingTags.map((pendingTag) => (
                 putOneTag(pendingTag.name, pendingTag.id, new Date(pendingTag.startDatetime).toISOString()).then((res) => {
                     console.log("my res: "+res);
-                    window.location.reload(true);
                 })
             ));
+
+            window.location.reload(true);
         }
     }
 
