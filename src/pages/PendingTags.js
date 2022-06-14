@@ -6,6 +6,7 @@ import EditTagActivationDialog from "../components/Dialogs/EditTagActivationDial
 import DeleteTagActivationDialog from "../components/Dialogs/DeleteTagActivationDialog";
 import CardExample from "../components/Cards/CardExample";
 import ConfirmEachButton from "../components/TagActivation/ConfirmEachButton";
+import {Redirect} from "react-router-dom";
 
 class PendingTags extends Component {
 
@@ -13,6 +14,7 @@ class PendingTags extends Component {
         super(props);
         this.state = {
             pendingTags: "",
+            redirect: false,
         }
     }
 
@@ -25,13 +27,18 @@ class PendingTags extends Component {
 
     clickConfirmAll = () => {
         if (this.state.pendingTags) {
+            let i = 0;
+            let pendingTagsLength = this.state.pendingTags.length;
             this.state.pendingTags.map((pendingTag) => (
                 putOneTag(pendingTag.name, pendingTag.id, new Date(pendingTag.startDatetime).toISOString()).then((res) => {
                     console.log("my res: "+res);
+                    i++;
+                    if (i === pendingTagsLength){
+                        this.setState({redirect: true});
+                    }
                 })
             ));
-
-            window.location.reload(true);
+            // window.location.reload(true);
         }
     }
 
@@ -110,6 +117,7 @@ class PendingTags extends Component {
     }
 
     render() {
+        if(this.state.redirect) return <Redirect to="/chartsbytag"/>;
         return (
             <div className="container-fluid">
                 <div >
